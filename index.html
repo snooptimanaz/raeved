@@ -1181,91 +1181,280 @@
         // ============ KONFIGURATION ============
         const OWNER_EMAIL = 'snoop.timanaz@gmail.com';
 
-        // ============ FAHRZEUGDATENBANK (erweitert) ============
+        // ================================================================
+        //  ERWEITERTE FAHRZEUGDATENBANK
+        //  Basierend auf Wikipedia und gängigen Tuning-Shop-Strukturen
+        //  Alle Karosserievarianten (Limousine, Kombi, Coupé, Cabrio) sind
+        //  in den Baureihen-Bezeichnungen enthalten.
+        // ================================================================
         const carDatabase = {
-            'bmw': { name: 'BMW', series: {
-                'E30': { name: 'E30 (1982-1994)', motors: ['318i (M40)','325i (M20)','M3 (S14)'] },
-                'E36': { name: 'E36 (1990-2000)', motors: ['318i (M43)','320i (M50)','325i (M50)','328i (M52)','M3 (S50)'] },
-                'E46': { name: 'E46 (1998-2006)', motors: ['316i (N42)','318i (N42)','320i (M54)','325i (M54)','330i (M54)','M3 (S54)','320d (M47)','330d (M57)'] },
-                'E90': { name: 'E90 (2005-2012)', motors: ['318i (N46)','320i (N46)','325i (N52)','330i (N52)','335i (N54)','318d (N47)','320d (N47)','330d (N57)','335d (N57)'] },
-                'F30': { name: 'F30 (2012-2019)', motors: ['316i (N13)','320i (N20)','328i (N20)','335i (N55)','340i (B58)','316d (N47)','320d (N47)','330d (N57)'] },
-                'F10': { name: 'F10 (2010-2017)', motors: ['520i (N20)','528i (N20)','535i (N55)','550i (N63)','520d (N47)','530d (N57)','535d (N57)','M5 (S63)'] },
-                'G20': { name: 'G20 (2019-)', motors: ['318i (B48)','320i (B48)','330i (B48)','M340i (B58)','318d (B47)','320d (B47)','330d (B57)'] }
-            }},
-            'audi': { name: 'Audi', series: {
-                '8L': { name: '8L A3 (1996-2003)', motors: ['1.6 (AEH)','1.8T (AGU)','1.9 TDI (ALH)','S3 (APY)'] },
-                '8P': { name: '8P A3 (2003-2013)', motors: ['1.6 (BGU)','2.0 TFSI (AXX)','2.0 TDI (BKD)','3.2 VR6 (BDB)','S3 (BHZ)'] },
-                'B5': { name: 'B5 A4 (1994-2001)', motors: ['1.6 (ADP)','1.8T (AEB)','2.8 V6 (ACK)','1.9 TDI (AFN)','S4'] },
-                'B6': { name: 'B6 A4 (2000-2006)', motors: ['1.6 (AVL)','1.8T (BEX)','2.0 FSI (AWA)','1.9 TDI (AVF)','3.0 V6 (ASN)','S4 (BBK)'] },
-                'B7': { name: 'B7 A4 (2004-2008)', motors: ['1.8T (BFB)','2.0 TFSI (BGB)','2.0 TDI (BLB)','3.2 FSI (AUK)','RS4 (BNS)'] },
-                'B8': { name: 'B8 A4 (2008-2015)', motors: ['1.8 TFSI (CDHA)','2.0 TFSI (CDNC)','2.0 TDI (CAGA)','3.0 TDI (CDUC)','S4 (CAKA)'] },
-                'C7': { name: 'C7 A6 (2011-2018)', motors: ['2.0 TFSI (CDNC)','3.0 TFSI (CGWD)','2.0 TDI (CGLD)','3.0 TDI (CDUC)','S6 (CEUC)'] }
-            }},
-            'vw': { name: 'Volkswagen', series: {
-                'MK1': { name: 'Golf 1 (1974-1983)', motors: ['1.1 (GG)','1.5 (JB)','1.6 GTI (EG)'] },
-                'MK2': { name: 'Golf 2 (1983-1992)', motors: ['1.3 (HK)','1.6 (PN)','1.8 GTI (DX)','1.6 TD (JR)','GTI 16V (KR)'] },
-                'MK3': { name: 'Golf 3 (1991-1998)', motors: ['1.4 (ABD)','1.8 (ABS)','2.0 GTI (ADY)','1.9 TDI (1Z)','VR6 (ABV)'] },
-                'MK4': { name: 'Golf 4 (1997-2004)', motors: ['1.4 (AHW)','1.6 (AEH)','1.8T (AGU)','2.0 (APK)','1.9 TDI (ALH)','R32 (BJS)'] },
-                'MK5': { name: 'Golf 5 (2003-2008)', motors: ['1.4 (BKG)','1.6 (BGU)','2.0 TFSI (AXX)','1.9 TDI (BKC)','2.0 TDI (BKD)','GTI (AXX)'] },
-                'MK6': { name: 'Golf 6 (2008-2012)', motors: ['1.4 TSI (CAXA)','2.0 TSI (CCZB)','1.6 TDI (CAYC)','2.0 TDI (CBDB)','GTI (CCZB)','R (CDLC)'] },
-                'MK7': { name: 'Golf 7 (2012-2020)', motors: ['1.0 TSI (CHZD)','1.4 TSI (CHPA)','2.0 GTI (CHHB)','1.6 TDI (CRKB)','2.0 GTD (CUNA)','R (CJXC)'] },
-                'MK8': { name: 'Golf 8 (2020-)', motors: ['1.0 TSI (DLA)','1.5 TSI (DPCA)','2.0 GTI (DNPA)','2.0 TDI (DTR)','R (DNFF)'] }
-            }},
-            'mercedes': { name: 'Mercedes-Benz', series: {
-                'W201': { name: '190er (1982-1993)', motors: ['190E (M102)','190D (OM601)','190E 2.5-16 (M102)'] },
-                'W202': { name: 'W202 C-Klasse (1993-2000)', motors: ['C180 (M111)','C200 (M111)','C220 (M111)','C250 TD (OM605)','C36 AMG (M104)'] },
-                'W203': { name: 'W203 (2000-2007)', motors: ['C180 (M271)','C200 (M271)','C220 CDI (OM646)','C320 (M112)','C32 AMG (M112)'] },
-                'W204': { name: 'W204 (2007-2014)', motors: ['C180 (M271)','C200 (M271)','C250 (M271)','C220 CDI (OM651)','C63 AMG (M156)'] },
-                'W205': { name: 'W205 (2014-2021)', motors: ['C180 (M274)','C200 (M274)','C300 (M274)','C220d (OM651)','C63 AMG (M177)'] }
-            }},
-            'opel': { name: 'Opel', series: {
-                'Astra H': { name: 'Astra H (2004-2010)', motors: ['1.4 (Z14XEP)','1.6 (Z16XER)','2.0 Turbo (Z20LEH)','1.7 CDTI (Z17DTH)','OPC (Z20LEH)'] },
-                'Astra J': { name: 'Astra J (2009-2015)', motors: ['1.4 (A14NET)','1.6 (A16XER)','2.0 CDTI (A20DTH)','2.0 OPC (A20NFT)'] },
-                'Insignia A': { name: 'Insignia A (2008-2017)', motors: ['1.6 (A16XER)','2.0 Turbo (A20NFT)','2.0 CDTI (A20DTH)'] }
-            }},
-            'ford': { name: 'Ford', series: {
-                'MK2': { name: 'Focus MK2 (2004-2011)', motors: ['1.6 (HWDA)','2.0 (AODA)','2.5 ST (HYDA)','1.6 TDCi (G8DA)','2.0 TDCi (G6DA)'] },
-                'MK3': { name: 'Focus MK3 (2011-2018)', motors: ['1.0 EcoBoost (M1DA)','1.6 EcoBoost (JQDA)','2.0 ST (R9DA)','1.6 TDCi (T1DA)','2.0 TDCi (T7DA)'] },
-                'Mustang': { name: 'Mustang (2015-)', motors: ['2.3 EcoBoost (H2GA)','5.0 V8 (MFGA)','5.2 V8 GT350'] }
-            }},
-            'toyota': { name: 'Toyota', series: {
-                'Supra A80': { name: 'Supra MK4 (1993-2002)', motors: ['3.0 (2JZ-GE)','3.0 Turbo (2JZ-GTE)'] },
-                'Supra A90': { name: 'Supra MK5 (2019-)', motors: ['2.0 (B48)','3.0 (B58)'] },
-                'GT86': { name: 'GT86 (2012-2021)', motors: ['2.0 (FA20)'] },
-                'GR86': { name: 'GR86 (2022-)', motors: ['2.4 (FA24)'] },
-                'GR Yaris': { name: 'GR Yaris (2020-)', motors: ['1.6 Turbo (G16E-GTS)'] }
-            }},
-            'nissan': { name: 'Nissan', series: {
-                '350Z': { name: '350Z (2002-2009)', motors: ['3.5 V6 (VQ35DE)','3.5 V6 RevUp (VQ35DE)'] },
-                '370Z': { name: '370Z (2009-2020)', motors: ['3.7 V6 (VQ37VHR)'] },
-                'GTR': { name: 'GT-R (2007-)', motors: ['3.8 V6 Twin-Turbo (VR38DETT)'] },
-                'Skyline R32': { name: 'Skyline R32 (1989-1994)', motors: ['RB20DET','RB25DE','RB26DETT'] },
-                'Skyline R34': { name: 'Skyline R34 (1999-2002)', motors: ['RB25DE','RB25DET','RB26DETT'] }
-            }},
-            'porsche': { name: 'Porsche', series: {
-                '911 996': { name: '911 996 (1997-2005)', motors: ['3.4 (M96)','3.6 (M96)','Turbo (M96/70)'] },
-                '911 997': { name: '911 997 (2004-2012)', motors: ['3.6 (M97)','3.8 (M97)','Turbo (M97/70)','GT3 (M97/79)'] },
-                '911 991': { name: '911 991 (2011-2019)', motors: ['3.4 (MA1)','3.8 (MA1)','Turbo (MA1/71)','GT3 (MA1/75)'] },
-                'Cayman 987': { name: 'Cayman 987 (2005-2012)', motors: ['2.7 (M97)','3.4 (M97)','S (M97)'] },
-                'Boxster 986': { name: 'Boxster 986 (1996-2004)', motors: ['2.5 (M96)','2.7 (M96)','3.2 S (M96)'] }
-            }},
-            'honda': { name: 'Honda', series: {
-                'Civic EK': { name: 'Civic EK (1995-2000)', motors: ['1.4 (D14)','1.6 VTi (B16A2)','Type R (B16B)'] },
-                'Civic EP3': { name: 'Civic EP3 (2001-2005)', motors: ['1.6 (D16)','2.0 Type R (K20A2)'] },
-                'Civic FN2': { name: 'Civic FN2 (2006-2011)', motors: ['1.4 (L13)','2.0 Type R (K20Z4)'] },
-                'Civic FK8': { name: 'Civic Type R FK8 (2017-2022)', motors: ['2.0 VTEC Turbo (K20C1)'] },
-                'S2000': { name: 'S2000 (1999-2009)', motors: ['2.0 (F20C)','2.2 (F22C1)'] }
-            }},
-            'hyundai': { name: 'Hyundai', series: {
-                'i30N': { name: 'i30 N (2017-)', motors: ['2.0 T-GDI (G4KH)'] },
-                'i20N': { name: 'i20 N (2021-)', motors: ['1.6 T-GDI (G4FP)'] },
-                'Kona N': { name: 'Kona N (2021-)', motors: ['2.0 T-GDI (G4KH)'] }
-            }},
-            'seat': { name: 'Seat/Cupra', series: {
-                'Leon 1P': { name: 'Leon 1P (2005-2012)', motors: ['1.4 TSI (CAXC)','2.0 TFSI (BWA)','2.0 TDI (BKD)','Cupra R (BWJ)'] },
-                'Leon 5F': { name: 'Leon 5F (2012-2020)', motors: ['1.4 TSI (CHPA)','2.0 TSI (CHHB)','2.0 TDI (CUNA)','Cupra 280 (CJXA)'] },
-                'Leon KL': { name: 'Leon KL (2020-)', motors: ['1.5 TSI (DPCA)','2.0 TSI (DNPA)','Cupra 300 (DNPA)'] }
-            }}
+            // ---------- BMW ----------
+            'bmw': {
+                name: 'BMW',
+                series: {
+                    'E30': { name: 'E30 (3er, 1982-1994)', motors: ['316i (M10)', '318i (M10)', '318is (M42)', '320i (M20)', '323i (M20)', '325i (M20)', '325e (M20)', 'M3 (S14)'] },
+                    'E36': { name: 'E36 (3er, 1990-2000)', motors: ['316i (M43)', '318i (M43)', '318is (M44)', '320i (M50)', '323i (M52)', '325i (M50)', '328i (M52)', 'M3 (S50/S52)'] },
+                    'E46': { name: 'E46 (3er, 1998-2006)', motors: ['316i (N42/N46)', '318i (N42/N46)', '320i (M54)', '323i (M52)', '325i (M54)', '328i (M52)', '330i (M54)', 'M3 (S54)', '320d (M47)', '330d (M57)'] },
+                    'E90/E91/E92/E93': { name: 'E90/E91/E92/E93 (3er, 2005-2013)', motors: ['318i (N46)', '320i (N46)', '320si (N45)', '323i (N52)', '325i (N52)', '328i (N52)', '330i (N52)', '335i (N54/N55)', 'M3 (S65)', '316d (N47)', '318d (N47)', '320d (N47)', '325d (M57)', '330d (M57)', '335d (M57)'] },
+                    'F30/F31/F34': { name: 'F30/F31/F34 (3er, 2012-2019)', motors: ['316i (N13)', '318i (N13)', '320i (N20)', '328i (N20)', '330i (N20/B48)', '335i (N55)', '340i (B58)', 'M3 (S55)', '316d (N47)', '318d (N47)', '320d (N47)', '325d (N47)', '330d (N57)', '335d (N57)'] },
+                    'G20/G21': { name: 'G20/G21 (3er, 2019-heute)', motors: ['318i (B48)', '320i (B48)', '330i (B48)', 'M340i (B58)', 'M3 (S58)', '318d (B47)', '320d (B47)', '330d (B57)', 'M340d (B57)'] },
+                    'E39': { name: 'E39 (5er, 1995-2003)', motors: ['520i (M52/M54)', '523i (M52)', '525i (M52/M54)', '528i (M52)', '530i (M54)', '535i (M62)', '540i (M62)', 'M5 (S62)', '520d (M47)', '525d (M57)', '530d (M57)'] },
+                    'E60/E61': { name: 'E60/E61 (5er, 2003-2010)', motors: ['520i (M54)', '523i (N52)', '525i (M54/N52)', '530i (N52)', '535i (N54)', '545i (N62)', '550i (N62)', 'M5 (S85)', '520d (M47)', '525d (M57)', '530d (M57)', '535d (M57)'] },
+                    'F10/F11': { name: 'F10/F11 (5er, 2010-2017)', motors: ['520i (N20)', '528i (N20)', '530i (N20)', '535i (N55)', '550i (N63)', 'M5 (S63)', '518d (N47)', '520d (N47)', '525d (N47)', '530d (N57)', '535d (N57)', 'M550d (N57)'] },
+                    'G30/G31': { name: 'G30/G31 (5er, 2017-heute)', motors: ['520i (B48)', '530i (B48)', '540i (B58)', 'M550i (N63)', 'M5 (S63)', '520d (B47)', '530d (B57)', '540d (B57)', 'M550d (B57)'] },
+                    'E85/E86': { name: 'E85/E86 (Z4, 2002-2008)', motors: ['2.0i (N46)', '2.2i (M54)', '2.5i (M54)', '3.0i (M54)', '3.0si (N52)', 'M (S54)'] },
+                    'E89': { name: 'E89 (Z4, 2009-2016)', motors: ['sDrive20i (N20)', 'sDrive23i (N52)', 'sDrive28i (N20)', 'sDrive30i (N52)', 'sDrive35i (N54)', 'sDrive35is (N54)'] },
+                    'E70': { name: 'E70 (X5, 2006-2013)', motors: ['xDrive30i (N52)', 'xDrive35i (N54/N55)', 'xDrive48i (N62)', 'xDrive50i (N63)', 'xDrive30d (M57)', 'xDrive35d (M57)', 'xDrive40d (M57)', 'M (S63)'] },
+                    'F15': { name: 'F15 (X5, 2013-2018)', motors: ['xDrive30d (N57)', 'xDrive35d (N57)', 'xDrive40d (N57)', 'xDrive35i (N55)', 'xDrive50i (N63)', 'M50d (N57)', 'X5 M (S63)'] },
+                    'G05': { name: 'G05 (X5, 2018-heute)', motors: ['xDrive30d (B57)', 'xDrive40d (B57)', 'xDrive40i (B58)', 'xDrive45e (B58)', 'M50d (B57)', 'X5 M (S63)'] },
+                    'E83': { name: 'E83 (X3, 2003-2010)', motors: ['xDrive20i (N46)', 'xDrive25i (M54)', 'xDrive30i (M54)', 'xDrive18d (M47)', 'xDrive20d (M47)', 'xDrive30d (M57)'] },
+                    'F25': { name: 'F25 (X3, 2010-2017)', motors: ['xDrive20i (N20)', 'xDrive28i (N20)', 'xDrive35i (N55)', 'xDrive20d (N47)', 'xDrive30d (N57)', 'xDrive35d (N57)'] },
+                    'G01': { name: 'G01 (X3, 2017-heute)', motors: ['xDrive20i (B48)', 'xDrive30i (B48)', 'M40i (B58)', 'xDrive20d (B47)', 'xDrive30d (B57)', 'M40d (B57)', 'X3 M (S58)'] },
+                    'F20/F21': { name: 'F20/F21 (1er, 2011-2019)', motors: ['114i (N13)', '116i (N13)', '118i (N13)', '120i (N13)', '125i (N20)', 'M135i (N55)', '116d (N47)', '118d (N47)', '120d (N47)', '125d (N47)'] },
+                    'F22/F23': { name: 'F22/F23 (2er, 2014-heute)', motors: ['218i (B38)', '220i (B48)', '228i (N20)', '230i (B48)', 'M235i (N55)', 'M240i (B58)', 'M2 (N55/S55)', '218d (B47)', '220d (B47)', '225d (B47)'] }
+                }
+            },
+
+            // ---------- AUDI ----------
+            'audi': {
+                name: 'Audi',
+                series: {
+                    '8L': { name: '8L A3 (1996-2003)', motors: ['1.6 (AEH/AKL)', '1.8 (AGN)', '1.8T (AGU/ARZ)', '1.9 TDI (ALH/AGR)', 'S3 (APY/AMK)'] },
+                    '8P': { name: '8P A3 (2003-2013)', motors: ['1.4 TFSI (CAXC)', '1.6 (BGU)', '1.6 FSI (BLF)', '1.8 TFSI (BZB)', '2.0 TFSI (AXX/BWA)', '2.0 TDI (BKD)', '3.2 VR6 (BDB)', 'S3 (BHZ)', 'RS3 (CEPA)'] },
+                    '8V': { name: '8V A3 (2012-2020)', motors: ['1.2 TFSI (CYGA)', '1.4 TFSI (CMBA)', '1.8 TFSI (CJSB)', '2.0 TFSI (CHHB)', '2.0 TDI (CRLB)', 'S3 (CJXC)', 'RS3 (DNWA)'] },
+                    '8Y': { name: '8Y A3 (2020-heute)', motors: ['30 TFSI (1.0)', '35 TFSI (1.5)', '40 TFSI (2.0)', 'S3 (2.0)', 'RS3 (2.5)', '30 TDI (2.0)', '35 TDI (2.0)'] },
+                    'B5': { name: 'B5 A4 (1994-2001)', motors: ['1.6 (ADP)', '1.8 (ADR)', '1.8T (AEB)', '2.4 V6 (AFB)', '2.6 V6 (ABC)', '2.8 V6 (AAH)', 'S4 (AGB)', '1.9 TDI (AFN)', '2.5 TDI (AEL)'] },
+                    'B6': { name: 'B6 A4 (2000-2006)', motors: ['1.6 (AVL)', '1.8T (BEX)', '2.0 (ALT)', '2.0 FSI (AWA)', '2.4 V6 (BDV)', '3.0 V6 (ASN)', 'S4 (BBK)', '1.9 TDI (AVF)', '2.5 TDI (BDG)'] },
+                    'B7': { name: 'B7 A4 (2004-2008)', motors: ['1.6 (BKE)', '1.8T (BKB)', '2.0 TFSI (BGB)', '2.0 TDI (BLB)', '3.0 TDI (ASB)', '3.2 FSI (AUK)', 'S4 (BNS)', 'RS4 (BNS)'] },
+                    'B8': { name: 'B8 A4 (2008-2015)', motors: ['1.8 TFSI (CDHA)', '2.0 TFSI (CDNC)', '3.0 TFSI (CAKA)', '2.0 TDI (CAGA)', '3.0 TDI (CDUC)', 'S4 (CAKA)', 'RS4 (CFSA)'] },
+                    'B9': { name: 'B9 A4 (2015-2023)', motors: ['35 TFSI (2.0)', '40 TFSI (2.0)', '45 TFSI (2.0)', 'S4 (3.0)', 'RS4 (2.9)', '30 TDI (2.0)', '35 TDI (2.0)', '40 TDI (2.0)'] },
+                    'C5': { name: 'C5 A6 (1997-2005)', motors: ['1.8T (AJL)', '2.0 (ALT)', '2.4 V6 (BDV)', '2.7T (AJK)', '2.8 V6 (APR)', '3.0 V6 (ASN)', '4.2 V8 (ANK)', 'S6 (AQJ)', '1.9 TDI (AVG)', '2.5 TDI (AKE)'] },
+                    'C6': { name: 'C6 A6 (2004-2011)', motors: ['2.0 TFSI (BPJ)', '2.4 V6 (BDV)', '2.8 V6 (BDX)', '3.0 V6 (BBJ)', '3.2 V6 (AUK)', '4.2 V8 (BAT)', 'S6 (BXA)', 'RS6 (BRM)', '2.0 TDI (BNA)', '2.7 TDI (BPP)', '3.0 TDI (BMK)'] },
+                    'C7': { name: 'C7 A6 (2011-2018)', motors: ['1.8 TFSI (CDHA)', '2.0 TFSI (CDNC)', '2.8 FSI (CHVA)', '3.0 TFSI (CGWD)', 'S6 (CEUC)', 'RS6 (CRDB)', '2.0 TDI (CGLD)', '3.0 TDI (CDUC)', '3.0 TDI (CLAB)'] },
+                    'C8': { name: 'C8 A6 (2018-heute)', motors: ['40 TFSI (2.0)', '45 TFSI (2.0)', '55 TFSI (3.0)', 'S6 (2.9)', 'RS6 (4.0)', '40 TDI (2.0)', '50 TDI (3.0)'] },
+                    '8J': { name: '8J TT (2006-2014)', motors: ['1.8 TFSI (CDAA)', '2.0 TFSI (CCZA)', '2.5 TFSI (CEPA)', 'S (CDMA)', 'RS (CEPA)'] },
+                    '8S': { name: '8S TT (2014-2023)', motors: ['2.0 TFSI (CJXC)', 'TTS (CJXC)', 'TT RS (CZGB)'] },
+                    '4M': { name: '4M Q7 (2015-heute)', motors: ['45 TDI (3.0)', '50 TDI (3.0)', '55 TFSI (3.0)', 'SQ7 (4.0)', 'RS Q7 (4.0)'] },
+                    '4L': { name: '4L Q7 (2005-2015)', motors: ['3.0 TDI (BUN)', '3.6 FSI (BHK)', '4.2 V8 (BAR)', '6.0 V12 TDI (CCB)'] },
+                    'FY': { name: 'FY Q5 (2008-2017)', motors: ['2.0 TFSI (CDNB)', '3.0 TFSI (CTWA)', 'SQ5 (CTUD)', '2.0 TDI (CAGA)', '3.0 TDI (CDUC)'] }
+                }
+            },
+
+            // ---------- VOLKSWAGEN ----------
+            'vw': {
+                name: 'Volkswagen',
+                series: {
+                    'MK1': { name: 'Golf 1 (1974-1983)', motors: ['1.1 (GG)', '1.3 (HK)', '1.5 (JB)', '1.6 GTI (EG)', '1.6 Diesel (CK)'] },
+                    'MK2': { name: 'Golf 2 (1983-1992)', motors: ['1.3 (HK)', '1.6 (PN)', '1.8 GTI (DX)', '1.8 GTI 16V (KR)', '1.6 TD (JR)', '1.6 D (ME)', '1.9 D (AAZ)'] },
+                    'MK3': { name: 'Golf 3 (1991-1998)', motors: ['1.4 (ABD)', '1.6 (AEK)', '1.8 (ABS)', '2.0 GTI (ADY)', '2.0 GTI 16V (ABF)', '1.9 TDI (1Z)', 'VR6 (AAA)'] },
+                    'MK4': { name: 'Golf 4 (1997-2004)', motors: ['1.4 (AHW)', '1.6 (AEH)', '1.8T (AGU)', '2.0 (APK)', '2.3 VR5 (AGZ)', '1.9 TDI (ALH)', '1.9 TDI (ASZ)', '2.0 GTI (AUQ)', 'R32 (BJS)'] },
+                    'MK5': { name: 'Golf 5 (2003-2008)', motors: ['1.4 (BKG)', '1.6 (BGU)', '1.4 TSI (CAXA)', '2.0 TFSI (AXX)', '1.9 TDI (BKC)', '2.0 TDI (BKD)', 'GTI (AXX)', 'R32 (BUB)'] },
+                    'MK6': { name: 'Golf 6 (2008-2012)', motors: ['1.2 TSI (CBZA)', '1.4 TSI (CAXA)', '2.0 TSI (CCZB)', '1.6 TDI (CAYC)', '2.0 TDI (CBDB)', 'GTI (CCZB)', 'R (CDLC)'] },
+                    'MK7': { name: 'Golf 7 (2012-2020)', motors: ['1.0 TSI (CHZD)', '1.2 TSI (CYGA)', '1.4 TSI (CHPA)', '2.0 GTI (CHHB)', '2.0 GTI Performance (CJXC)', 'R (CJXC)', '1.6 TDI (CRKB)', '2.0 GTD (CUNA)'] },
+                    'MK8': { name: 'Golf 8 (2020-heute)', motors: ['1.0 TSI (DLA)', '1.5 TSI (DPCA)', '2.0 GTI (DNPA)', '2.0 R (DNFF)', '2.0 TDI (DTR)'] },
+                    'Bora': { name: 'Bora/Jetta (1999-2005)', motors: ['1.4 (AHW)', '1.6 (AEH)', '1.8T (AGU)', '2.0 (APK)', '1.9 TDI (ALH)', '2.3 VR5 (AGZ)'] },
+                    'Jetta 5': { name: 'Jetta 5 (2005-2010)', motors: ['1.4 TSI (CAXA)', '1.6 (BGU)', '2.0 TFSI (AXX)', '1.9 TDI (BKC)', '2.0 TDI (BKD)'] },
+                    'Jetta 6': { name: 'Jetta 6 (2010-2018)', motors: ['1.2 TSI (CBZA)', '1.4 TSI (CAXA)', '2.0 TSI (CCZB)', '1.6 TDI (CAYC)', '2.0 TDI (CBDB)'] },
+                    'Polo 6N': { name: 'Polo 6N (1994-2002)', motors: ['1.0 (AER)', '1.3 (AAV)', '1.4 (AKK)', '1.6 (AEA)', '1.4 TDI (AMF)', '1.9 SDI (AGR)'] },
+                    'Polo 9N': { name: 'Polo 9N (2002-2009)', motors: ['1.2 (AZQ)', '1.4 (AUB)', '1.6 (BTS)', '1.8T (BJH)', '1.4 TDI (AMF)', '1.9 TDI (ATD)'] },
+                    'Polo 6R': { name: 'Polo 6R (2009-2014)', motors: ['1.0 (CHYA)', '1.2 TSI (CBZB)', '1.4 (CGGA)', '1.6 (CFNA)', '1.4 TDI (CUSA)', '1.6 TDI (CAYA)'] },
+                    'Polo 6C': { name: 'Polo 6C (2014-2017)', motors: ['1.0 TSI (CHZD)', '1.2 TSI (CBZA)', '1.4 TSI (CZCA)', '1.6 TDI (CRKB)', 'GTI (CJZD)'] },
+                    'Passat B5': { name: 'Passat B5 (1997-2005)', motors: ['1.6 (ADP)', '1.8T (AEB)', '2.0 (ALT)', '2.3 VR5 (AGZ)', '2.8 V6 (ACX)', '1.9 TDI (AFN)', '2.5 TDI (AKE)'] },
+                    'Passat B6': { name: 'Passat B6 (2005-2011)', motors: ['1.4 TSI (CAXA)', '1.6 (BGU)', '2.0 TDI (BKD)', '2.0 TFSI (AXX)', '3.2 V6 (AXZ)', '1.9 TDI (BKC)'] },
+                    'Passat B7': { name: 'Passat B7 (2011-2015)', motors: ['1.4 TSI (CAXA)', '2.0 TSI (CCZB)', '1.6 TDI (CAYC)', '2.0 TDI (CBDB)', 'R36 (BWS)'] },
+                    'Passat B8': { name: 'Passat B8 (2015-2023)', motors: ['1.4 TSI (CZDA)', '2.0 TSI (CHHB)', '1.6 TDI (CRKB)', '2.0 TDI (CUNA)', 'GTE (1.4 Hybrid)'] },
+                    'Tiguan 1': { name: 'Tiguan 1 (2008-2016)', motors: ['1.4 TSI (CAXA)', '2.0 TSI (CCZB)', '1.6 TDI (CAYC)', '2.0 TDI (CBDB)'] },
+                    'Tiguan 2': { name: 'Tiguan 2 (2016-heute)', motors: ['1.4 TSI (CZDA)', '2.0 TSI (CHHB)', '1.6 TDI (CRKB)', '2.0 TDI (CUNA)', 'R (DMTA)'] }
+                }
+            },
+
+            // ---------- MERCEDES-BENZ ----------
+            'mercedes': {
+                name: 'Mercedes-Benz',
+                series: {
+                    'W201': { name: 'W201 (190er, 1982-1993)', motors: ['190E 1.8 (M102)', '190E 2.0 (M102)', '190E 2.3 (M102)', '190E 2.5-16 (M102)', '190D 2.0 (OM601)', '190D 2.5 (OM602)'] },
+                    'W202': { name: 'W202 (C-Klasse, 1993-2000)', motors: ['C180 (M111)', 'C200 (M111)', 'C220 (M111)', 'C230 (M111)', 'C280 (M104)', 'C36 AMG (M104)', 'C43 AMG (M113)', 'C200 CDI (OM604)', 'C220 CDI (OM604)', 'C250 CDI (OM605)'] },
+                    'W203': { name: 'W203 (C-Klasse, 2000-2007)', motors: ['C180 (M271)', 'C200 (M271)', 'C200 Kompressor (M271)', 'C230 (M271)', 'C240 (M112)', 'C320 (M112)', 'C32 AMG (M112)', 'C55 AMG (M113)', 'C200 CDI (OM646)', 'C220 CDI (OM646)', 'C270 CDI (OM612)', 'C30 CDI (OM612)'] },
+                    'W204': { name: 'W204 (C-Klasse, 2007-2014)', motors: ['C180 (M271)', 'C200 (M271)', 'C200 Kompressor (M271)', 'C250 (M271)', 'C280 (M272)', 'C300 (M272)', 'C350 (M272)', 'C63 AMG (M156)', 'C200 CDI (OM646)', 'C220 CDI (OM651)', 'C250 CDI (OM651)', 'C320 CDI (OM642)'] },
+                    'W205': { name: 'W205 (C-Klasse, 2014-2021)', motors: ['C180 (M274)', 'C200 (M274)', 'C250 (M274)', 'C300 (M274)', 'C350 (M276)', 'C400 (M276)', 'C43 AMG (M276)', 'C63 AMG (M177)', 'C220d (OM651)', 'C250d (OM651)', 'C300d (OM642)'] },
+                    'W206': { name: 'W206 (C-Klasse, 2021-heute)', motors: ['C180 (M254)', 'C200 (M254)', 'C300 (M254)', 'C43 AMG (M139)', 'C63 AMG (M177)', 'C220d (OM654)', 'C300d (OM654)'] },
+                    'W210': { name: 'W210 (E-Klasse, 1995-2002)', motors: ['E200 (M111)', 'E220 (M111)', 'E230 (M111)', 'E240 (M112)', 'E280 (M104)', 'E320 (M112)', 'E430 (M113)', 'E50 AMG (M119)', 'E55 AMG (M113)', 'E200 CDI (OM604)', 'E220 CDI (OM604)', 'E250 CDI (OM605)', 'E300 TD (OM606)'] },
+                    'W211': { name: 'W211 (E-Klasse, 2002-2009)', motors: ['E200 (M271)', 'E200 Kompressor (M271)', 'E220 (M271)', 'E240 (M112)', 'E280 (M272)', 'E320 (M112)', 'E350 (M272)', 'E500 (M113)', 'E55 AMG (M113)', 'E63 AMG (M156)', 'E200 CDI (OM646)', 'E220 CDI (OM646)', 'E270 CDI (OM612)', 'E280 CDI (OM642)', 'E320 CDI (OM642)'] },
+                    'W212': { name: 'W212 (E-Klasse, 2009-2016)', motors: ['E200 (M271)', 'E200 Kompressor (M271)', 'E250 (M271)', 'E250 Kompressor (M271)', 'E300 (M272)', 'E350 (M272)', 'E400 (M276)', 'E500 (M273)', 'E63 AMG (M156)', 'E200 CDI (OM646)', 'E220 CDI (OM651)', 'E250 CDI (OM651)', 'E300 CDI (OM642)', 'E350 CDI (OM642)'] },
+                    'W213': { name: 'W213 (E-Klasse, 2016-2023)', motors: ['E180 (M274)', 'E200 (M274)', 'E250 (M274)', 'E300 (M274)', 'E350 (M276)', 'E400 (M276)', 'E43 AMG (M276)', 'E53 AMG (M256)', 'E63 AMG (M177)', 'E200d (OM654)', 'E220d (OM654)', 'E300d (OM654)', 'E350d (OM642)'] },
+                    'R230': { name: 'R230 (SL, 2001-2012)', motors: ['SL350 (M112)', 'SL500 (M113)', 'SL55 AMG (M113)', 'SL600 (M275)', 'SL65 AMG (M275)', 'SL63 AMG (M156)'] },
+                    'R231': { name: 'R231 (SL, 2012-2020)', motors: ['SL350 (M276)', 'SL400 (M276)', 'SL500 (M278)', 'SL63 AMG (M157)', 'SL65 AMG (M275)'] },
+                    'X166': { name: 'X166 (GL, 2012-2019)', motors: ['GL350 (OM642)', 'GL400 (M276)', 'GL500 (M278)', 'GL63 AMG (M157)'] }
+                }
+            },
+
+            // ---------- OPEL ----------
+            'opel': {
+                name: 'Opel',
+                series: {
+                    'Corsa B': { name: 'Corsa B (1993-2000)', motors: ['1.0 (X10XE)', '1.2 (X12XE)', '1.4 (X14XE)', '1.6 GSI (X16XE)', '1.5 TD (X15D)', '1.7 D (X17D)'] },
+                    'Corsa C': { name: 'Corsa C (2000-2006)', motors: ['1.0 (Z10XEP)', '1.2 (Z12XE)', '1.4 (Z14XE)', '1.8 GSI (Z18XE)', '1.3 CDTI (Z13DT)', '1.7 CDTI (Z17DT)'] },
+                    'Corsa D': { name: 'Corsa D (2006-2014)', motors: ['1.0 (A10XEP)', '1.2 (A12XER)', '1.4 (A14XER)', '1.6 Turbo (A16LER)', 'OPC (A16LES)', '1.3 CDTI (A13DTC)', '1.7 CDTI (A17DTS)'] },
+                    'Corsa E': { name: 'Corsa E (2014-2019)', motors: ['1.0 (B10XFL)', '1.2 (B12XEL)', '1.4 (B14XEL)', '1.4 Turbo (B14XFL)', '1.6 (B16XEL)', '1.3 CDTI (B13DTC)'] },
+                    'Astra F': { name: 'Astra F (1991-1998)', motors: ['1.4 (C14NZ)', '1.6 (C16SE)', '1.8 (C18XE)', '2.0 GSI (C20XE)', '2.0 16V (C20LET)', '1.7 D (17D)', '1.7 TD (X17DTL)'] },
+                    'Astra G': { name: 'Astra G (1998-2005)', motors: ['1.4 (Z14XE)', '1.6 (Z16XE)', '1.8 (Z18XE)', '2.0 GSI (Z20LET)', '2.0 OPC (Z20LEH)', '1.7 CDTI (Y17DT)', '2.0 DTI (Y20DTH)'] },
+                    'Astra H': { name: 'Astra H (2004-2010)', motors: ['1.4 (Z14XEP)', '1.6 (Z16XER)', '1.8 (Z18XER)', '2.0 Turbo (Z20LEH)', 'OPC (Z20LEH)', '1.3 CDTI (Z13DTJ)', '1.7 CDTI (Z17DTH)', '1.9 CDTI (Z19DTH)'] },
+                    'Astra J': { name: 'Astra J (2009-2015)', motors: ['1.4 (A14NET)', '1.6 (A16XER)', '1.6 Turbo (A16LET)', '2.0 Turbo (A20NFT)', 'OPC (A20NFT)', '1.3 CDTI (A13DTC)', '1.7 CDTI (A17DTS)', '2.0 CDTI (A20DTH)'] },
+                    'Astra K': { name: 'Astra K (2015-2021)', motors: ['1.0 (B10XFL)', '1.2 (B12XEL)', '1.4 (B14XEL)', '1.4 Turbo (B14XFL)', '1.6 Turbo (B16XEL)', '1.5 CDTI (B15DTL)', '1.6 CDTI (B16DTR)'] },
+                    'Vectra B': { name: 'Vectra B (1995-2002)', motors: ['1.6 (X16SZR)', '1.8 (X18XE)', '2.0 (X20XEV)', '2.5 V6 (X25XE)', '2.5 V6 (X25XER)', '1.7 D (X17DTL)', '2.0 DTI (Y20DTH)', '2.2 DTI (Y22DTH)'] },
+                    'Vectra C': { name: 'Vectra C (2002-2008)', motors: ['1.6 (Z16XEP)', '1.8 (Z18XE)', '2.0 (Z20NET)', '2.0 Turbo (Z20LEL)', '2.8 V6 Turbo (A28NER)', 'OPC (Z28NET)', '1.9 CDTI (Z19DTH)', '3.0 CDTI (Z30DT)'] },
+                    'Insignia A': { name: 'Insignia A (2008-2017)', motors: ['1.4 (A14NET)', '1.6 (A16XER)', '1.6 Turbo (A16LET)', '2.0 Turbo (A20NFT)', 'OPC (A20NFT)', '2.0 CDTI (A20DTH)', '2.0 Biturbo (A20DTR)'] },
+                    'Insignia B': { name: 'Insignia B (2017-2022)', motors: ['1.5 (B15XFL)', '1.6 (B16XFL)', '2.0 (B20XFL)', '2.0 Turbo (B20XFT)', '1.5 CDTI (B15DTL)', '2.0 CDTI (B20DTH)'] },
+                    'Zafira A': { name: 'Zafira A (1999-2005)', motors: ['1.6 (Z16XE)', '1.8 (Z18XE)', '2.0 Turbo (Z20LET)', '2.2 (Z22SE)', '2.0 DTI (Y20DTH)'] },
+                    'Zafira B': { name: 'Zafira B (2005-2010)', motors: ['1.6 (Z16XEP)', '1.8 (Z18XER)', '2.0 Turbo (Z20LEH)', 'OPC (Z20LEH)', '1.7 CDTI (Z17DTH)', '1.9 CDTI (Z19DTH)'] }
+                }
+            },
+
+            // ---------- FORD ----------
+            'ford': {
+                name: 'Ford',
+                series: {
+                    'Fiesta MK4': { name: 'Fiesta MK4 (1995-2002)', motors: ['1.25 (DHT)', '1.3 (J4C)', '1.4 (FXJA)', '1.6 (FYDA)', '1.8 D (RTN)', '1.8 TD (RTP)'] },
+                    'Fiesta MK5': { name: 'Fiesta MK5 (2002-2008)', motors: ['1.25 (FXJA)', '1.3 (A9JA)', '1.4 (FUJA)', '1.6 (FYDA)', '1.6 ST (CDJA)', '1.4 TDCi (F6JA)', '1.6 TDCi (G8DA)'] },
+                    'Fiesta MK6': { name: 'Fiesta MK6 (2008-2017)', motors: ['1.0 EcoBoost (M1DA)', '1.25 (SNJA)', '1.4 (SPJA)', '1.6 (HWJA)', '1.6 ST (JQDA)', '1.4 TDCi (F6JA)', '1.5 TDCi (UGDA)', '1.6 TDCi (G8DA)'] },
+                    'Fiesta MK7': { name: 'Fiesta MK7 (2017-heute)', motors: ['1.0 EcoBoost (M1DA)', '1.1 (B7DA)', '1.5 EcoBoost (Y2DA)', 'ST (Y2DA)', '1.5 EcoBlue (T3DA)'] },
+                    'Focus MK1': { name: 'Focus MK1 (1998-2004)', motors: ['1.4 (FXJA)', '1.6 (FYDA)', '1.8 (EYDA)', '2.0 (EDBA)', 'ST170 (ALDA)', 'RS (HMDA)', '1.8 TDCi (FFDA)', '1.8 TDDi (C9DA)'] },
+                    'Focus MK2': { name: 'Focus MK2 (2004-2011)', motors: ['1.4 (ASJA)', '1.6 (HWDA)', '1.8 (QQDA)', '2.0 (AODA)', '2.5 ST (HYDA)', 'RS (JZDA)', '1.6 TDCi (G8DA)', '1.8 TDCi (KKDA)', '2.0 TDCi (G6DA)'] },
+                    'Focus MK3': { name: 'Focus MK3 (2011-2018)', motors: ['1.0 EcoBoost (M1DA)', '1.5 EcoBoost (JQDA)', '1.6 EcoBoost (JQDA)', '2.0 EcoBoost (R9DA)', 'ST (R9DA)', 'RS (R9DA)', '1.5 TDCi (XXDA)', '1.6 TDCi (T1DA)', '2.0 TDCi (T7DA)'] },
+                    'Focus MK4': { name: 'Focus MK4 (2018-heute)', motors: ['1.0 EcoBoost (M1DA)', '1.5 EcoBoost (Y2DA)', '2.0 EcoBoost (R9DA)', 'ST (R9DA)', '1.5 EcoBlue (T3DA)', '2.0 EcoBlue (T3DA)'] },
+                    'Mondeo MK2': { name: 'Mondeo MK2 (1996-2000)', motors: ['1.6 (BAA)', '1.8 (CDB)', '2.0 (NGB)', '2.5 V6 (SEB)', '1.8 TD (RFN)', '1.8 TDDi (C9DA)'] },
+                    'Mondeo MK3': { name: 'Mondeo MK3 (2000-2007)', motors: ['1.8 (CDB)', '2.0 (CJBA)', '2.2 (KJBA)', '2.5 V6 (LCBD)', '3.0 V6 (REBA)', 'ST220 (REBA)', '2.0 TDCi (FMBA)', '2.2 TDCi (QJBA)'] },
+                    'Mondeo MK4': { name: 'Mondeo MK4 (2007-2014)', motors: ['1.6 (HWDA)', '2.0 (AODA)', '2.3 (SEBA)', '2.5 (HYDA)', '2.0 EcoBoost (R9DA)', '2.0 TDCi (G6DA)', '2.2 TDCi (QJBA)'] },
+                    'Mondeo MK5': { name: 'Mondeo MK5 (2014-2022)', motors: ['1.5 EcoBoost (JQDA)', '2.0 EcoBoost (R9DA)', '2.0 Hybrid (R9DA)', '1.5 TDCi (XXDA)', '2.0 TDCi (T7DA)'] },
+                    'Mustang S550': { name: 'Mustang S550 (2015-2023)', motors: ['2.3 EcoBoost (H2GA)', '5.0 V8 (MFGA)', '5.2 V8 GT350', '5.2 V8 GT500'] },
+                    'Mustang S650': { name: 'Mustang S650 (2024-heute)', motors: ['2.3 EcoBoost (H2GA)', '5.0 V8 (MFGA)', 'Dark Horse (5.0)'] }
+                }
+            },
+
+            // ---------- TOYOTA ----------
+            'toyota': {
+                name: 'Toyota',
+                series: {
+                    'Supra A70': { name: 'Supra MK3 (1986-1993)', motors: ['3.0 (7M-GE)', '3.0 Turbo (7M-GTE)'] },
+                    'Supra A80': { name: 'Supra MK4 (1993-2002)', motors: ['3.0 (2JZ-GE)', '3.0 Turbo (2JZ-GTE)'] },
+                    'Supra A90': { name: 'Supra MK5 (2019-heute)', motors: ['2.0 (B48)', '3.0 (B58)'] },
+                    'GT86': { name: 'GT86 (2012-2021)', motors: ['2.0 (FA20)'] },
+                    'GR86': { name: 'GR86 (2022-heute)', motors: ['2.4 (FA24)'] },
+                    'GR Yaris': { name: 'GR Yaris (2020-heute)', motors: ['1.6 Turbo (G16E-GTS)'] },
+                    'GR Corolla': { name: 'GR Corolla (2022-heute)', motors: ['1.6 Turbo (G16E-GTS)'] },
+                    'Celica T20': { name: 'Celica T20 (1993-1999)', motors: ['1.8 (7A-FE)', '2.0 (3S-GE)', '2.0 Turbo (3S-GTE)', 'GT-Four (3S-GTE)'] },
+                    'Celica T23': { name: 'Celica T23 (1999-2005)', motors: ['1.8 (1ZZ-FE)', '1.8 VVTL-i (2ZZ-GE)'] },
+                    'MR2 W20': { name: 'MR2 MK2 (1989-1999)', motors: ['2.0 (3S-GE)', '2.0 Turbo (3S-GTE)'] },
+                    'MR2 W30': { name: 'MR2 MK3 (1999-2007)', motors: ['1.8 (1ZZ-FE)'] },
+                    'Yaris P1': { name: 'Yaris P1 (1999-2005)', motors: ['1.0 (1SZ-FE)', '1.3 (2NZ-FE)', '1.4 D-4D (1ND-TV)', '1.5 (1NZ-FE)'] },
+                    'Yaris P2': { name: 'Yaris P2 (2005-2011)', motors: ['1.0 (1KR-FE)', '1.3 (2NZ-FE)', '1.4 D-4D (1ND-TV)', '1.8 (2ZR-FE)'] },
+                    'Yaris P3': { name: 'Yaris P3 (2011-2020)', motors: ['1.0 (1KR-FE)', '1.3 (1NR-FE)', '1.5 (1NZ-FE)', '1.4 D-4D (1ND-TV)'] },
+                    'Yaris P4': { name: 'Yaris P4 (2020-heute)', motors: ['1.0 (1KR-FE)', '1.5 Hybrid (M15A-FXE)', 'GR (G16E-GTS)'] }
+                }
+            },
+
+            // ---------- NISSAN ----------
+            'nissan': {
+                name: 'Nissan',
+                series: {
+                    '350Z': { name: '350Z (2002-2009)', motors: ['3.5 V6 (VQ35DE)', '3.5 V6 RevUp (VQ35DE)'] },
+                    '370Z': { name: '370Z (2009-2020)', motors: ['3.7 V6 (VQ37VHR)'] },
+                    'GTR R35': { name: 'GT-R R35 (2007-heute)', motors: ['3.8 V6 Twin-Turbo (VR38DETT)'] },
+                    'Skyline R32': { name: 'Skyline R32 (1989-1994)', motors: ['2.0 (RB20DE)', '2.0 Turbo (RB20DET)', '2.5 (RB25DE)', '2.6 Twin-Turbo (RB26DETT)'] },
+                    'Skyline R33': { name: 'Skyline R33 (1993-1998)', motors: ['2.0 (RB20DE)', '2.5 (RB25DE)', '2.5 Turbo (RB25DET)', '2.6 Twin-Turbo (RB26DETT)'] },
+                    'Skyline R34': { name: 'Skyline R34 (1999-2002)', motors: ['2.5 (RB25DE)', '2.5 Turbo (RB25DET)', '2.6 Twin-Turbo (RB26DETT)'] },
+                    'Skyline V35': { name: 'Skyline V35 (2001-2007)', motors: ['2.5 V6 (VQ25DD)', '3.0 V6 (VQ30DD)', '3.5 V6 (VQ35DE)'] },
+                    'Skyline V36': { name: 'Skyline V36 (2006-2014)', motors: ['2.5 V6 (VQ25HR)', '3.5 V6 (VQ35HR)', '3.7 V6 (VQ37VHR)'] },
+                    'Silvia S13': { name: 'Silvia S13 (1988-1994)', motors: ['1.8 Turbo (CA18DET)', '2.0 (SR20DE)', '2.0 Turbo (SR20DET)'] },
+                    'Silvia S14': { name: 'Silvia S14 (1994-1999)', motors: ['2.0 (SR20DE)', '2.0 Turbo (SR20DET)'] },
+                    'Silvia S15': { name: 'Silvia S15 (1999-2002)', motors: ['2.0 (SR20DE)', '2.0 Turbo (SR20DET)'] },
+                    '200SX S13': { name: '200SX S13 (1988-1994)', motors: ['1.8 Turbo (CA18DET)'] },
+                    '200SX S14': { name: '200SX S14 (1994-1999)', motors: ['2.0 Turbo (SR20DET)'] },
+                    '200SX S15': { name: '200SX S15 (1999-2002)', motors: ['2.0 Turbo (SR20DET)'] },
+                    'Micra K11': { name: 'Micra K11 (1992-2002)', motors: ['1.0 (CG10DE)', '1.3 (CG13DE)'] },
+                    'Micra K12': { name: 'Micra K12 (2002-2010)', motors: ['1.0 (CR10DE)', '1.2 (CR12DE)', '1.4 (CR14DE)', '1.5 dCi (K9K)'] }
+                }
+            },
+
+            // ---------- PORSCHE ----------
+            'porsche': {
+                name: 'Porsche',
+                series: {
+                    '911 964': { name: '911 964 (1989-1994)', motors: ['3.6 (M64)', '3.6 Turbo (M64)', 'RS (M64)'] },
+                    '911 993': { name: '911 993 (1994-1998)', motors: ['3.6 (M64)', '3.6 Turbo (M64)', 'RS (M64)', 'GT2 (M64)'] },
+                    '911 996': { name: '911 996 (1997-2005)', motors: ['3.4 (M96)', '3.6 (M96)', 'Turbo (M96/70)', 'GT3 (M96/79)', 'GT2 (M96/70)'] },
+                    '911 997': { name: '911 997 (2004-2012)', motors: ['3.6 (M97)', '3.8 (M97)', 'Turbo (M97/70)', 'GT3 (M97/79)', 'GT2 (M97/70)'] },
+                    '911 991': { name: '911 991 (2011-2019)', motors: ['3.4 (MA1)', '3.8 (MA1)', 'Turbo (MA1/71)', 'GT3 (MA1/75)', 'GT2 (MA1/75)'] },
+                    '911 992': { name: '911 992 (2019-heute)', motors: ['3.0 (MA2)', '3.8 (MA2)', 'Turbo (MA2)', 'GT3 (MA2)'] },
+                    'Cayman 987': { name: 'Cayman 987 (2005-2012)', motors: ['2.7 (M97)', '2.9 (M97)', '3.4 (M97)', 'S (M97)', 'R (M97)'] },
+                    'Cayman 981': { name: 'Cayman 981 (2012-2016)', motors: ['2.7 (MA1)', '3.4 (MA1)', 'GT4 (MA1)'] },
+                    'Cayman 982': { name: 'Cayman 982 (2016-heute)', motors: ['2.0 (MA2)', '2.5 (MA2)', 'GT4 (MA2)'] },
+                    'Boxster 986': { name: 'Boxster 986 (1996-2004)', motors: ['2.5 (M96)', '2.7 (M96)', '3.2 S (M96)'] },
+                    'Boxster 987': { name: 'Boxster 987 (2005-2012)', motors: ['2.7 (M97)', '2.9 (M97)', '3.4 (M97)', 'S (M97)'] },
+                    'Boxster 981': { name: 'Boxster 981 (2012-2016)', motors: ['2.7 (MA1)', '3.4 (MA1)', 'S (MA1)'] },
+                    'Boxster 982': { name: 'Boxster 982 (2016-heute)', motors: ['2.0 (MA2)', '2.5 (MA2)', 'GTS (MA2)'] },
+                    'Panamera 970': { name: 'Panamera 970 (2009-2016)', motors: ['3.6 V6 (M46)', '4.8 V8 (M48)', 'Turbo (M48)', 'S (M48)', 'GTS (M48)'] },
+                    'Panamera 971': { name: 'Panamera 971 (2016-2023)', motors: ['2.9 V6 (M46)', '4.0 V8 (M48)', 'Turbo (M48)', 'S (M46)'] },
+                    'Cayenne 9PA': { name: 'Cayenne 9PA (2002-2010)', motors: ['3.2 V6 (M55)', '4.5 V8 (M48)', 'Turbo (M48)', 'S (M48)', 'GTS (M48)'] },
+                    'Cayenne 92A': { name: 'Cayenne 92A (2010-2017)', motors: ['3.0 V6 (M55)', '3.6 V6 (M46)', '4.8 V8 (M48)', 'Turbo (M48)', 'S (M48)', 'GTS (M48)'] },
+                    'Cayenne 9YA': { name: 'Cayenne 9YA (2017-heute)', motors: ['3.0 V6 (M55)', '2.9 V6 (M46)', '4.0 V8 (M48)', 'Turbo (M48)', 'S (M46)'] },
+                    'Macan 95B': { name: 'Macan 95B (2014-heute)', motors: ['2.0 (M55)', '3.0 V6 (M46)', '3.6 V6 (M46)', 'S (M46)', 'GTS (M46)', 'Turbo (M46)'] }
+                }
+            },
+
+            // ---------- HONDA ----------
+            'honda': {
+                name: 'Honda',
+                series: {
+                    'Civic EG': { name: 'Civic EG (1991-1995)', motors: ['1.3 (D13B)', '1.5 (D15B)', '1.6 VTi (D16Z6)', '1.6 VTi (B16A2)'] },
+                    'Civic EK': { name: 'Civic EK (1995-2000)', motors: ['1.4 (D14A4)', '1.5 (D15B)', '1.6 VTi (B16A2)', 'Type R (B16B)'] },
+                    'Civic EP': { name: 'Civic EP (2001-2005)', motors: ['1.4 (D14Z4)', '1.6 (D16W1)', '2.0 Type R (K20A2)'] },
+                    'Civic FN': { name: 'Civic FN (2006-2011)', motors: ['1.4 (L13A7)', '1.8 (R18A2)', '2.0 Type R (K20Z4)'] },
+                    'Civic FK': { name: 'Civic FK (2011-2017)', motors: ['1.4 (L13Z1)', '1.8 (R18Z1)', '1.6 i-DTEC (N16A1)', '2.0 Type R (K20C1)'] },
+                    'Civic FC': { name: 'Civic FC (2017-2022)', motors: ['1.0 (P10A1)', '1.5 (L15B7)', '1.6 i-DTEC (N16A1)', '2.0 Type R (K20C1)'] },
+                    'Civic FL': { name: 'Civic FL (2022-heute)', motors: ['1.5 (L15C1)', '2.0 Type R (K20C1)', '2.0 e:PHEV (LFA1)'] },
+                    'Accord CG': { name: 'Accord CG (1998-2002)', motors: ['1.8 (F18B2)', '2.0 (F20B6)', '2.0 (F20Z1)', '2.3 (F23Z5)', '2.2 i-CTDI (N22A1)'] },
+                    'Accord CL': { name: 'Accord CL (2003-2008)', motors: ['2.0 (K20A6)', '2.4 (K24A3)', '2.2 i-CTDI (N22A1)'] },
+                    'Accord CU': { name: 'Accord CU (2008-2015)', motors: ['2.0 (R20A5)', '2.4 (K24Z3)', '2.2 i-DTEC (N22B2)'] },
+                    'S2000': { name: 'S2000 (1999-2009)', motors: ['2.0 (F20C)', '2.2 (F22C1)'] },
+                    'Integra DC2': { name: 'Integra DC2 (1993-2001)', motors: ['1.8 (B18C1)', '1.8 Type R (B18C5)'] },
+                    'Integra DC5': { name: 'Integra DC5 (2001-2006)', motors: ['2.0 (K20A3)', '2.0 Type R (K20A)'] },
+                    'Prelude BB5': { name: 'Prelude BB5 (1996-2001)', motors: ['2.0 (F20A4)', '2.2 (H22A5)', '2.2 VTEC (H22A)'] },
+                    'Prelude BB6': { name: 'Prelude BB6 (1997-2001)', motors: ['2.0 (F20A4)', '2.2 (H22A5)', '2.2 VTEC (H22A8)'] }
+                }
+            },
+
+            // ---------- HYUNDAI ----------
+            'hyundai': {
+                name: 'Hyundai',
+                series: {
+                    'i30 PD': { name: 'i30 PD (2017-heute)', motors: ['1.0 T-GDI (G3LF)', '1.4 T-GDI (G4LD)', '1.5 T-GDI (G4LH)', '2.0 N (G4KH)', '1.6 CRDi (D4FE)', '1.6 CRDi (D4FB)'] },
+                    'i30 GD': { name: 'i30 GD (2012-2017)', motors: ['1.4 (G4FA)', '1.6 (G4FD)', '1.6 GDI (G4FD)', '1.6 CRDi (D4FB)', '1.6 CRDi (D4FC)'] },
+                    'i20 GB': { name: 'i20 GB (2015-2020)', motors: ['1.0 T-GDI (G3LC)', '1.2 (G4LA)', '1.4 (G4LC)', '1.4 CRDi (D4FA)'] },
+                    'i20 BC3': { name: 'i20 BC3 (2020-heute)', motors: ['1.0 T-GDI (G3LF)', '1.2 (G4LA)', '1.5 CRDi (D4FA)', 'N (G4FP)'] },
+                    'Kona OS': { name: 'Kona OS (2017-2023)', motors: ['1.0 T-GDI (G3LF)', '1.6 T-GDI (G4FJ)', '2.0 (G4NC)', '1.6 CRDi (D4FE)', 'N (G4KH)'] },
+                    'Kona SX2': { name: 'Kona SX2 (2023-heute)', motors: ['1.0 T-GDI (G3LF)', '1.6 T-GDI (G4FJ)', '2.0 (G4NC)', 'N (G4KH)'] },
+                    'Tucson TL': { name: 'Tucson TL (2015-2020)', motors: ['1.6 T-GDI (G4FJ)', '2.0 (G4NC)', '1.7 CRDi (D4FE)', '2.0 CRDi (D4HA)'] },
+                    'Tucson NX4': { name: 'Tucson NX4 (2020-heute)', motors: ['1.6 T-GDI (G4FJ)', '2.0 (G4NC)', '1.6 CRDi (D4FE)', '2.0 CRDi (D4HA)'] }
+                }
+            },
+
+            // ---------- SEAT/CUPRA ----------
+            'seat': {
+                name: 'Seat/Cupra',
+                series: {
+                    'Leon 1M': { name: 'Leon 1M (1999-2006)', motors: ['1.4 (AEX)', '1.6 (AEH)', '1.8T (AGU)', '1.8T Cupra (AUQ)', '2.8 VR5 (AQN)', '1.9 TDI (ALH)', '1.9 TDI (ASZ)', '2.0 TDI (ARL)'] },
+                    'Leon 1P': { name: 'Leon 1P (2005-2012)', motors: ['1.4 TSI (CAXC)', '1.6 (BSE)', '1.8 TFSI (BZB)', '2.0 TFSI (BWA)', '2.0 TFSI Cupra (BWJ)', '1.9 TDI (BKC)', '2.0 TDI (BKD)', '2.0 TDI (BMN)'] },
+                    'Leon 5F': { name: 'Leon 5F (2012-2020)', motors: ['1.2 TSI (CJZA)', '1.4 TSI (CHPA)', '1.8 TSI (CJSB)', '2.0 TSI (CHHB)', '2.0 TSI Cupra (CJXA)', '1.6 TDI (CRKB)', '2.0 TDI (CUNA)'] },
+                    'Leon KL': { name: 'Leon KL (2020-heute)', motors: ['1.0 TSI (DLA)', '1.5 TSI (DPCA)', '2.0 TSI (DNPA)', '2.0 TSI Cupra (DNPA)', '2.0 TDI (DTR)'] },
+                    'Ibiza 6J': { name: 'Ibiza 6J (2008-2017)', motors: ['1.0 (CHYA)', '1.2 TSI (CBZB)', '1.4 (CGGA)', '1.4 TSI (CAVA)', '1.6 (CFNA)', '1.2 TDI (CFWA)', '1.4 TDI (CUSA)', '1.6 TDI (CAYA)'] },
+                    'Ibiza 6K': { name: 'Ibiza 6K (1993-2002)', motors: ['1.0 (AAU)', '1.4 (AEX)', '1.6 (AEH)', '1.8T (AQQ)', '1.9 TDI (AGR)', '1.9 SDI (AEY)'] },
+                    'Ibiza 6L': { name: 'Ibiza 6L (2002-2008)', motors: ['1.2 (AZQ)', '1.4 (AUB)', '1.6 (BTS)', '1.8T (BBU)', '1.4 TDI (AMF)', '1.9 TDI (ATD)', '1.9 TDI (ASZ)'] },
+                    'Ibiza KJ': { name: 'Ibiza KJ (2017-heute)', motors: ['1.0 TSI (CHZD)', '1.5 TSI (DPCA)', '1.6 TDI (CRKB)'] },
+                    'Arona': { name: 'Arona (2017-heute)', motors: ['1.0 TSI (CHZD)', '1.5 TSI (DPCA)', '1.6 TDI (CRKB)'] },
+                    'Formentor': { name: 'Formentor (2020-heute)', motors: ['1.5 TSI (DPCA)', '2.0 TSI (DNPA)', '2.0 TSI VZ (DNPA)', '2.0 TDI (DTR)'] }
+                }
+            }
         };
 
         // ============ PRODUKTE (Admin-verwaltet) ============
@@ -1707,4 +1896,3 @@
     </script>
 </body>
 </html>
-    
