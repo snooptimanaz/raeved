@@ -1080,4 +1080,130 @@
             container.innerHTML = '<p style="color:var(--text-darker);">Keine Produkte vorhanden.</p>';
             return;
         }
-        let html = '<table class="admin-table"><tr><th>Name</th><th>Preis</th><th>Kategorie</th><th>Fahrzeug-Match</th
+        let html = '<table class="admin-table"><tr><th>Name</th><th>Preis</th><th>Kategorie</th><th>Fahrzeug-Match</th><th>Aktionen</th></tr>';
+        products.forEach((p, i) => {
+            const match = p.vehicleMatch ? p.vehicleMatch.map(m => m.brand + ' ' + m.series).join(', ') : 'universell';
+            html += `<tr>
+                <td>${p.name}</td>
+                <td>${p.price.toFixed(2).replace('.', ',')} €</td>
+                <td>${p.category || '-'}</td>
+                <td>${match}</td>
+                <td>
+                    <button class="admin-btn" onclick="editProduct(${i})">Bearbeiten</button>
+                    <button class="admin-btn danger" onclick="deleteProduct(${i})">Löschen</button>
+                </td>
+            </tr>`;
+        });
+        html += '</table>';
+        container.innerHTML = html;
+    }
+    function renderAdminOrders() {
+        const container = document.getElementById('adminOrderList');
+        if (orders.length === 0) {
+            container.innerHTML = '<p style="color:var(--text-darker);">Keine Bestellungen vorhanden.</p>';
+            return;
+        }
+        let html = '<table class="admin-table"><tr><th>ID</th><th>Kunde</th><th>Produkte</th><th>Gesamt</th><th>Datum</th></tr>';
+        orders.forEach(o => {
+            const items = o.items.map(i => i.name).join(', ');
+            html += `<tr><td>${o.id}</td><td>${o.user}</td><td>${items}</td><td>${o.total.toFixed(2).replace('.',',')} €</td><td>${o.date}</td></tr>`;
+        });
+        html += '</table>';
+        container.innerHTML = html;
+    }
+    function addNewProduct() {
+        document.getElementById('productModalTitle').textContent = 'Neues Produkt';
+        document.getElementById('productName').value = '';
+        document.getElementById('productPrice').value = '';
+        document.getElementById('productDescription').value = '';
+        document.getElementById('productCategory').value = '';
+        document.getElementById('productAffiliateLink').value = '';
+        document.getElementById('productVehicleMatch').value = '';
+        document.getElementById('productModal').classList.add('show');
+    }
+    function editProduct(index) {
+        const p = products[index];
+        document.getElementById('productModalTitle').textContent = 'Produkt bearbeiten';
+        document.getElementById('productName').value = p.name;
+        document.getElementById('productPrice').value = p.price;
+        document.getElementById('productDescription').value = p.description || '';
+        document.getElementById('productCategory').value = p.category || '';
+        document.getElementById('productAffiliateLink').value = p.affiliateLink || '';
+        document.getElementById('productVehicleMatch').value = p.vehicleMatch ? JSON.stringify(p.vehicleMatch) : '';
+        document.getElementById('productModal').classList.add('show');
+        document.getElementById('productModal').dataset.editIndex = index;
+    }
+    function saveProduct() {
+        const name = document.getElementById('productName').value.trim();
+        const price = parseFloat(document.getElementById('productPrice').value);
+        const description = document.getElementById('productDescription').value.trim();
+        const category = document.getElementById('productCategory').value.trim();
+        const affiliateLink = document.getElementById('productAffiliateLink').value.trim();
+        const vehicleMatchStr = document.getElementById('productVehicleMatch').value.trim();
+        if (!name || !price) { alert('Name und Preis sind Pflicht!'); return; }
+        let vehicleMatch = null;
+        if (vehicleMatchStr) {
+            try { vehicleMatch = JSON.parse(vehicleMatchStr); } catch(e) { alert('Ungültiges JSON für Fahrzeug-Match!'); return; }
+        }
+        const editIndex = document.getElementById('productModal').dataset.editIndex;
+        if (editIndex !== undefined && editIndex !== '') {
+            products[parseInt(editIndex)] = { ...products[parseInt(editIndex)], name, price, description, category, affiliateLink, vehicleMatch };
+        } else {
+            products.push({ id: Date.now(), name, price, description, category, affiliateLink, vehicleMatch, badge: 'Neu' });
+        }
+        localStorage.setItem('raeved_products', JSON.stringify(products));
+        closeModal('productModal');
+        renderAdminProducts();
+        renderProducts();
+        buildCategoryGrid();
+        buildCategoryMenu();
+        delete document.getElementById('productModal').dataset.editIndex;
+    }
+    function deleteProduct(index) {
+        if (confirm('Produkt wirklich löschen?')) {
+            products.splice(index, 1);
+            localStorage.setItem('raeved_products', JSON.stringify(products));
+            renderAdminProducts();
+            renderProducts();
+            buildCategoryGrid();
+            buildCategoryMenu();
+        }
+    }
+
+    // ============ KONTAKT TABS ============
+    function showLegalTab(tab) {
+        document.querySelectorAll('.contact-tab').forEach(t => t.classList.remove('active'));
+        document.querySelectorAll('.legal').forEach(l => l.classList.remove('active'));
+        document.querySelector(`.contact-tab[onclick*="${tab}"]`).classList.add('active');
+        document.getElementById('legal-' + tab).classList.add('active');
+    }
+
+    // ============ ADMIN-MENU ============
+    function updateAdminMenu() {
+        const container = document.getElementById('adminMenuContainer');
+        if (currentUser && currentUser.email.toLowerCase() === OWNER_EMAIL) {
+            container.innerHTML = `<div class="menu-heading">Admin</div>
+                <button class="menu-item sub" onclick="showAdminPanel()">Admin Panel</button>`;
+        } else {
+            container.innerHTML = '';
+        }
+    }
+
+    // ============ INIT ============
+    document.getElementById('wishlistCount').textContent = wishlist.length;
+    initVehicleDropdowns();
+    buildCategoryGrid();
+    buildCategoryMenu();
+    renderProducts();
+    updateAdminMenu();
+
+    // Wenn Fahrzeug gespeichert, Filter anwenden
+    if (selectedVehicle) {
+        // Selektierte Werte in Dropdowns setzen (optional)
+        // Produkte filtern
+        renderProducts();
+        buildCategoryGrid();
+    }
+</script>
+</body>
+</html>
