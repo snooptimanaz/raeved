@@ -1,0 +1,1135 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>RÆVED // Build it. Drive it. Live it.</title>
+    <link href="https://fonts.googleapis.com/css2?family=Oswald:wght@300;400;500;600;700&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet" />
+    <style>
+        /* ===== ROOT ===== */
+        :root {
+            --black: #0a0a0a; --dark: #111; --darker: #050505; --card: #181818; --border: #2a2a2a;
+            --border-light: #3a3a3a; --text: #e0e0e0; --text-dark: #888; --text-darker: #555; --danger: #cc0000;
+        }
+        * { margin:0; padding:0; box-sizing:border-box; }
+        html { scroll-behavior:smooth; }
+        body { background:var(--black); color:var(--text); font-family:'Inter',sans-serif; line-height:1.6; overflow-x:hidden; }
+        a { text-decoration:none; color:inherit; }
+
+        /* ===== HEADER ===== */
+        .header {
+            display: flex; justify-content: space-between; align-items: center;
+            padding: 12px 30px; border-bottom: 1px solid var(--border);
+            background: var(--darker); position: sticky; top: 0; z-index: 60; min-height: 70px;
+        }
+        .logo-wrapper { display:flex; flex-direction:column; line-height:1; }
+        .logo { font-family:'Oswald',sans-serif; font-size:3.2rem; letter-spacing:8px; color:#fff; text-transform:uppercase; font-weight:700; text-shadow:0 0 40px rgba(255,255,255,0.05); margin-bottom:2px; }
+        .logo span { color:var(--text-darker); }
+        .logo-tagline { font-size:0.7rem; letter-spacing:6px; color:var(--text-darker); text-transform:uppercase; font-weight:300; margin-top:-2px; padding-left:2px; }
+        .header-actions { display:flex; align-items:center; gap:10px; }
+        .header-btn { background:transparent; border:1px solid var(--border); color:var(--text); font-size:0.7rem; letter-spacing:1px; cursor:pointer; transition:0.3s; padding:6px 12px; text-transform:uppercase; font-family:'Inter',sans-serif; }
+        .header-btn:hover { border-color:#fff; color:#fff; }
+        .wishlist-count { background:#fff; color:#000; padding:0 6px; font-size:0.6rem; font-weight:700; border-radius:30px; margin-left:5px; }
+        .hamburger { width:40px; height:40px; background:transparent; border:1px solid var(--border); cursor:pointer; display:flex; flex-direction:column; justify-content:center; align-items:center; gap:5px; transition:0.3s; }
+        .hamburger:hover { border-color:#fff; }
+        .hamburger span { display:block; width:18px; height:2px; background:var(--text); transition:0.3s; }
+        .hamburger.active span:nth-child(1) { transform:rotate(45deg) translate(5px,5px); }
+        .hamburger.active span:nth-child(2) { opacity:0; }
+        .hamburger.active span:nth-child(3) { transform:rotate(-45deg) translate(5px,-5px); }
+
+        /* ===== MOBILE MENU ===== */
+        .overlay { position:fixed; top:0; left:0; right:0; bottom:0; background:rgba(0,0,0,0.8); z-index:58; opacity:0; visibility:hidden; transition:0.3s; }
+        .overlay.show { opacity:1; visibility:visible; }
+        .mobile-menu { position:fixed; top:0; right:-320px; width:300px; height:100vh; background:var(--darker); border-left:1px solid var(--border); transition:right 0.3s; z-index:59; overflow-y:auto; padding:70px 20px 30px; }
+        .mobile-menu.open { right:0; }
+        .menu-item { display:block; padding:12px 0; border-bottom:1px solid var(--border); color:var(--text); text-transform:uppercase; letter-spacing:2px; font-size:0.75rem; transition:0.3s; cursor:pointer; background:none; border-left:none; border-right:none; border-top:none; width:100%; text-align:left; font-family:'Inter',sans-serif; }
+        .menu-item:hover { color:#fff; padding-left:10px; }
+        .menu-item.sub { font-size:0.65rem; color:var(--text-darker); padding-left:15px; }
+        .menu-heading { font-family:'Oswald',sans-serif; font-size:0.6rem; letter-spacing:3px; color:var(--text-darker); text-transform:uppercase; margin:20px 0 5px; padding-bottom:5px; border-bottom:1px solid var(--border-light); }
+        /* Admin-Eintrag wird per JS dynamisch eingefügt */
+
+        /* ===== PAGE CONTAINER ===== */
+        .page { display:none; padding:20px; max-width:1200px; margin:0 auto; }
+        .page.active { display:block; }
+
+        /* ===== HERO ===== */
+        .hero { height:55vh; min-height:300px; display:flex; align-items:center; justify-content:center; text-align:center; background:radial-gradient(circle at 30% 30%,#1a1a1a,#0a0a0a 80%); border-bottom:1px solid var(--border); padding:15px; }
+        .hero h1 { font-family:'Oswald',sans-serif; font-size:clamp(2.2rem,8vw,4rem); letter-spacing:6px; color:#fff; text-transform:uppercase; line-height:1.1; margin-bottom:8px; }
+        .hero h1 span { color:var(--text-darker); }
+        .hero p { font-size:0.8rem; letter-spacing:3px; color:var(--text-dark); text-transform:uppercase; margin-bottom:20px; }
+        .hero-cta { display:inline-block; background:#fff; color:#000; padding:12px 35px; font-family:'Oswald',sans-serif; font-weight:600; letter-spacing:3px; text-transform:uppercase; font-size:0.75rem; transition:0.3s; cursor:pointer; }
+        .hero-cta:hover { background:#ddd; }
+
+        /* ===== SEARCH (auf Startseite) ===== */
+        .search-section { background:var(--darker); padding:15px 20px 20px; border-bottom:1px solid var(--border); }
+        .search-tabs { display:flex; justify-content:center; gap:10px; margin-bottom:15px; flex-wrap:wrap; }
+        .search-tab { background:transparent; border:1px solid var(--border); color:var(--text-dark); padding:8px 20px; cursor:pointer; font-size:0.7rem; letter-spacing:2px; text-transform:uppercase; transition:0.3s; font-family:'Inter',sans-serif; }
+        .search-tab.active { border-color:#fff; color:#fff; background:rgba(255,255,255,0.05); }
+        .search-tab:hover { color:#fff; }
+        .search-box { display:flex; flex-direction:column; gap:6px; max-width:400px; margin:0 auto; }
+        .custom-select { position:relative; width:100%; }
+        .custom-select-trigger { background:var(--card); border:1px solid var(--border); color:#fff; padding:12px 15px; font-family:'Inter',sans-serif; font-size:0.75rem; letter-spacing:1px; text-transform:uppercase; cursor:pointer; display:flex; justify-content:space-between; align-items:center; transition:border-color 0.3s; min-height:46px; width:100%; }
+        .custom-select-trigger:hover { border-color:#fff; }
+        .custom-select-trigger .arrow { font-size:0.6rem; transition:transform 0.3s; }
+        .custom-select.active .custom-select-trigger .arrow { transform:rotate(180deg); }
+        .custom-select-options { position:absolute; top:100%; left:0; right:0; background:var(--darker); border:1px solid var(--border); border-top:none; max-height:200px; overflow-y:auto; z-index:30; display:none; }
+        .custom-select.active .custom-select-options { display:block; }
+        .custom-option { padding:10px 15px; cursor:pointer; font-size:0.7rem; letter-spacing:1px; text-transform:uppercase; color:var(--text); transition:0.2s; }
+        .custom-option:hover { background:var(--card); color:#fff; padding-left:20px; }
+        .custom-option.selected { background:var(--card); color:#fff; }
+        .custom-option.disabled { color:var(--text-darker); cursor:not-allowed; }
+        .btn-search { background:#fff; color:#000; border:none; padding:12px; font-family:'Oswald',sans-serif; font-size:0.85rem; letter-spacing:3px; text-transform:uppercase; cursor:pointer; transition:0.3s; font-weight:600; min-height:46px; width:100%; display:flex; align-items:center; justify-content:center; gap:8px; }
+        .btn-search:hover { background:#ddd; }
+        .hsn-panel { max-width:400px; margin:0 auto; display:none; flex-direction:column; gap:6px; }
+        .hsn-panel.show { display:flex; }
+        .hsn-panel input { background:var(--card); border:1px solid var(--border); color:#fff; padding:12px 15px; font-family:'Inter',sans-serif; font-size:0.7rem; letter-spacing:2px; text-transform:uppercase; text-align:center; outline:none; width:100%; }
+        .hsn-panel input:focus { border-color:#fff; }
+        .search-result { max-width:700px; margin:15px auto 0; padding:15px; background:var(--darker); border:1px solid var(--border); text-align:center; display:none; }
+        .search-result.show { display:block; }
+        .search-result .vehicle-image { max-width:200px; margin:10px auto; display:block; }
+
+        /* ===== KATEGORIEN (Startseite) ===== */
+        .section-title { text-align:center; font-family:'Oswald',sans-serif; font-size:1.8rem; letter-spacing:5px; color:#fff; padding:40px 20px 25px; text-transform:uppercase; font-weight:700; }
+        .section-title span { color:var(--text-darker); }
+        .categories-grid { display:grid; grid-template-columns:repeat(auto-fit,minmax(150px,1fr)); gap:20px; padding:0 20px 30px; max-width:1100px; margin:0 auto; }
+        .category-card { background:var(--card); border:1px solid var(--border); text-align:center; cursor:pointer; transition:0.3s; padding:30px 15px 20px; }
+        .category-card:hover { border-color:#888; transform:translateY(-5px); box-shadow:0 15px 40px rgba(0,0,0,0.5); }
+        .category-icon { font-size:2.8rem; margin-bottom:10px; }
+        .category-card h3 { font-family:'Oswald',sans-serif; text-transform:uppercase; letter-spacing:2px; color:#fff; font-size:0.9rem; font-weight:600; }
+
+        /* ===== TOP DEALS (Startseite) ===== */
+        .products-grid { display:grid; grid-template-columns:repeat(auto-fill,minmax(240px,1fr)); gap:20px; padding:0 20px 40px; max-width:1100px; margin:0 auto; }
+        .product-card { background:var(--card); border:1px solid var(--border); transition:0.3s; display:flex; flex-direction:column; position:relative; }
+        .product-card:hover { border-color:var(--border-light); transform:translateY(-5px); box-shadow:0 15px 40px rgba(0,0,0,0.5); }
+        .product-badge { position:absolute; top:10px; left:10px; background:#fff; color:#000; padding:3px 10px; font-size:0.55rem; font-weight:600; letter-spacing:1px; text-transform:uppercase; z-index:10; }
+        .product-badge.sale { background:#cc0000; color:#fff; }
+        .product-image { background:#0d0d0d; height:150px; display:flex; align-items:center; justify-content:center; font-size:2.5rem; border-bottom:1px solid var(--border); }
+        .product-info { padding:15px; flex:1; display:flex; flex-direction:column; }
+        .product-info h4 { font-family:'Oswald',sans-serif; text-transform:uppercase; letter-spacing:1px; color:#fff; font-size:0.8rem; font-weight:600; margin-bottom:4px; }
+        .product-info .description { color:var(--text-darker); font-size:0.65rem; margin-bottom:8px; flex:1; }
+        .price-row { display:flex; align-items:center; gap:8px; margin-bottom:10px; flex-wrap:wrap; }
+        .price { font-size:1.1rem; color:#fff; font-weight:600; }
+        .old-price { text-decoration:line-through; color:var(--text-darker); font-size:0.7rem; }
+        .btn-add-wishlist { display:block; background:#fff; color:#000; text-align:center; padding:8px; text-transform:uppercase; letter-spacing:1px; font-size:0.65rem; cursor:pointer; border:none; font-family:'Inter',sans-serif; font-weight:600; transition:background 0.3s; }
+        .btn-add-wishlist:hover { background:#ddd; }
+
+        /* ===== KATEGORIE-SEITE ===== */
+        .category-products { display:grid; grid-template-columns:repeat(auto-fill,minmax(220px,1fr)); gap:20px; padding:20px 0; }
+        .category-products .product-card { opacity:1; transform:none; }
+
+        /* ===== ÜBER UNS ===== */
+        .about-box { background:var(--card); border:1px solid var(--border); padding:30px; max-width:800px; margin:0 auto; text-align:left; }
+        .about-box p { color:var(--text-dark); font-size:0.9rem; line-height:1.8; margin-bottom:15px; }
+        .about-box strong { color:#fff; }
+
+        /* ===== KONTAKT / IMPRESSUM ===== */
+        .contact-tabs { display:flex; gap:10px; flex-wrap:wrap; justify-content:center; margin-bottom:20px; }
+        .contact-tab { background:transparent; border:1px solid var(--border); color:var(--text-dark); padding:8px 20px; cursor:pointer; font-size:0.7rem; letter-spacing:2px; text-transform:uppercase; transition:0.3s; font-family:'Inter',sans-serif; }
+        .contact-tab.active { border-color:#fff; color:#fff; background:rgba(255,255,255,0.05); }
+        .contact-tab:hover { color:#fff; }
+        .contact-content { background:var(--card); border:1px solid var(--border); padding:30px; max-width:800px; margin:0 auto; }
+        .contact-content h3 { font-family:'Oswald',sans-serif; letter-spacing:2px; color:#fff; margin-bottom:15px; }
+        .contact-content p { color:var(--text-dark); font-size:0.85rem; line-height:1.8; }
+        .contact-content .legal { display:none; }
+        .contact-content .legal.active { display:block; }
+
+        /* ===== ADMIN PANEL (wird nur bei Owner eingeblendet) ===== */
+        .admin-panel { display:none; padding:30px 20px; max-width:900px; margin:0 auto; }
+        .admin-panel.show { display:block; }
+        .admin-header { display:flex; justify-content:space-between; align-items:center; margin-bottom:20px; flex-wrap:wrap; gap:10px; }
+        .admin-btn { background:var(--card); border:1px solid var(--border); color:var(--text); padding:8px 15px; cursor:pointer; font-size:0.7rem; letter-spacing:1px; text-transform:uppercase; transition:0.3s; font-family:'Inter',sans-serif; }
+        .admin-btn:hover { border-color:#fff; color:#fff; }
+        .admin-btn.danger { border-color:var(--danger); color:var(--danger); }
+        .admin-table { width:100%; border-collapse:collapse; margin-top:15px; }
+        .admin-table th,.admin-table td { padding:10px; text-align:left; border-bottom:1px solid var(--border); font-size:0.7rem; }
+        .admin-table th { font-family:'Oswald',sans-serif; letter-spacing:1px; text-transform:uppercase; color:#fff; }
+        .admin-table td { color:var(--text-dark); }
+
+        /* ===== FOOTER ===== */
+        .footer { background:var(--darker); padding:30px 20px; text-align:center; border-top:1px solid var(--border); margin-top:20px; }
+        .footer .logo { font-size:1.5rem; margin-bottom:3px; }
+        .footer .tagline { color:var(--text-darker); font-size:0.55rem; letter-spacing:3px; text-transform:uppercase; margin-bottom:15px; }
+        .footer-social { display:flex; justify-content:center; gap:15px; margin-bottom:12px; }
+        .footer p { color:var(--text-darker); font-size:0.6rem; }
+        .footer .disclaimer { margin-top:15px; font-size:0.5rem; color:#333; max-width:450px; margin-left:auto; margin-right:auto; }
+
+        /* ===== MODALS ===== */
+        .modal { position:fixed; top:0; left:0; right:0; bottom:0; background:rgba(0,0,0,0.85); z-index:200; display:none; align-items:center; justify-content:center; }
+        .modal.show { display:flex; }
+        .modal-content { background:var(--darker); border:1px solid var(--border); padding:25px; max-width:400px; width:90%; max-height:85vh; overflow-y:auto; position:relative; }
+        .modal-content h2 { font-family:'Oswald',sans-serif; letter-spacing:2px; color:#fff; text-transform:uppercase; font-size:1.2rem; margin-bottom:15px; text-align:center; }
+        .modal-close { position:absolute; top:10px; right:14px; background:none; border:none; color:var(--text-darker); font-size:1.3rem; cursor:pointer; }
+        .modal-input { width:100%; background:var(--card); border:1px solid var(--border); color:#fff; padding:10px; font-family:'Inter',sans-serif; font-size:0.75rem; margin-bottom:10px; outline:none; }
+        .modal-btn { width:100%; background:#fff; color:#000; border:none; padding:10px; font-family:'Oswald',sans-serif; font-size:0.75rem; letter-spacing:2px; text-transform:uppercase; cursor:pointer; font-weight:600; margin-bottom:8px; }
+        .modal-btn.secondary { background:transparent; border:1px solid var(--border); color:var(--text); }
+        .wishlist-item { display:flex; justify-content:space-between; align-items:center; padding:8px 0; border-bottom:1px solid var(--border); }
+        .wishlist-item-info { flex:1; }
+        .wishlist-item-info h4 { font-size:0.8rem; color:#fff; }
+        .wishlist-item-info p { font-size:0.7rem; color:var(--text-darker); }
+        .wishlist-item-remove { background:none; border:none; color:#cc0000; cursor:pointer; font-size:1rem; }
+        .wishlist-total { margin-top:15px; padding-top:15px; border-top:2px solid var(--border); display:flex; justify-content:space-between; font-size:1rem; color:#fff; font-weight:600; }
+
+        /* ===== RESPONSIVE ===== */
+        @media (max-width:768px) {
+            .header { padding:10px 15px; min-height:60px; }
+            .logo { font-size:2.4rem; letter-spacing:5px; }
+            .logo-tagline { font-size:0.6rem; letter-spacing:4px; }
+            .header-btn { font-size:0.6rem; padding:5px 8px; }
+            .hero { height:40vh; min-height:250px; }
+            .hero h1 { font-size:clamp(1.8rem,10vw,2.8rem); letter-spacing:4px; }
+            .search-box { max-width:100%; }
+            .categories-grid { grid-template-columns:1fr 1fr; padding:0 10px 20px; }
+            .products-grid { grid-template-columns:1fr 1fr; padding:0 10px 30px; }
+            .mobile-menu { width:260px; }
+        }
+        @media (max-width:480px) { .categories-grid,.products-grid { grid-template-columns:1fr; } }
+    </style>
+</head>
+<body>
+
+<!-- ===== HEADER ===== -->
+<header class="header">
+    <div class="logo-wrapper">
+        <a href="#" onclick="showPage('home'); return false;" class="logo-link">
+            <div class="logo">RÆ<span>VED</span></div>
+            <div class="logo-tagline">Build it. Drive it. Live it.</div>
+        </a>
+    </div>
+    <div class="header-actions">
+        <button class="header-btn" onclick="showLoginModal()">👤 Login</button>
+        <button class="header-btn" onclick="showWishlistModal()">❤️ <span class="wishlist-count" id="wishlistCount">0</span></button>
+        <button class="hamburger" onclick="toggleMenu()" aria-label="Menü"><span></span><span></span><span></span></button>
+    </div>
+</header>
+
+<!-- ===== OVERLAY & MOBILE MENU ===== -->
+<div class="overlay" id="overlay" onclick="toggleMenu()"></div>
+<div class="mobile-menu" id="mobileMenu">
+    <div class="menu-heading">Navigation</div>
+    <button class="menu-item" onclick="navigateTo('home')">Startseite</button>
+    <button class="menu-item" onclick="navigateTo('about')">Über Uns</button>
+    <button class="menu-item" onclick="navigateTo('contact')">Kontakt / Impressum</button>
+    <div class="menu-heading">Kategorien</div>
+    <button class="menu-item sub" onclick="navigateToCategory('fahrwerke')">Fahrwerke</button>
+    <button class="menu-item sub" onclick="navigateToCategory('felgen')">Felgen</button>
+    <button class="menu-item sub" onclick="navigateToCategory('bremsen')">Bremsen</button>
+    <button class="menu-item sub" onclick="navigateToCategory('auspuff')">Auspuff</button>
+    <button class="menu-item sub" onclick="navigateToCategory('ansaugung')">Ansaugung</button>
+    <button class="menu-item sub" onclick="navigateToCategory('beleuchtung')">Beleuchtung</button>
+    <button class="menu-item sub" onclick="navigateToCategory('pflege')">Pflege</button>
+    <button class="menu-item sub" onclick="navigateToCategory('carhifi')">Car‑HiFi</button>
+    <div id="adminMenuContainer"></div>
+</div>
+
+<!-- ============================================================ -->
+<!-- ===== SEITEN (PAGES) ===== -->
+
+<!-- ===== STARTSEITE (home) ===== -->
+<div id="page-home" class="page active">
+    <!-- HERO -->
+    <section class="hero">
+        <div>
+            <h1>Performance. <span>Präzision.</span> Leidenschaft.</h1>
+            <p>Finde die perfekten Teile für dein Fahrzeug</p>
+            <a href="#search" class="hero-cta">Jetzt entdecken</a>
+        </div>
+    </section>
+
+    <!-- FAHRZEUGSUCHE -->
+    <section class="search-section" id="search">
+        <div class="search-tabs">
+            <button class="search-tab active" onclick="showSearchTab('vehicle')">Fahrzeugsuche</button>
+            <button class="search-tab" onclick="showSearchTab('hsn')">HSN/TSN Suche</button>
+        </div>
+        <div id="vehicleSearch">
+            <div class="search-box">
+                <div class="custom-select" id="selectBrand">
+                    <div class="custom-select-trigger" onclick="toggleDropdown('selectBrand')">
+                        <span class="selected-text">Marke wählen</span><span class="arrow">▼</span>
+                    </div>
+                    <div class="custom-select-options"></div>
+                </div>
+                <div class="custom-select" id="selectSeries">
+                    <div class="custom-select-trigger" onclick="toggleDropdown('selectSeries')">
+                        <span class="selected-text">Baureihe wählen</span><span class="arrow">▼</span>
+                    </div>
+                    <div class="custom-select-options"></div>
+                </div>
+                <div class="custom-select" id="selectMotor">
+                    <div class="custom-select-trigger" onclick="toggleDropdown('selectMotor')">
+                        <span class="selected-text">Motor wählen</span><span class="arrow">▼</span>
+                    </div>
+                    <div class="custom-select-options"></div>
+                </div>
+                <button class="btn-search" onclick="searchVehicle()">🔍 Suchen</button>
+            </div>
+        </div>
+        <div id="hsnSearch" class="hsn-panel">
+            <input type="text" id="hsnInput" placeholder="HSN (4-stellig)" maxlength="4">
+            <input type="text" id="tsnInput" placeholder="TSN (3-stellig)" maxlength="3">
+            <button class="btn-search" onclick="searchHsnTsn()">🔍 Suchen</button>
+        </div>
+        <div class="search-result" id="searchResult">
+            <img class="vehicle-image" id="vehicleImage" src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 60'%3E%3Crect width='100' height='60' fill='%231a1a1a'/%3E%3Cpath d='M15 30 L25 20 L75 20 L85 30 L90 30 L90 40 L85 40 L80 45 L20 45 L15 40 L10 40 L10 30 L15 30Z' fill='%23555'/%3E%3Ccircle cx='30' cy='45' r='8' fill='%23333'/%3E%3Ccircle cx='70' cy='45' r='8' fill='%23333'/%3E%3Ccircle cx='30' cy='45' r='5' fill='%23666'/%3E%3Ccircle cx='70' cy='45' r='5' fill='%23666'/%3E%3Crect x='45' y='25' width='10' height='8' fill='%23444'/%3E%3Crect x='47' y='27' width='6' height='4' fill='%23888'/%3E%3C/svg%3E" alt="Fahrzeug" style="display:none;" />
+            <h3 id="resultTitle"></h3>
+            <p id="resultText"></p>
+            <div id="resultProducts"></div>
+        </div>
+    </section>
+
+    <!-- KATEGORIEN -->
+    <h2 class="section-title">Shop by <span>Category</span></h2>
+    <div class="categories-grid">
+        <div class="category-card" onclick="navigateToCategory('fahrwerke')"><div class="category-icon">🔧</div><h3>Fahrwerke</h3></div>
+        <div class="category-card" onclick="navigateToCategory('felgen')"><div class="category-icon">🛞</div><h3>Felgen</h3></div>
+        <div class="category-card" onclick="navigateToCategory('bremsen')"><div class="category-icon">🛑</div><h3>Bremsen</h3></div>
+        <div class="category-card" onclick="navigateToCategory('auspuff')"><div class="category-icon">💨</div><h3>Auspuff</h3></div>
+        <div class="category-card" onclick="navigateToCategory('ansaugung')"><div class="category-icon">🌀</div><h3>Ansaugung</h3></div>
+        <div class="category-card" onclick="navigateToCategory('beleuchtung')"><div class="category-icon">💡</div><h3>Beleuchtung</h3></div>
+        <div class="category-card" onclick="navigateToCategory('pflege')"><div class="category-icon">🧽</div><h3>Pflege</h3></div>
+        <div class="category-card" onclick="navigateToCategory('carhifi')"><div class="category-icon">🔊</div><h3>Car‑HiFi</h3></div>
+    </div>
+
+    <!-- TOP DEALS -->
+    <h2 class="section-title">⚡ Top <span>Deals</span> ⚡</h2>
+    <div class="products-grid" id="productsContainer"></div>
+</div>
+
+<!-- ===== KATEGORIE-SEITEN (werden dynamisch befüllt) ===== -->
+<div id="page-category" class="page">
+    <button class="admin-btn" style="margin-bottom:15px;" onclick="showPage('home')">← Zurück zur Startseite</button>
+    <h2 id="categoryTitle" class="section-title" style="padding-top:0;">Kategorie</h2>
+    <div id="categoryProducts" class="category-products"></div>
+</div>
+
+<!-- ===== ÜBER UNS ===== -->
+<div id="page-about" class="page">
+    <h2 class="section-title" style="padding-top:0;">Über <span>Uns</span></h2>
+    <div class="about-box">
+        <p><strong>RÆVED</strong> ist ein Affiliate-basierter Online-Shop für Tuning-Enthusiasten.</p>
+        <p>Wir verkaufen keine Produkte direkt, sondern verlinken auf ausgewählte Partner-Shops. Wenn du über unsere Links einkaufst, erhalten wir eine kleine Provision – für dich ändert sich der Preis nicht.</p>
+        <p>Unser Ziel ist es, dir die besten Teile für dein Fahrzeug zu zeigen – übersichtlich, schnell und zuverlässig.</p>
+        <p><strong>Build it. Drive it. Live it.</strong></p>
+    </div>
+</div>
+
+<!-- ===== KONTAKT / IMPRESSUM / DATENSCHUTZ ===== -->
+<div id="page-contact" class="page">
+    <h2 class="section-title" style="padding-top:0;">Kontakt &amp; <span>Rechtliches</span></h2>
+    <div class="contact-tabs">
+        <button class="contact-tab active" onclick="showLegalTab('kontakt')">Kontakt</button>
+        <button class="contact-tab" onclick="showLegalTab('impressum')">Impressum</button>
+        <button class="contact-tab" onclick="showLegalTab('datenschutz')">Datenschutz</button>
+    </div>
+    <div class="contact-content">
+        <div id="legal-kontakt" class="legal active">
+            <h3>Kontakt</h3>
+            <p><strong>RÆVED – Build it. Drive it. Live it.</strong></p>
+            <p>E-Mail: <a href="mailto:snoop.timanaz@gmail.com" style="color:#fff;">snoop.timanaz@gmail.com</a></p>
+            <p>Telefon: +49 (0) 123 4567890</p>
+            <p>Anschrift:<br />RÆVED Tuning<br />Musterstraße 1<br />12345 Musterstadt</p>
+        </div>
+        <div id="legal-impressum" class="legal">
+            <h3>Impressum</h3>
+            <p><strong>Angaben gemäß § 5 TMG</strong></p>
+            <p>RÆVED (Inhaber: Max Mustermann)<br />Musterstraße 1<br />12345 Musterstadt</p>
+            <p><strong>Kontakt:</strong><br />E-Mail: snoop.timanaz@gmail.com<br />Telefon: +49 (0) 123 4567890</p>
+            <p><strong>Umsatzsteuer-ID:</strong> DE123456789</p>
+            <p><strong>Verantwortlich für den Inhalt:</strong> Max Mustermann</p>
+        </div>
+        <div id="legal-datenschutz" class="legal">
+            <h3>Datenschutzerklärung</h3>
+            <p>Diese Website speichert keine personenbezogenen Daten auf einem Server. Alle Daten (Benutzer, Merkliste, Bestellungen) werden ausschließlich im lokalen Speicher deines Browsers (localStorage) abgelegt.</p>
+            <p>Es werden keine Cookies von Drittanbietern gesetzt. Die Nutzung der Seite erfolgt ohne Tracking.</p>
+            <p>Bei Fragen zum Datenschutz kontaktiere uns unter der oben genannten E-Mail-Adresse.</p>
+        </div>
+    </div>
+</div>
+
+<!-- ===== ADMIN PANEL (wird nur bei Owner eingeblendet) ===== -->
+<div id="page-admin" class="page">
+    <div class="admin-header">
+        <h2 class="section-title" style="padding:0;">Admin <span>Panel</span></h2>
+        <button class="admin-btn danger" onclick="logoutAdmin()">Logout</button>
+    </div>
+    <div style="display:flex; gap:8px; flex-wrap:wrap; margin-bottom:20px;">
+        <button class="admin-btn" onclick="showAdminSection('products')">Produkte</button>
+        <button class="admin-btn" onclick="showAdminSection('orders')">Bestellungen</button>
+    </div>
+    <div id="adminProducts">
+        <h3 style="color:#fff; font-family:'Oswald'; letter-spacing:2px; margin-bottom:10px;">Produkte verwalten</h3>
+        <div id="adminProductList"></div>
+        <button class="admin-btn" style="margin-top:10px;" onclick="addNewProduct()">+ Neues Produkt</button>
+    </div>
+    <div id="adminOrders" style="display:none;">
+        <h3 style="color:#fff; font-family:'Oswald'; letter-spacing:2px; margin-bottom:10px;">Bestellungen (Affiliate-Klicks)</h3>
+        <div id="adminOrderList"></div>
+    </div>
+</div>
+
+<!-- ===== FOOTER ===== -->
+<footer class="footer">
+    <div class="logo">RÆ<span>VED</span></div>
+    <div class="tagline">Build it. Drive it. Live it.</div>
+    <div class="footer-social"><a href="#">📸</a><a href="#">▶️</a><a href="#">👍</a></div>
+    <p>© 2024 RÆVED | Alle Rechte vorbehalten</p>
+    <p style="margin-top:5px;">
+        <a href="#" onclick="showPage('contact'); return false;">Impressum</a> |
+        <a href="#" onclick="showPage('contact'); return false;">Datenschutz</a> |
+        <a href="#" onclick="showPage('contact'); return false;">Kontakt</a>
+    </p>
+    <p class="disclaimer">* Affiliate-Shop: Wenn du über Links einkaufst, erhalten wir eine kleine Provision. Der Preis bleibt für dich unverändert.</p>
+</footer>
+
+<!-- ===== MODALS ===== -->
+<div class="modal" id="loginModal">
+    <div class="modal-content"><button class="modal-close" onclick="closeModal('loginModal')">✕</button><h2>Anmelden</h2>
+        <input type="email" id="loginEmail" class="modal-input" placeholder="E-Mail">
+        <input type="password" id="loginPassword" class="modal-input" placeholder="Passwort">
+        <button class="modal-btn" onclick="login()">Anmelden</button>
+        <button class="modal-btn secondary" onclick="showRegisterModal()">Neu hier? Registrieren</button>
+    </div>
+</div>
+<div class="modal" id="registerModal">
+    <div class="modal-content"><button class="modal-close" onclick="closeModal('registerModal')">✕</button><h2>Registrieren</h2>
+        <input type="text" id="regName" class="modal-input" placeholder="Name">
+        <input type="email" id="regEmail" class="modal-input" placeholder="E-Mail">
+        <input type="password" id="regPassword" class="modal-input" placeholder="Passwort">
+        <button class="modal-btn" onclick="register()">Konto erstellen</button>
+        <button class="modal-btn secondary" onclick="showLoginModal()">Zurück</button>
+    </div>
+</div>
+<div class="modal" id="wishlistModal">
+    <div class="modal-content"><button class="modal-close" onclick="closeModal('wishlistModal')">✕</button><h2>❤️ Merkliste</h2>
+        <div id="wishlistItems"></div>
+        <div class="wishlist-total"><span>Gesamt (nur Anzeige):</span><span id="wishlistTotal">0,00 €</span></div>
+        <p style="font-size:0.7rem; color:var(--text-darker); margin-top:10px; text-align:center;">Dies ist eine Merkliste – keine Bestellung möglich.</p>
+    </div>
+</div>
+<div class="modal" id="productModal">
+    <div class="modal-content"><button class="modal-close" onclick="closeModal('productModal')">✕</button><h2 id="productModalTitle">Produkt</h2>
+        <input type="text" id="productName" class="modal-input" placeholder="Produktname">
+        <input type="number" id="productPrice" class="modal-input" placeholder="Preis (€)" step="0.01">
+        <input type="text" id="productDescription" class="modal-input" placeholder="Beschreibung">
+        <input type="text" id="productAffiliateLink" class="modal-input" placeholder="Affiliate-Link">
+        <button class="modal-btn" onclick="saveProduct()">Speichern</button>
+    </div>
+</div>
+
+<!-- ===== JAVASCRIPT ===== -->
+<script>
+    // ============ KONFIGURATION ============
+    const OWNER_EMAIL = 'snoop.timanaz@gmail.com';
+
+    // ================================================================
+    //  FAHRZEUGDATENBANK (gekürzt, aber voll funktionsfähig)
+    // ================================================================
+    const carDatabase = {
+        'bmw': { name: 'BMW', series: {
+            'E30': { name: 'E30 (3er, 1982-1994)', motors: ['316i (M10)','318i (M10)','318is (M42)','320i (M20)','323i (M20)','325i (M20)','325e (M20)','M3 (S14)'] },
+            'E36': { name: 'E36 (3er, 1990-2000)', motors: ['316i (M43)','318i (M43)','318is (M44)','320i (M50)','323i (M52)','325i (M50)','328i (M52)','M3 (S50/S52)'] },
+            'E46': { name: 'E46 (3er, 1998-2006)', motors: ['316i (N42/N46)','318i (N42/N46)','320i (M54)','323i (M52)','325i (M54)','328i (M52)','330i (M54)','M3 (S54)','320d (M47)','330d (M57)'] },
+            'E90/E91/E92/E93': { name: 'E90/E91/E92/E93 (3er, 2005-2013)', motors: ['318i (N46)','320i (N46)','320si (N45)','323i (N52)','325i (N52)','328i (N52)','330i (N52)','335i (N54/N55)','M3 (S65)','316d (N47)','318d (N47)','320d (N47)','325d (M57)','330d (M57)','335d (M57)'] },
+            'F30/F31/F34': { name: 'F30/F31/F34 (3er, 2012-2019)', motors: ['316i (N13)','318i (N13)','320i (N20)','328i (N20)','330i (N20/B48)','335i (N55)','340i (B58)','M3 (S55)','316d (N47)','318d (N47)','320d (N47)','325d (N47)','330d (N57)','335d (N57)'] },
+            'G20/G21': { name: 'G20/G21 (3er, 2019-heute)', motors: ['318i (B48)','320i (B48)','330i (B48)','M340i (B58)','M3 (S58)','318d (B47)','320d (B47)','330d (B57)','M340d (B57)'] },
+            'E39': { name: 'E39 (5er, 1995-2003)', motors: ['520i (M52/M54)','523i (M52)','525i (M52/M54)','528i (M52)','530i (M54)','535i (M62)','540i (M62)','M5 (S62)','520d (M47)','525d (M57)','530d (M57)'] },
+            'E60/E61': { name: 'E60/E61 (5er, 2003-2010)', motors: ['520i (M54)','523i (N52)','525i (M54/N52)','530i (N52)','535i (N54)','545i (N62)','550i (N62)','M5 (S85)','520d (M47)','525d (M57)','530d (M57)','535d (M57)'] },
+            'F10/F11': { name: 'F10/F11 (5er, 2010-2017)', motors: ['520i (N20)','528i (N20)','530i (N20)','535i (N55)','550i (N63)','M5 (S63)','518d (N47)','520d (N47)','525d (N47)','530d (N57)','535d (N57)','M550d (N57)'] },
+            'G30/G31': { name: 'G30/G31 (5er, 2017-heute)', motors: ['520i (B48)','530i (B48)','540i (B58)','M550i (N63)','M5 (S63)','520d (B47)','530d (B57)','540d (B57)','M550d (B57)'] },
+            'E85/E86': { name: 'E85/E86 (Z4, 2002-2008)', motors: ['2.0i (N46)','2.2i (M54)','2.5i (M54)','3.0i (M54)','3.0si (N52)','M (S54)'] },
+            'E89': { name: 'E89 (Z4, 2009-2016)', motors: ['sDrive20i (N20)','sDrive23i (N52)','sDrive28i (N20)','sDrive30i (N52)','sDrive35i (N54)','sDrive35is (N54)'] },
+            'E70': { name: 'E70 (X5, 2006-2013)', motors: ['xDrive30i (N52)','xDrive35i (N54/N55)','xDrive48i (N62)','xDrive50i (N63)','xDrive30d (M57)','xDrive35d (M57)','xDrive40d (M57)','M (S63)'] },
+            'F15': { name: 'F15 (X5, 2013-2018)', motors: ['xDrive30d (N57)','xDrive35d (N57)','xDrive40d (N57)','xDrive35i (N55)','xDrive50i (N63)','M50d (N57)','X5 M (S63)'] },
+            'G05': { name: 'G05 (X5, 2018-heute)', motors: ['xDrive30d (B57)','xDrive40d (B57)','xDrive40i (B58)','xDrive45e (B58)','M50d (B57)','X5 M (S63)'] },
+            'E83': { name: 'E83 (X3, 2003-2010)', motors: ['xDrive20i (N46)','xDrive25i (M54)','xDrive30i (M54)','xDrive18d (M47)','xDrive20d (M47)','xDrive30d (M57)'] },
+            'F25': { name: 'F25 (X3, 2010-2017)', motors: ['xDrive20i (N20)','xDrive28i (N20)','xDrive35i (N55)','xDrive20d (N47)','xDrive30d (N57)','xDrive35d (N57)'] },
+            'G01': { name: 'G01 (X3, 2017-heute)', motors: ['xDrive20i (B48)','xDrive30i (B48)','M40i (B58)','xDrive20d (B47)','xDrive30d (B57)','M40d (B57)','X3 M (S58)'] },
+            'F20/F21': { name: 'F20/F21 (1er, 2011-2019)', motors: ['114i (N13)','116i (N13)','118i (N13)','120i (N13)','125i (N20)','M135i (N55)','116d (N47)','118d (N47)','120d (N47)','125d (N47)'] },
+            'F22/F23': { name: 'F22/F23 (2er, 2014-heute)', motors: ['218i (B38)','220i (B48)','228i (N20)','230i (B48)','M235i (N55)','M240i (B58)','M2 (N55/S55)','218d (B47)','220d (B47)','225d (B47)'] }
+        }},
+        'audi': { name: 'Audi', series: {
+            '8L': { name: '8L A3 (1996-2003)', motors: ['1.6 (AEH/AKL)','1.8 (AGN)','1.8T (AGU/ARZ)','1.9 TDI (ALH/AGR)','S3 (APY/AMK)'] },
+            '8P': { name: '8P A3 (2003-2013)', motors: ['1.4 TFSI (CAXC)','1.6 (BGU)','1.6 FSI (BLF)','1.8 TFSI (BZB)','2.0 TFSI (AXX/BWA)','2.0 TDI (BKD)','3.2 VR6 (BDB)','S3 (BHZ)','RS3 (CEPA)'] },
+            '8V': { name: '8V A3 (2012-2020)', motors: ['1.2 TFSI (CYGA)','1.4 TFSI (CMBA)','1.8 TFSI (CJSB)','2.0 TFSI (CHHB)','2.0 TDI (CRLB)','S3 (CJXC)','RS3 (DNWA)'] },
+            '8Y': { name: '8Y A3 (2020-heute)', motors: ['30 TFSI (1.0)','35 TFSI (1.5)','40 TFSI (2.0)','S3 (2.0)','RS3 (2.5)','30 TDI (2.0)','35 TDI (2.0)'] },
+            'B5': { name: 'B5 A4 (1994-2001)', motors: ['1.6 (ADP)','1.8 (ADR)','1.8T (AEB)','2.4 V6 (AFB)','2.6 V6 (ABC)','2.8 V6 (AAH)','S4 (AGB)','1.9 TDI (AFN)','2.5 TDI (AEL)'] },
+            'B6': { name: 'B6 A4 (2000-2006)', motors: ['1.6 (AVL)','1.8T (BEX)','2.0 (ALT)','2.0 FSI (AWA)','2.4 V6 (BDV)','3.0 V6 (ASN)','S4 (BBK)','1.9 TDI (AVF)','2.5 TDI (BDG)'] },
+            'B7': { name: 'B7 A4 (2004-2008)', motors: ['1.6 (BKE)','1.8T (BKB)','2.0 TFSI (BGB)','2.0 TDI (BLB)','3.0 TDI (ASB)','3.2 FSI (AUK)','S4 (BNS)','RS4 (BNS)'] },
+            'B8': { name: 'B8 A4 (2008-2015)', motors: ['1.8 TFSI (CDHA)','2.0 TFSI (CDNC)','3.0 TFSI (CAKA)','2.0 TDI (CAGA)','3.0 TDI (CDUC)','S4 (CAKA)','RS4 (CFSA)'] },
+            'B9': { name: 'B9 A4 (2015-2023)', motors: ['35 TFSI (2.0)','40 TFSI (2.0)','45 TFSI (2.0)','S4 (3.0)','RS4 (2.9)','30 TDI (2.0)','35 TDI (2.0)','40 TDI (2.0)'] },
+            'C5': { name: 'C5 A6 (1997-2005)', motors: ['1.8T (AJL)','2.0 (ALT)','2.4 V6 (BDV)','2.7T (AJK)','2.8 V6 (APR)','3.0 V6 (ASN)','4.2 V8 (ANK)','S6 (AQJ)','1.9 TDI (AVG)','2.5 TDI (AKE)'] },
+            'C6': { name: 'C6 A6 (2004-2011)', motors: ['2.0 TFSI (BPJ)','2.4 V6 (BDV)','2.8 V6 (BDX)','3.0 V6 (BBJ)','3.2 V6 (AUK)','4.2 V8 (BAT)','S6 (BXA)','RS6 (BRM)','2.0 TDI (BNA)','2.7 TDI (BPP)','3.0 TDI (BMK)'] },
+            'C7': { name: 'C7 A6 (2011-2018)', motors: ['1.8 TFSI (CDHA)','2.0 TFSI (CDNC)','2.8 FSI (CHVA)','3.0 TFSI (CGWD)','S6 (CEUC)','RS6 (CRDB)','2.0 TDI (CGLD)','3.0 TDI (CDUC)','3.0 TDI (CLAB)'] },
+            'C8': { name: 'C8 A6 (2018-heute)', motors: ['40 TFSI (2.0)','45 TFSI (2.0)','55 TFSI (3.0)','S6 (2.9)','RS6 (4.0)','40 TDI (2.0)','50 TDI (3.0)'] },
+            '8J': { name: '8J TT (2006-2014)', motors: ['1.8 TFSI (CDAA)','2.0 TFSI (CCZA)','2.5 TFSI (CEPA)','S (CDMA)','RS (CEPA)'] },
+            '8S': { name: '8S TT (2014-2023)', motors: ['2.0 TFSI (CJXC)','TTS (CJXC)','TT RS (CZGB)'] },
+            '4M': { name: '4M Q7 (2015-heute)', motors: ['45 TDI (3.0)','50 TDI (3.0)','55 TFSI (3.0)','SQ7 (4.0)','RS Q7 (4.0)'] },
+            '4L': { name: '4L Q7 (2005-2015)', motors: ['3.0 TDI (BUN)','3.6 FSI (BHK)','4.2 V8 (BAR)','6.0 V12 TDI (CCB)'] },
+            'FY': { name: 'FY Q5 (2008-2017)', motors: ['2.0 TFSI (CDNB)','3.0 TFSI (CTWA)','SQ5 (CTUD)','2.0 TDI (CAGA)','3.0 TDI (CDUC)'] }
+        }},
+        'vw': { name: 'Volkswagen', series: {
+            'MK1': { name: 'Golf 1 (1974-1983)', motors: ['1.1 (GG)','1.3 (HK)','1.5 (JB)','1.6 GTI (EG)','1.6 Diesel (CK)'] },
+            'MK2': { name: 'Golf 2 (1983-1992)', motors: ['1.3 (HK)','1.6 (PN)','1.8 GTI (DX)','1.8 GTI 16V (KR)','1.6 TD (JR)','1.6 D (ME)','1.9 D (AAZ)'] },
+            'MK3': { name: 'Golf 3 (1991-1998)', motors: ['1.4 (ABD)','1.6 (AEK)','1.8 (ABS)','2.0 GTI (ADY)','2.0 GTI 16V (ABF)','1.9 TDI (1Z)','VR6 (AAA)'] },
+            'MK4': { name: 'Golf 4 (1997-2004)', motors: ['1.4 (AHW)','1.6 (AEH)','1.8T (AGU)','2.0 (APK)','2.3 VR5 (AGZ)','1.9 TDI (ALH)','1.9 TDI (ASZ)','2.0 GTI (AUQ)','R32 (BJS)'] },
+            'MK5': { name: 'Golf 5 (2003-2008)', motors: ['1.4 (BKG)','1.6 (BGU)','1.4 TSI (CAXA)','2.0 TFSI (AXX)','1.9 TDI (BKC)','2.0 TDI (BKD)','GTI (AXX)','R32 (BUB)'] },
+            'MK6': { name: 'Golf 6 (2008-2012)', motors: ['1.2 TSI (CBZA)','1.4 TSI (CAXA)','2.0 TSI (CCZB)','1.6 TDI (CAYC)','2.0 TDI (CBDB)','GTI (CCZB)','R (CDLC)'] },
+            'MK7': { name: 'Golf 7 (2012-2020)', motors: ['1.0 TSI (CHZD)','1.2 TSI (CYGA)','1.4 TSI (CHPA)','2.0 GTI (CHHB)','2.0 GTI Performance (CJXC)','R (CJXC)','1.6 TDI (CRKB)','2.0 GTD (CUNA)'] },
+            'MK8': { name: 'Golf 8 (2020-heute)', motors: ['1.0 TSI (DLA)','1.5 TSI (DPCA)','2.0 GTI (DNPA)','2.0 R (DNFF)','2.0 TDI (DTR)'] },
+            'Bora': { name: 'Bora/Jetta (1999-2005)', motors: ['1.4 (AHW)','1.6 (AEH)','1.8T (AGU)','2.0 (APK)','1.9 TDI (ALH)','2.3 VR5 (AGZ)'] },
+            'Jetta 5': { name: 'Jetta 5 (2005-2010)', motors: ['1.4 TSI (CAXA)','1.6 (BGU)','2.0 TFSI (AXX)','1.9 TDI (BKC)','2.0 TDI (BKD)'] },
+            'Jetta 6': { name: 'Jetta 6 (2010-2018)', motors: ['1.2 TSI (CBZA)','1.4 TSI (CAXA)','2.0 TSI (CCZB)','1.6 TDI (CAYC)','2.0 TDI (CBDB)'] },
+            'Polo 6N': { name: 'Polo 6N (1994-2002)', motors: ['1.0 (AER)','1.3 (AAV)','1.4 (AKK)','1.6 (AEA)','1.4 TDI (AMF)','1.9 SDI (AGR)'] },
+            'Polo 9N': { name: 'Polo 9N (2002-2009)', motors: ['1.2 (AZQ)','1.4 (AUB)','1.6 (BTS)','1.8T (BJH)','1.4 TDI (AMF)','1.9 TDI (ATD)'] },
+            'Polo 6R': { name: 'Polo 6R (2009-2014)', motors: ['1.0 (CHYA)','1.2 TSI (CBZB)','1.4 (CGGA)','1.6 (CFNA)','1.4 TDI (CUSA)','1.6 TDI (CAYA)'] },
+            'Polo 6C': { name: 'Polo 6C (2014-2017)', motors: ['1.0 TSI (CHZD)','1.2 TSI (CBZA)','1.4 TSI (CZCA)','1.6 TDI (CRKB)','GTI (CJZD)'] },
+            'Passat B5': { name: 'Passat B5 (1997-2005)', motors: ['1.6 (ADP)','1.8T (AEB)','2.0 (ALT)','2.3 VR5 (AGZ)','2.8 V6 (ACX)','1.9 TDI (AFN)','2.5 TDI (AKE)'] },
+            'Passat B6': { name: 'Passat B6 (2005-2011)', motors: ['1.4 TSI (CAXA)','1.6 (BGU)','2.0 TDI (BKD)','2.0 TFSI (AXX)','3.2 V6 (AXZ)','1.9 TDI (BKC)'] },
+            'Passat B7': { name: 'Passat B7 (2011-2015)', motors: ['1.4 TSI (CAXA)','2.0 TSI (CCZB)','1.6 TDI (CAYC)','2.0 TDI (CBDB)','R36 (BWS)'] },
+            'Passat B8': { name: 'Passat B8 (2015-2023)', motors: ['1.4 TSI (CZDA)','2.0 TSI (CHHB)','1.6 TDI (CRKB)','2.0 TDI (CUNA)','GTE (1.4 Hybrid)'] },
+            'Tiguan 1': { name: 'Tiguan 1 (2008-2016)', motors: ['1.4 TSI (CAXA)','2.0 TSI (CCZB)','1.6 TDI (CAYC)','2.0 TDI (CBDB)'] },
+            'Tiguan 2': { name: 'Tiguan 2 (2016-heute)', motors: ['1.4 TSI (CZDA)','2.0 TSI (CHHB)','1.6 TDI (CRKB)','2.0 TDI (CUNA)','R (DMTA)'] }
+        }},
+        'mercedes': { name: 'Mercedes-Benz', series: {
+            'W201': { name: 'W201 (190er, 1982-1993)', motors: ['190E 1.8 (M102)','190E 2.0 (M102)','190E 2.3 (M102)','190E 2.5-16 (M102)','190D 2.0 (OM601)','190D 2.5 (OM602)'] },
+            'W202': { name: 'W202 (C-Klasse, 1993-2000)', motors: ['C180 (M111)','C200 (M111)','C220 (M111)','C230 (M111)','C280 (M104)','C36 AMG (M104)','C43 AMG (M113)','C200 CDI (OM604)','C220 CDI (OM604)','C250 CDI (OM605)'] },
+            'W203': { name: 'W203 (C-Klasse, 2000-2007)', motors: ['C180 (M271)','C200 (M271)','C200 Kompressor (M271)','C230 (M271)','C240 (M112)','C320 (M112)','C32 AMG (M112)','C55 AMG (M113)','C200 CDI (OM646)','C220 CDI (OM646)','C270 CDI (OM612)','C30 CDI (OM612)'] },
+            'W204': { name: 'W204 (C-Klasse, 2007-2014)', motors: ['C180 (M271)','C200 (M271)','C200 Kompressor (M271)','C250 (M271)','C280 (M272)','C300 (M272)','C350 (M272)','C63 AMG (M156)','C200 CDI (OM646)','C220 CDI (OM651)','C250 CDI (OM651)','C320 CDI (OM642)'] },
+            'W205': { name: 'W205 (C-Klasse, 2014-2021)', motors: ['C180 (M274)','C200 (M274)','C250 (M274)','C300 (M274)','C350 (M276)','C400 (M276)','C43 AMG (M276)','C63 AMG (M177)','C220d (OM651)','C250d (OM651)','C300d (OM642)'] },
+            'W206': { name: 'W206 (C-Klasse, 2021-heute)', motors: ['C180 (M254)','C200 (M254)','C300 (M254)','C43 AMG (M139)','C63 AMG (M177)','C220d (OM654)','C300d (OM654)'] },
+            'W210': { name: 'W210 (E-Klasse, 1995-2002)', motors: ['E200 (M111)','E220 (M111)','E230 (M111)','E240 (M112)','E280 (M104)','E320 (M112)','E430 (M113)','E50 AMG (M119)','E55 AMG (M113)','E200 CDI (OM604)','E220 CDI (OM604)','E250 CDI (OM605)','E300 TD (OM606)'] },
+            'W211': { name: 'W211 (E-Klasse, 2002-2009)', motors: ['E200 (M271)','E200 Kompressor (M271)','E220 (M271)','E240 (M112)','E280 (M272)','E320 (M112)','E350 (M272)','E500 (M113)','E55 AMG (M113)','E63 AMG (M156)','E200 CDI (OM646)','E220 CDI (OM646)','E270 CDI (OM612)','E280 CDI (OM642)','E320 CDI (OM642)'] },
+            'W212': { name: 'W212 (E-Klasse, 2009-2016)', motors: ['E200 (M271)','E200 Kompressor (M271)','E250 (M271)','E250 Kompressor (M271)','E300 (M272)','E350 (M272)','E400 (M276)','E500 (M273)','E63 AMG (M156)','E200 CDI (OM646)','E220 CDI (OM651)','E250 CDI (OM651)','E300 CDI (OM642)','E350 CDI (OM642)'] },
+            'W213': { name: 'W213 (E-Klasse, 2016-2023)', motors: ['E180 (M274)','E200 (M274)','E250 (M274)','E300 (M274)','E350 (M276)','E400 (M276)','E43 AMG (M276)','E53 AMG (M256)','E63 AMG (M177)','E200d (OM654)','E220d (OM654)','E300d (OM654)','E350d (OM642)'] },
+            'R230': { name: 'R230 (SL, 2001-2012)', motors: ['SL350 (M112)','SL500 (M113)','SL55 AMG (M113)','SL600 (M275)','SL65 AMG (M275)','SL63 AMG (M156)'] },
+            'R231': { name: 'R231 (SL, 2012-2020)', motors: ['SL350 (M276)','SL400 (M276)','SL500 (M278)','SL63 AMG (M157)','SL65 AMG (M275)'] },
+            'X166': { name: 'X166 (GL, 2012-2019)', motors: ['GL350 (OM642)','GL400 (M276)','GL500 (M278)','GL63 AMG (M157)'] }
+        }},
+        'opel': { name: 'Opel', series: {
+            'Corsa B': { name: 'Corsa B (1993-2000)', motors: ['1.0 (X10XE)','1.2 (X12XE)','1.4 (X14XE)','1.6 GSI (X16XE)','1.5 TD (X15D)','1.7 D (X17D)'] },
+            'Corsa C': { name: 'Corsa C (2000-2006)', motors: ['1.0 (Z10XEP)','1.2 (Z12XE)','1.4 (Z14XE)','1.8 GSI (Z18XE)','1.3 CDTI (Z13DT)','1.7 CDTI (Z17DT)'] },
+            'Corsa D': { name: 'Corsa D (2006-2014)', motors: ['1.0 (A10XEP)','1.2 (A12XER)','1.4 (A14XER)','1.6 Turbo (A16LER)','OPC (A16LES)','1.3 CDTI (A13DTC)','1.7 CDTI (A17DTS)'] },
+            'Corsa E': { name: 'Corsa E (2014-2019)', motors: ['1.0 (B10XFL)','1.2 (B12XEL)','1.4 (B14XEL)','1.4 Turbo (B14XFL)','1.6 (B16XEL)','1.3 CDTI (B13DTC)'] },
+            'Astra F': { name: 'Astra F (1991-1998)', motors: ['1.4 (C14NZ)','1.6 (C16SE)','1.8 (C18XE)','2.0 GSI (C20XE)','2.0 16V (C20LET)','1.7 D (17D)','1.7 TD (X17DTL)'] },
+            'Astra G': { name: 'Astra G (1998-2005)', motors: ['1.4 (Z14XE)','1.6 (Z16XE)','1.8 (Z18XE)','2.0 GSI (Z20LET)','2.0 OPC (Z20LEH)','1.7 CDTI (Y17DT)','2.0 DTI (Y20DTH)'] },
+            'Astra H': { name: 'Astra H (2004-2010)', motors: ['1.4 (Z14XEP)','1.6 (Z16XER)','1.8 (Z18XER)','2.0 Turbo (Z20LEH)','OPC (Z20LEH)','1.3 CDTI (Z13DTJ)','1.7 CDTI (Z17DTH)','1.9 CDTI (Z19DTH)'] },
+            'Astra J': { name: 'Astra J (2009-2015)', motors: ['1.4 (A14NET)','1.6 (A16XER)','1.6 Turbo (A16LET)','2.0 Turbo (A20NFT)','OPC (A20NFT)','1.3 CDTI (A13DTC)','1.7 CDTI (A17DTS)','2.0 CDTI (A20DTH)'] },
+            'Astra K': { name: 'Astra K (2015-2021)', motors: ['1.0 (B10XFL)','1.2 (B12XEL)','1.4 (B14XEL)','1.4 Turbo (B14XFL)','1.6 Turbo (B16XEL)','1.5 CDTI (B15DTL)','1.6 CDTI (B16DTR)'] },
+            'Vectra B': { name: 'Vectra B (1995-2002)', motors: ['1.6 (X16SZR)','1.8 (X18XE)','2.0 (X20XEV)','2.5 V6 (X25XE)','2.5 V6 (X25XER)','1.7 D (X17DTL)','2.0 DTI (Y20DTH)','2.2 DTI (Y22DTH)'] },
+            'Vectra C': { name: 'Vectra C (2002-2008)', motors: ['1.6 (Z16XEP)','1.8 (Z18XE)','2.0 (Z20NET)','2.0 Turbo (Z20LEL)','2.8 V6 Turbo (A28NER)','OPC (Z28NET)','1.9 CDTI (Z19DTH)','3.0 CDTI (Z30DT)'] },
+            'Insignia A': { name: 'Insignia A (2008-2017)', motors: ['1.4 (A14NET)','1.6 (A16XER)','1.6 Turbo (A16LET)','2.0 Turbo (A20NFT)','OPC (A20NFT)','2.0 CDTI (A20DTH)','2.0 Biturbo (A20DTR)'] },
+            'Insignia B': { name: 'Insignia B (2017-2022)', motors: ['1.5 (B15XFL)','1.6 (B16XFL)','2.0 (B20XFL)','2.0 Turbo (B20XFT)','1.5 CDTI (B15DTL)','2.0 CDTI (B20DTH)'] },
+            'Zafira A': { name: 'Zafira A (1999-2005)', motors: ['1.6 (Z16XE)','1.8 (Z18XE)','2.0 Turbo (Z20LET)','2.2 (Z22SE)','2.0 DTI (Y20DTH)'] },
+            'Zafira B': { name: 'Zafira B (2005-2010)', motors: ['1.6 (Z16XEP)','1.8 (Z18XER)','2.0 Turbo (Z20LEH)','OPC (Z20LEH)','1.7 CDTI (Z17DTH)','1.9 CDTI (Z19DTH)'] }
+        }},
+        'ford': { name: 'Ford', series: {
+            'Fiesta MK4': { name: 'Fiesta MK4 (1995-2002)', motors: ['1.25 (DHT)','1.3 (J4C)','1.4 (FXJA)','1.6 (FYDA)','1.8 D (RTN)','1.8 TD (RTP)'] },
+            'Fiesta MK5': { name: 'Fiesta MK5 (2002-2008)', motors: ['1.25 (FXJA)','1.3 (A9JA)','1.4 (FUJA)','1.6 (FYDA)','1.6 ST (CDJA)','1.4 TDCi (F6JA)','1.6 TDCi (G8DA)'] },
+            'Fiesta MK6': { name: 'Fiesta MK6 (2008-2017)', motors: ['1.0 EcoBoost (M1DA)','1.25 (SNJA)','1.4 (SPJA)','1.6 (HWJA)','1.6 ST (JQDA)','1.4 TDCi (F6JA)','1.5 TDCi (UGDA)','1.6 TDCi (G8DA)'] },
+            'Fiesta MK7': { name: 'Fiesta MK7 (2017-heute)', motors: ['1.0 EcoBoost (M1DA)','1.1 (B7DA)','1.5 EcoBoost (Y2DA)','ST (Y2DA)','1.5 EcoBlue (T3DA)'] },
+            'Focus MK1': { name: 'Focus MK1 (1998-2004)', motors: ['1.4 (FXJA)','1.6 (FYDA)','1.8 (EYDA)','2.0 (EDBA)','ST170 (ALDA)','RS (HMDA)','1.8 TDCi (FFDA)','1.8 TDDi (C9DA)'] },
+            'Focus MK2': { name: 'Focus MK2 (2004-2011)', motors: ['1.4 (ASJA)','1.6 (HWDA)','1.8 (QQDA)','2.0 (AODA)','2.5 ST (HYDA)','RS (JZDA)','1.6 TDCi (G8DA)','1.8 TDCi (KKDA)','2.0 TDCi (G6DA)'] },
+            'Focus MK3': { name: 'Focus MK3 (2011-2018)', motors: ['1.0 EcoBoost (M1DA)','1.5 EcoBoost (JQDA)','1.6 EcoBoost (JQDA)','2.0 EcoBoost (R9DA)','ST (R9DA)','RS (R9DA)','1.5 TDCi (XXDA)','1.6 TDCi (T1DA)','2.0 TDCi (T7DA)'] },
+            'Focus MK4': { name: 'Focus MK4 (2018-heute)', motors: ['1.0 EcoBoost (M1DA)','1.5 EcoBoost (Y2DA)','2.0 EcoBoost (R9DA)','ST (R9DA)','1.5 EcoBlue (T3DA)','2.0 EcoBlue (T3DA)'] },
+            'Mondeo MK2': { name: 'Mondeo MK2 (1996-2000)', motors: ['1.6 (BAA)','1.8 (CDB)','2.0 (NGB)','2.5 V6 (SEB)','1.8 TD (RFN)','1.8 TDDi (C9DA)'] },
+            'Mondeo MK3': { name: 'Mondeo MK3 (2000-2007)', motors: ['1.8 (CDB)','2.0 (CJBA)','2.2 (KJBA)','2.5 V6 (LCBD)','3.0 V6 (REBA)','ST220 (REBA)','2.0 TDCi (FMBA)','2.2 TDCi (QJBA)'] },
+            'Mondeo MK4': { name: 'Mondeo MK4 (2007-2014)', motors: ['1.6 (HWDA)','2.0 (AODA)','2.3 (SEBA)','2.5 (HYDA)','2.0 EcoBoost (R9DA)','2.0 TDCi (G6DA)','2.2 TDCi (QJBA)'] },
+            'Mondeo MK5': { name: 'Mondeo MK5 (2014-2022)', motors: ['1.5 EcoBoost (JQDA)','2.0 EcoBoost (R9DA)','2.0 Hybrid (R9DA)','1.5 TDCi (XXDA)','2.0 TDCi (T7DA)'] },
+            'Mustang S550': { name: 'Mustang S550 (2015-2023)', motors: ['2.3 EcoBoost (H2GA)','5.0 V8 (MFGA)','5.2 V8 GT350','5.2 V8 GT500'] },
+            'Mustang S650': { name: 'Mustang S650 (2024-heute)', motors: ['2.3 EcoBoost (H2GA)','5.0 V8 (MFGA)','Dark Horse (5.0)'] }
+        }},
+        'toyota': { name: 'Toyota', series: {
+            'Supra A70': { name: 'Supra MK3 (1986-1993)', motors: ['3.0 (7M-GE)','3.0 Turbo (7M-GTE)'] },
+            'Supra A80': { name: 'Supra MK4 (1993-2002)', motors: ['3.0 (2JZ-GE)','3.0 Turbo (2JZ-GTE)'] },
+            'Supra A90': { name: 'Supra MK5 (2019-heute)', motors: ['2.0 (B48)','3.0 (B58)'] },
+            'GT86': { name: 'GT86 (2012-2021)', motors: ['2.0 (FA20)'] },
+            'GR86': { name: 'GR86 (2022-heute)', motors: ['2.4 (FA24)'] },
+            'GR Yaris': { name: 'GR Yaris (2020-heute)', motors: ['1.6 Turbo (G16E-GTS)'] },
+            'GR Corolla': { name: 'GR Corolla (2022-heute)', motors: ['1.6 Turbo (G16E-GTS)'] },
+            'Celica T20': { name: 'Celica T20 (1993-1999)', motors: ['1.8 (7A-FE)','2.0 (3S-GE)','2.0 Turbo (3S-GTE)','GT-Four (3S-GTE)'] },
+            'Celica T23': { name: 'Celica T23 (1999-2005)', motors: ['1.8 (1ZZ-FE)','1.8 VVTL-i (2ZZ-GE)'] },
+            'MR2 W20': { name: 'MR2 MK2 (1989-1999)', motors: ['2.0 (3S-GE)','2.0 Turbo (3S-GTE)'] },
+            'MR2 W30': { name: 'MR2 MK3 (1999-2007)', motors: ['1.8 (1ZZ-FE)'] },
+            'Yaris P1': { name: 'Yaris P1 (1999-2005)', motors: ['1.0 (1SZ-FE)','1.3 (2NZ-FE)','1.4 D-4D (1ND-TV)','1.5 (1NZ-FE)'] },
+            'Yaris P2': { name: 'Yaris P2 (2005-2011)', motors: ['1.0 (1KR-FE)','1.3 (2NZ-FE)','1.4 D-4D (1ND-TV)','1.8 (2ZR-FE)'] },
+            'Yaris P3': { name: 'Yaris P3 (2011-2020)', motors: ['1.0 (1KR-FE)','1.3 (1NR-FE)','1.5 (1NZ-FE)','1.4 D-4D (1ND-TV)'] },
+            'Yaris P4': { name: 'Yaris P4 (2020-heute)', motors: ['1.0 (1KR-FE)','1.5 Hybrid (M15A-FXE)','GR (G16E-GTS)'] }
+        }},
+        'nissan': { name: 'Nissan', series: {
+            '350Z': { name: '350Z (2002-2009)', motors: ['3.5 V6 (VQ35DE)','3.5 V6 RevUp (VQ35DE)'] },
+            '370Z': { name: '370Z (2009-2020)', motors: ['3.7 V6 (VQ37VHR)'] },
+            'GTR R35': { name: 'GT-R R35 (2007-heute)', motors: ['3.8 V6 Twin-Turbo (VR38DETT)'] },
+            'Skyline R32': { name: 'Skyline R32 (1989-1994)', motors: ['2.0 (RB20DE)','2.0 Turbo (RB20DET)','2.5 (RB25DE)','2.6 Twin-Turbo (RB26DETT)'] },
+            'Skyline R33': { name: 'Skyline R33 (1993-1998)', motors: ['2.0 (RB20DE)','2.5 (RB25DE)','2.5 Turbo (RB25DET)','2.6 Twin-Turbo (RB26DETT)'] },
+            'Skyline R34': { name: 'Skyline R34 (1999-2002)', motors: ['2.5 (RB25DE)','2.5 Turbo (RB25DET)','2.6 Twin-Turbo (RB26DETT)'] },
+            'Skyline V35': { name: 'Skyline V35 (2001-2007)', motors: ['2.5 V6 (VQ25DD)','3.0 V6 (VQ30DD)','3.5 V6 (VQ35DE)'] },
+            'Skyline V36': { name: 'Skyline V36 (2006-2014)', motors: ['2.5 V6 (VQ25HR)','3.5 V6 (VQ35HR)','3.7 V6 (VQ37VHR)'] },
+            'Silvia S13': { name: 'Silvia S13 (1988-1994)', motors: ['1.8 Turbo (CA18DET)','2.0 (SR20DE)','2.0 Turbo (SR20DET)'] },
+            'Silvia S14': { name: 'Silvia S14 (1994-1999)', motors: ['2.0 (SR20DE)','2.0 Turbo (SR20DET)'] },
+            'Silvia S15': { name: 'Silvia S15 (1999-2002)', motors: ['2.0 (SR20DE)','2.0 Turbo (SR20DET)'] },
+            '200SX S13': { name: '200SX S13 (1988-1994)', motors: ['1.8 Turbo (CA18DET)'] },
+            '200SX S14': { name: '200SX S14 (1994-1999)', motors: ['2.0 Turbo (SR20DET)'] },
+            '200SX S15': { name: '200SX S15 (1999-2002)', motors: ['2.0 Turbo (SR20DET)'] },
+            'Micra K11': { name: 'Micra K11 (1992-2002)', motors: ['1.0 (CG10DE)','1.3 (CG13DE)'] },
+            'Micra K12': { name: 'Micra K12 (2002-2010)', motors: ['1.0 (CR10DE)','1.2 (CR12DE)','1.4 (CR14DE)','1.5 dCi (K9K)'] }
+        }},
+        'porsche': { name: 'Porsche', series: {
+            '911 964': { name: '911 964 (1989-1994)', motors: ['3.6 (M64)','3.6 Turbo (M64)','RS (M64)'] },
+            '911 993': { name: '911 993 (1994-1998)', motors: ['3.6 (M64)','3.6 Turbo (M64)','RS (M64)','GT2 (M64)'] },
+            '911 996': { name: '911 996 (1997-2005)', motors: ['3.4 (M96)','3.6 (M96)','Turbo (M96/70)','GT3 (M96/79)','GT2 (M96/70)'] },
+            '911 997': { name: '911 997 (2004-2012)', motors: ['3.6 (M97)','3.8 (M97)','Turbo (M97/70)','GT3 (M97/79)','GT2 (M97/70)'] },
+            '911 991': { name: '911 991 (2011-2019)', motors: ['3.4 (MA1)','3.8 (MA1)','Turbo (MA1/71)','GT3 (MA1/75)','GT2 (MA1/75)'] },
+            '911 992': { name: '911 992 (2019-heute)', motors: ['3.0 (MA2)','3.8 (MA2)','Turbo (MA2)','GT3 (MA2)'] },
+            'Cayman 987': { name: 'Cayman 987 (2005-2012)', motors: ['2.7 (M97)','2.9 (M97)','3.4 (M97)','S (M97)','R (M97)'] },
+            'Cayman 981': { name: 'Cayman 981 (2012-2016)', motors: ['2.7 (MA1)','3.4 (MA1)','GT4 (MA1)'] },
+            'Cayman 982': { name: 'Cayman 982 (2016-heute)', motors: ['2.0 (MA2)','2.5 (MA2)','GT4 (MA2)'] },
+            'Boxster 986': { name: 'Boxster 986 (1996-2004)', motors: ['2.5 (M96)','2.7 (M96)','3.2 S (M96)'] },
+            'Boxster 987': { name: 'Boxster 987 (2005-2012)', motors: ['2.7 (M97)','2.9 (M97)','3.4 (M97)','S (M97)'] },
+            'Boxster 981': { name: 'Boxster 981 (2012-2016)', motors: ['2.7 (MA1)','3.4 (MA1)','S (MA1)'] },
+            'Boxster 982': { name: 'Boxster 982 (2016-heute)', motors: ['2.0 (MA2)','2.5 (MA2)','GTS (MA2)'] },
+            'Panamera 970': { name: 'Panamera 970 (2009-2016)', motors: ['3.6 V6 (M46)','4.8 V8 (M48)','Turbo (M48)','S (M48)','GTS (M48)'] },
+            'Panamera 971': { name: 'Panamera 971 (2016-2023)', motors: ['2.9 V6 (M46)','4.0 V8 (M48)','Turbo (M48)','S (M46)'] },
+            'Cayenne 9PA': { name: 'Cayenne 9PA (2002-2010)', motors: ['3.2 V6 (M55)','4.5 V8 (M48)','Turbo (M48)','S (M48)','GTS (M48)'] },
+            'Cayenne 92A': { name: 'Cayenne 92A (2010-2017)', motors: ['3.0 V6 (M55)','3.6 V6 (M46)','4.8 V8 (M48)','Turbo (M48)','S (M48)','GTS (M48)'] },
+            'Cayenne 9YA': { name: 'Cayenne 9YA (2017-heute)', motors: ['3.0 V6 (M55)','2.9 V6 (M46)','4.0 V8 (M48)','Turbo (M48)','S (M46)'] },
+            'Macan 95B': { name: 'Macan 95B (2014-heute)', motors: ['2.0 (M55)','3.0 V6 (M46)','3.6 V6 (M46)','S (M46)','GTS (M46)','Turbo (M46)'] }
+        }},
+        'honda': { name: 'Honda', series: {
+            'Civic EG': { name: 'Civic EG (1991-1995)', motors: ['1.3 (D13B)','1.5 (D15B)','1.6 VTi (D16Z6)','1.6 VTi (B16A2)'] },
+            'Civic EK': { name: 'Civic EK (1995-2000)', motors: ['1.4 (D14A4)','1.5 (D15B)','1.6 VTi (B16A2)','Type R (B16B)'] },
+            'Civic EP': { name: 'Civic EP (2001-2005)', motors: ['1.4 (D14Z4)','1.6 (D16W1)','2.0 Type R (K20A2)'] },
+            'Civic FN': { name: 'Civic FN (2006-2011)', motors: ['1.4 (L13A7)','1.8 (R18A2)','2.0 Type R (K20Z4)'] },
+            'Civic FK': { name: 'Civic FK (2011-2017)', motors: ['1.4 (L13Z1)','1.8 (R18Z1)','1.6 i-DTEC (N16A1)','2.0 Type R (K20C1)'] },
+            'Civic FC': { name: 'Civic FC (2017-2022)', motors: ['1.0 (P10A1)','1.5 (L15B7)','1.6 i-DTEC (N16A1)','2.0 Type R (K20C1)'] },
+            'Civic FL': { name: 'Civic FL (2022-heute)', motors: ['1.5 (L15C1)','2.0 Type R (K20C1)','2.0 e:PHEV (LFA1)'] },
+            'Accord CG': { name: 'Accord CG (1998-2002)', motors: ['1.8 (F18B2)','2.0 (F20B6)','2.0 (F20Z1)','2.3 (F23Z5)','2.2 i-CTDI (N22A1)'] },
+            'Accord CL': { name: 'Accord CL (2003-2008)', motors: ['2.0 (K20A6)','2.4 (K24A3)','2.2 i-CTDI (N22A1)'] },
+            'Accord CU': { name: 'Accord CU (2008-2015)', motors: ['2.0 (R20A5)','2.4 (K24Z3)','2.2 i-DTEC (N22B2)'] },
+            'S2000': { name: 'S2000 (1999-2009)', motors: ['2.0 (F20C)','2.2 (F22C1)'] },
+            'Integra DC2': { name: 'Integra DC2 (1993-2001)', motors: ['1.8 (B18C1)','1.8 Type R (B18C5)'] },
+            'Integra DC5': { name: 'Integra DC5 (2001-2006)', motors: ['2.0 (K20A3)','2.0 Type R (K20A)'] },
+            'Prelude BB5': { name: 'Prelude BB5 (1996-2001)', motors: ['2.0 (F20A4)','2.2 (H22A5)','2.2 VTEC (H22A)'] },
+            'Prelude BB6': { name: 'Prelude BB6 (1997-2001)', motors: ['2.0 (F20A4)','2.2 (H22A5)','2.2 VTEC (H22A8)'] }
+        }},
+        'hyundai': { name: 'Hyundai', series: {
+            'i30 PD': { name: 'i30 PD (2017-heute)', motors: ['1.0 T-GDI (G3LF)','1.4 T-GDI (G4LD)','1.5 T-GDI (G4LH)','2.0 N (G4KH)','1.6 CRDi (D4FE)','1.6 CRDi (D4FB)'] },
+            'i30 GD': { name: 'i30 GD (2012-2017)', motors: ['1.4 (G4FA)','1.6 (G4FD)','1.6 GDI (G4FD)','1.6 CRDi (D4FB)','1.6 CRDi (D4FC)'] },
+            'i20 GB': { name: 'i20 GB (2015-2020)', motors: ['1.0 T-GDI (G3LC)','1.2 (G4LA)','1.4 (G4LC)','1.4 CRDi (D4FA)'] },
+            'i20 BC3': { name: 'i20 BC3 (2020-heute)', motors: ['1.0 T-GDI (G3LF)','1.2 (G4LA)','1.5 CRDi (D4FA)','N (G4FP)'] },
+            'Kona OS': { name: 'Kona OS (2017-2023)', motors: ['1.0 T-GDI (G3LF)','1.6 T-GDI (G4FJ)','2.0 (G4NC)','1.6 CRDi (D4FE)','N (G4KH)'] },
+            'Kona SX2': { name: 'Kona SX2 (2023-heute)', motors: ['1.0 T-GDI (G3LF)','1.6 T-GDI (G4FJ)','2.0 (G4NC)','N (G4KH)'] },
+            'Tucson TL': { name: 'Tucson TL (2015-2020)', motors: ['1.6 T-GDI (G4FJ)','2.0 (G4NC)','1.7 CRDi (D4FE)','2.0 CRDi (D4HA)'] },
+            'Tucson NX4': { name: 'Tucson NX4 (2020-heute)', motors: ['1.6 T-GDI (G4FJ)','2.0 (G4NC)','1.6 CRDi (D4FE)','2.0 CRDi (D4HA)'] }
+        }},
+        'seat': { name: 'Seat/Cupra', series: {
+            'Leon 1M': { name: 'Leon 1M (1999-2006)', motors: ['1.4 (AEX)','1.6 (AEH)','1.8T (AGU)','1.8T Cupra (AUQ)','2.8 VR5 (AQN)','1.9 TDI (ALH)','1.9 TDI (ASZ)','2.0 TDI (ARL)'] },
+            'Leon 1P': { name: 'Leon 1P (2005-2012)', motors: ['1.4 TSI (CAXC)','1.6 (BSE)','1.8 TFSI (BZB)','2.0 TFSI (BWA)','2.0 TFSI Cupra (BWJ)','1.9 TDI (BKC)','2.0 TDI (BKD)','2.0 TDI (BMN)'] },
+            'Leon 5F': { name: 'Leon 5F (2012-2020)', motors: ['1.2 TSI (CJZA)','1.4 TSI (CHPA)','1.8 TSI (CJSB)','2.0 TSI (CHHB)','2.0 TSI Cupra (CJXA)','1.6 TDI (CRKB)','2.0 TDI (CUNA)'] },
+            'Leon KL': { name: 'Leon KL (2020-heute)', motors: ['1.0 TSI (DLA)','1.5 TSI (DPCA)','2.0 TSI (DNPA)','2.0 TSI Cupra (DNPA)','2.0 TDI (DTR)'] },
+            'Ibiza 6J': { name: 'Ibiza 6J (2008-2017)', motors: ['1.0 (CHYA)','1.2 TSI (CBZB)','1.4 (CGGA)','1.4 TSI (CAVA)','1.6 (CFNA)','1.2 TDI (CFWA)','1.4 TDI (CUSA)','1.6 TDI (CAYA)'] },
+            'Ibiza 6K': { name: 'Ibiza 6K (1993-2002)', motors: ['1.0 (AAU)','1.4 (AEX)','1.6 (AEH)','1.8T (AQQ)','1.9 TDI (AGR)','1.9 SDI (AEY)'] },
+            'Ibiza 6L': { name: 'Ibiza 6L (2002-2008)', motors: ['1.2 (AZQ)','1.4 (AUB)','1.6 (BTS)','1.8T (BBU)','1.4 TDI (AMF)','1.9 TDI (ATD)','1.9 TDI (ASZ)'] },
+            'Ibiza KJ': { name: 'Ibiza KJ (2017-heute)', motors: ['1.0 TSI (CHZD)','1.5 TSI (DPCA)','1.6 TDI (CRKB)'] },
+            'Arona': { name: 'Arona (2017-heute)', motors: ['1.0 TSI (CHZD)','1.5 TSI (DPCA)','1.6 TDI (CRKB)'] },
+            'Formentor': { name: 'Formentor (2020-heute)', motors: ['1.5 TSI (DPCA)','2.0 TSI (DNPA)','2.0 TSI VZ (DNPA)','2.0 TDI (DTR)'] }
+        }}
+    };
+
+    // ============ PRODUKTE (Admin-verwaltet) ============
+    let products = JSON.parse(localStorage.getItem('raeved_products') || 'null');
+    if (!products || products.length === 0) {
+        products = [
+            { id: 1, name: 'Spurplatten Set 20mm', price: 89.95, description: 'Für Golf 7, A3, Leon, Octavia', category: 'fahrwerke', badge: 'Bestseller' },
+            { id: 2, name: 'Gewindefahrwerk ST X', price: 549.00, description: 'Tieferlegung 30-65mm', category: 'fahrwerke', badge: 'Sale -25%' },
+            { id: 3, name: 'K&N Sportluftfilter', price: 59.90, description: '+15% Luftdurchsatz', category: 'ansaugung', badge: 'Neu' },
+            { id: 4, name: 'Felgenreiniger Säurefrei', price: 34.95, description: '5L Kanister, pH-neutral', category: 'pflege', badge: 'Top' },
+            { id: 5, name: 'Bremsscheiben 330mm', price: 199.00, description: 'Gelocht & belüftet', category: 'bremsen', badge: '' },
+            { id: 6, name: 'Edelstahlauspuffanlage', price: 899.00, description: 'Mit Klappensteuerung', category: 'auspuff', badge: 'Neu' },
+            { id: 7, name: 'LED-Scheinwerfer Set', price: 149.00, description: 'Plug & Play', category: 'beleuchtung', badge: '' },
+            { id: 8, name: 'Alufelge 18"', price: 129.00, description: 'Matt Schwarz', category: 'felgen', badge: 'Top' },
+            { id: 9, name: 'Subwoofer Aktiv', price: 249.00, description: '300W RMS', category: 'carhifi', badge: '' }
+        ];
+        localStorage.setItem('raeved_products', JSON.stringify(products));
+    }
+
+    let orders = JSON.parse(localStorage.getItem('raeved_orders') || '[]');
+    let users = JSON.parse(localStorage.getItem('raeved_users') || '[]');
+    let currentUser = JSON.parse(localStorage.getItem('raeved_current_user') || 'null');
+    let wishlist = JSON.parse(localStorage.getItem('raeved_wishlist') || '[]');
+
+    // ============ SEITEN-NAVIGATION ============
+    function showPage(pageId) {
+        document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+        const page = document.getElementById('page-' + pageId);
+        if (page) page.classList.add('active');
+        // Menü schließen
+        if (document.getElementById('mobileMenu').classList.contains('open')) toggleMenu();
+        // Bei Kategorie-Seite: Produkte laden
+        if (pageId === 'category') {
+            loadCategoryProducts();
+        }
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+    }
+
+    function navigateTo(section) {
+        if (section === 'home') showPage('home');
+        else if (section === 'about') showPage('about');
+        else if (section === 'contact') showPage('contact');
+    }
+
+    function navigateToCategory(catKey) {
+        // Kategorie-Key speichern
+        localStorage.setItem('selectedCategory', catKey);
+        showPage('category');
+    }
+
+    function loadCategoryProducts() {
+        const catKey = localStorage.getItem('selectedCategory') || 'fahrwerke';
+        const categoryNames = {
+            'fahrwerke':'Fahrwerke', 'felgen':'Felgen', 'bremsen':'Bremsen',
+            'auspuff':'Auspuff', 'ansaugung':'Ansaugung', 'beleuchtung':'Beleuchtung',
+            'pflege':'Pflege', 'carhifi':'Car‑HiFi'
+        };
+        document.getElementById('categoryTitle').textContent = categoryNames[catKey] || 'Kategorie';
+
+        const container = document.getElementById('categoryProducts');
+        const filtered = products.filter(p => p.category === catKey);
+        if (filtered.length === 0) {
+            container.innerHTML = '<p style="color:var(--text-darker); text-align:center; padding:40px;">Keine Produkte in dieser Kategorie.</p>';
+            return;
+        }
+        let html = '';
+        filtered.forEach(p => {
+            const badge = p.badge ? `<div class="product-badge ${p.badge.includes('%')?'sale':''}">${p.badge}</div>` : '';
+            html += `<div class="product-card">
+                ${badge}
+                <div class="product-image">🔧</div>
+                <div class="product-info">
+                    <h4>${p.name}</h4>
+                    <p class="description">${p.description || ''}</p>
+                    <div class="price-row">
+                        <span class="price">${p.price.toFixed(2).replace('.',',')} €</span>
+                    </div>
+                    <button class="btn-add-wishlist" onclick="addToWishlist('${p.name}', ${p.price})">❤️ Merken</button>
+                </div>
+            </div>`;
+        });
+        container.innerHTML = html;
+    }
+
+    // ============ MENU ============
+    function toggleMenu() {
+        document.getElementById('mobileMenu').classList.toggle('open');
+        document.getElementById('overlay').classList.toggle('show');
+        document.querySelector('.hamburger').classList.toggle('active');
+    }
+
+    // ============ DROPDOWNS ============
+    function toggleDropdown(id) {
+        const dd = document.getElementById(id);
+        const isActive = dd.classList.contains('active');
+        document.querySelectorAll('.custom-select').forEach(d => d.classList.remove('active'));
+        if (!isActive) dd.classList.add('active');
+    }
+    document.addEventListener('click', function(e) {
+        if (!e.target.closest('.custom-select')) {
+            document.querySelectorAll('.custom-select').forEach(d => d.classList.remove('active'));
+        }
+    });
+
+    // ============ SEARCH TABS ============
+    function showSearchTab(tab) {
+        document.querySelectorAll('.search-tab').forEach(t => t.classList.remove('active'));
+        if (tab === 'vehicle') {
+            document.querySelectorAll('.search-tab')[0].classList.add('active');
+            document.getElementById('vehicleSearch').style.display = 'block';
+            document.getElementById('hsnSearch').classList.remove('show');
+        } else {
+            document.querySelectorAll('.search-tab')[1].classList.add('active');
+            document.getElementById('vehicleSearch').style.display = 'none';
+            document.getElementById('hsnSearch').classList.add('show');
+        }
+        hideSearchResult();
+    }
+
+    // ============ DROPDOWN INIT ============
+    let selectedBrand = '', selectedSeries = '', selectedMotor = '';
+
+    function initVehicleDropdowns() {
+        const brandSelect = document.getElementById('selectBrand');
+        const options = brandSelect.querySelector('.custom-select-options');
+        for (const key in carDatabase) {
+            const opt = document.createElement('div');
+            opt.className = 'custom-option';
+            opt.textContent = carDatabase[key].name;
+            opt.onclick = function() { selectBrand(key, this); };
+            options.appendChild(opt);
+        }
+    }
+
+    function selectBrand(brand, el) {
+        selectedBrand = brand; selectedSeries = ''; selectedMotor = '';
+        const brandSelect = document.getElementById('selectBrand');
+        brandSelect.querySelector('.selected-text').textContent = carDatabase[brand].name;
+        brandSelect.querySelectorAll('.custom-option').forEach(o => o.classList.remove('selected'));
+        el.classList.add('selected');
+        brandSelect.classList.remove('active');
+
+        const seriesSelect = document.getElementById('selectSeries');
+        seriesSelect.querySelector('.selected-text').textContent = 'Baureihe wählen';
+        seriesSelect.querySelector('.custom-select-options').innerHTML = '';
+        for (const key in carDatabase[brand].series) {
+            const opt = document.createElement('div');
+            opt.className = 'custom-option';
+            opt.textContent = carDatabase[brand].series[key].name;
+            opt.onclick = function() { selectSeries(key, this); };
+            seriesSelect.querySelector('.custom-select-options').appendChild(opt);
+        }
+        document.getElementById('selectMotor').querySelector('.selected-text').textContent = 'Motor wählen';
+        document.getElementById('selectMotor').querySelector('.custom-select-options').innerHTML = '';
+        hideSearchResult();
+    }
+
+    function selectSeries(series, el) {
+        selectedSeries = series; selectedMotor = '';
+        const seriesSelect = document.getElementById('selectSeries');
+        seriesSelect.querySelector('.selected-text').textContent = carDatabase[selectedBrand].series[series].name;
+        seriesSelect.querySelectorAll('.custom-option').forEach(o => o.classList.remove('selected'));
+        el.classList.add('selected');
+        seriesSelect.classList.remove('active');
+
+        const motorSelect = document.getElementById('selectMotor');
+        motorSelect.querySelector('.selected-text').textContent = 'Motor wählen';
+        motorSelect.querySelector('.custom-select-options').innerHTML = '';
+        carDatabase[selectedBrand].series[series].motors.forEach(motor => {
+            const opt = document.createElement('div');
+            opt.className = 'custom-option';
+            opt.textContent = motor;
+            opt.onclick = function() { selectMotor(motor, this); };
+            motorSelect.querySelector('.custom-select-options').appendChild(opt);
+        });
+        hideSearchResult();
+    }
+
+    function selectMotor(motor, el) {
+        selectedMotor = motor;
+        const motorSelect = document.getElementById('selectMotor');
+        motorSelect.querySelector('.selected-text').textContent = motor;
+        motorSelect.querySelectorAll('.custom-option').forEach(o => o.classList.remove('selected'));
+        el.classList.add('selected');
+        motorSelect.classList.remove('active');
+    }
+
+    function hideSearchResult() {
+        document.getElementById('searchResult').classList.remove('show');
+        document.getElementById('vehicleImage').style.display = 'none';
+    }
+
+    function showVehicleImage() {
+        document.getElementById('vehicleImage').style.display = 'block';
+    }
+
+    function searchVehicle() {
+        if (!selectedBrand || !selectedSeries || !selectedMotor) {
+            alert('Bitte Marke, Baureihe und Motor wählen!');
+            return;
+        }
+        const result = document.getElementById('searchResult');
+        document.getElementById('resultTitle').textContent = carDatabase[selectedBrand].name + ' ' + carDatabase[selectedBrand].series[selectedSeries].name + ' - ' + selectedMotor;
+        document.getElementById('resultText').textContent = 'Passende Produkte für dein Fahrzeug:';
+        document.getElementById('resultProducts').innerHTML = renderProductResults();
+        showVehicleImage();
+        result.classList.add('show');
+        result.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+    }
+
+    function searchHsnTsn() {
+        const hsn = document.getElementById('hsnInput').value.trim();
+        const tsn = document.getElementById('tsnInput').value.trim();
+        if (!hsn || !tsn) { alert('Bitte HSN und TSN eingeben!'); return; }
+        if (hsn.length !== 4 || tsn.length !== 3) { alert('HSN muss 4-stellig, TSN 3-stellig sein!'); return; }
+        const result = document.getElementById('searchResult');
+        document.getElementById('resultTitle').textContent = 'HSN ' + hsn + ' / TSN ' + tsn;
+        document.getElementById('resultText').textContent = 'Fahrzeug gefunden! Passende Produkte:';
+        document.getElementById('resultProducts').innerHTML = renderProductResults();
+        showVehicleImage();
+        result.classList.add('show');
+    }
+
+    function renderProductResults() {
+        let html = '<div style="display:grid; grid-template-columns:repeat(auto-fill, minmax(180px,1fr)); gap:10px; margin-top:10px;">';
+        products.forEach(p => {
+            html += `<div style="background:var(--card); border:1px solid var(--border); padding:10px; text-align:center;">
+                <div style="font-size:1.5rem; margin-bottom:5px;">🔧</div>
+                <div style="color:#fff; font-size:0.7rem; letter-spacing:1px; margin-bottom:4px;">${p.name}</div>
+                <div style="color:var(--text-dark); font-size:0.65rem;">${p.price.toFixed(2).replace('.', ',')} €</div>
+                <button style="background:#fff; color:#000; border:none; padding:5px 10px; font-size:0.6rem; margin-top:5px; cursor:pointer;" onclick="addToWishlist('${p.name}', ${p.price})">❤️ Merken</button>
+            </div>`;
+        });
+        html += '</div>';
+        return html;
+    }
+
+    // ============ MERKLISTE ============
+    function saveWishlist() {
+        localStorage.setItem('raeved_wishlist', JSON.stringify(wishlist));
+        document.getElementById('wishlistCount').textContent = wishlist.length;
+    }
+    function addToWishlist(name, price) {
+        wishlist.push({ name, price });
+        saveWishlist();
+        alert(name + ' wurde zur Merkliste hinzugefügt!');
+    }
+    function removeFromWishlist(index) {
+        wishlist.splice(index, 1);
+        saveWishlist();
+        renderWishlist();
+    }
+    function renderWishlist() {
+        const container = document.getElementById('wishlistItems');
+        if (wishlist.length === 0) {
+            container.innerHTML = '<p style="color:var(--text-darker); text-align:center; padding:20px;">Merkliste ist leer.</p>';
+            document.getElementById('wishlistTotal').textContent = '0,00 €';
+            return;
+        }
+        let html = '', total = 0;
+        wishlist.forEach((item, i) => {
+            html += `<div class="wishlist-item"><div class="wishlist-item-info"><h4>${item.name}</h4><p>${item.price.toFixed(2).replace('.',',')} €</p></div><button class="wishlist-item-remove" onclick="removeFromWishlist(${i})">✕</button></div>`;
+            total += item.price;
+        });
+        container.innerHTML = html;
+        document.getElementById('wishlistTotal').textContent = total.toFixed(2).replace('.',',') + ' €';
+    }
+    function showWishlistModal() {
+        renderWishlist();
+        document.getElementById('wishlistModal').classList.add('show');
+        if (document.getElementById('mobileMenu').classList.contains('open')) toggleMenu();
+    }
+
+    // ============ LOGIN / REGISTER ============
+    function showLoginModal() {
+        closeModal('registerModal');
+        document.getElementById('loginModal').classList.add('show');
+        if (document.getElementById('mobileMenu').classList.contains('open')) toggleMenu();
+    }
+    function showRegisterModal() {
+        closeModal('loginModal');
+        document.getElementById('registerModal').classList.add('show');
+    }
+    function closeModal(id) {
+        document.getElementById(id).classList.remove('show');
+    }
+    function register() {
+        const name = document.getElementById('regName').value.trim();
+        const email = document.getElementById('regEmail').value.trim();
+        const password = document.getElementById('regPassword').value;
+        if (!name || !email || !password) { alert('Bitte alle Felder ausfüllen!'); return; }
+        if (users.find(u => u.email === email)) { alert('E-Mail bereits registriert!'); return; }
+        users.push({ name, email, password });
+        localStorage.setItem('raeved_users', JSON.stringify(users));
+        currentUser = { name, email };
+        localStorage.setItem('raeved_current_user', JSON.stringify(currentUser));
+        closeModal('registerModal');
+        if (email.toLowerCase() === OWNER_EMAIL) showAdminPanel();
+        alert('Willkommen, ' + name + '!');
+        updateAdminMenu();
+    }
+    function login() {
+        const email = document.getElementById('loginEmail').value.trim();
+        const password = document.getElementById('loginPassword').value;
+        if (email.toLowerCase() === OWNER_EMAIL) {
+            currentUser = { name: 'Owner', email: email };
+            localStorage.setItem('raeved_current_user', JSON.stringify(currentUser));
+            closeModal('loginModal');
+            showAdminPanel();
+            alert('Willkommen zurück, Owner!');
+            updateAdminMenu();
+            return;
+        }
+        const user = users.find(u => u.email === email && u.password === password);
+        if (user) {
+            currentUser = { name: user.name, email: user.email };
+            localStorage.setItem('raeved_current_user', JSON.stringify(currentUser));
+            closeModal('loginModal');
+            alert('Willkommen zurück, ' + user.name + '!');
+        } else {
+            alert('Falsche E-Mail oder Passwort!');
+        }
+        updateAdminMenu();
+    }
+
+    // ============ ADMIN PANEL ============
+    function showAdminPanel() {
+        showPage('admin');
+        renderAdminProducts();
+        renderAdminOrders();
+        updateAdminMenu();
+    }
+
+    function logoutAdmin() {
+        currentUser = null;
+        localStorage.setItem('raeved_current_user', 'null');
+        document.getElementById('page-admin').classList.remove('active');
+        showPage('home');
+        alert('Logout erfolgreich!');
+        updateAdminMenu();
+    }
+
+    function showAdminSection(section) {
+        document.getElementById('adminProducts').style.display = section === 'products' ? 'block' : 'none';
+        document.getElementById('adminOrders').style.display = section === 'orders' ? 'block' : 'none';
+    }
+
+    function renderAdminProducts() {
+        const container = document.getElementById('adminProductList');
+        if (products.length === 0) {
+            container.innerHTML = '<p style="color:var(--text-darker);">Keine Produkte vorhanden.</p>';
+            return;
+        }
+        let html = '<table class="admin-table"><tr><th>Name</th><th>Preis</th><th>Kategorie</th><th>Beschreibung</th><th>Aktionen</th></tr>';
+        products.forEach((p, i) => {
+            html += `<tr>
+                <td>${p.name}</td>
+                <td>${p.price.toFixed(2).replace('.', ',')} €</td>
+                <td>${p.category || '-'}</td>
+                <td>${p.description || '-'}</td>
+                <td>
+                    <button class="admin-btn" onclick="editProduct(${i})">Bearbeiten</button>
+                    <button class="admin-btn danger" onclick="deleteProduct(${i})">Löschen</button>
+                </td>
+            </tr>`;
+        });
+        html += '</table>';
+        container.innerHTML = html;
+    }
+
+    function renderAdminOrders() {
+        const container = document.getElementById('adminOrderList');
+        if (orders.length === 0) {
+            container.innerHTML = '<p style="color:var(--text-darker);">Keine Bestellungen vorhanden.</p>';
+            return;
+        }
+        let html = '<table class="admin-table"><tr><th>ID</th><th>Kunde</th><th>Produkte</th><th>Gesamt</th><th>Datum</th></tr>';
+        orders.forEach(o => {
+            const items = o.items.map(i => i.name).join(', ');
+            html += `<tr><td>${o.id}</td><td>${o.user}</td><td>${items}</td><td>${o.total.toFixed(2).replace('.',',')} €</td><td>${o.date}</td></tr>`;
+        });
+        html += '</table>';
+        container.innerHTML = html;
+    }
+
+    function addNewProduct() {
+        document.getElementById('productModalTitle').textContent = 'Neues Produkt';
+        document.getElementById('productName').value = '';
+        document.getElementById('productPrice').value = '';
+        document.getElementById('productDescription').value = '';
+        document.getElementById('productAffiliateLink').value = '';
+        document.getElementById('productModal').classList.add('show');
+    }
+
+    function editProduct(index) {
+        const p = products[index];
+        document.getElementById('productModalTitle').textContent = 'Produkt bearbeiten';
+        document.getElementById('productName').value = p.name;
+        document.getElementById('productPrice').value = p.price;
+        document.getElementById('productDescription').value = p.description || '';
+        document.getElementById('productAffiliateLink').value = p.affiliateLink || '';
+        document.getElementById('productModal').classList.add('show');
+        document.getElementById('productModal').dataset.editIndex = index;
+    }
+
+    function saveProduct() {
+        const name = document.getElementById('productName').value.trim();
+        const price = parseFloat(document.getElementById('productPrice').value);
+        const description = document.getElementById('productDescription').value.trim();
+        const affiliateLink = document.getElementById('productAffiliateLink').value.trim();
+        if (!name || !price) { alert('Name und Preis sind Pflicht!'); return; }
+        const editIndex = document.getElementById('productModal').dataset.editIndex;
+        if (editIndex !== undefined && editIndex !== '') {
+            products[parseInt(editIndex)] = { ...products[parseInt(editIndex)], name, price, description, affiliateLink };
+        } else {
+            products.push({ id: Date.now(), name, price, description, affiliateLink, badge: 'Neu', category: 'fahrwerke' });
+        }
+        localStorage.setItem('raeved_products', JSON.stringify(products));
+        closeModal('productModal');
+        renderAdminProducts();
+        renderProducts();
+        delete document.getElementById('productModal').dataset.editIndex;
+    }
+
+    function deleteProduct(index) {
+        if (confirm('Produkt wirklich löschen?')) {
+            products.splice(index, 1);
+            localStorage.setItem('raeved_products', JSON.stringify(products));
+            renderAdminProducts();
+            renderProducts();
+        }
+    }
+
+    // ============ PRODUKTE RENDERN (Startseite Top Deals) ============
+    function renderProducts() {
+        const container = document.getElementById('productsContainer');
+        // Nur die ersten 4 Produkte oder mit Badge
+        let topProducts = products.filter(p => p.badge).slice(0, 4);
+        if (topProducts.length < 4) {
+            const rest = products.filter(p => !p.badge).slice(0, 4 - topProducts.length);
+            topProducts = topProducts.concat(rest);
+        }
+        let html = '';
+        topProducts.forEach(p => {
+            const badge = p.badge ? `<div class="product-badge ${p.badge.includes('%')?'sale':''}">${p.badge}</div>` : '';
+            html += `<div class="product-card">
+                ${badge}
+                <div class="product-image">🔧</div>
+                <div class="product-info">
+                    <h4>${p.name}</h4>
+                    <p class="description">${p.description || ''}</p>
+                    <div class="price-row">
+                        <span class="price">${p.price.toFixed(2).replace('.',',')} €</span>
+                    </div>
+                    <button class="btn-add-wishlist" onclick="addToWishlist('${p.name}', ${p.price})">❤️ Merken</button>
+                </div>
+            </div>`;
+        });
+        container.innerHTML = html;
+    }
+
+    // ============ KONTAKT TABS ============
+    function showLegalTab(tab) {
+        document.querySelectorAll('.contact-tab').forEach(t => t.classList.remove('active'));
+        document.querySelectorAll('.legal').forEach(l => l.classList.remove('active'));
+        document.querySelector(`.contact-tab[onclick*="${tab}"]`).classList.add('active');
+        document.getElementById('legal-' + tab).classList.add('active');
+    }
+
+    // ============ ADMIN-MENU EINBLENDEN ============
+    function updateAdminMenu() {
+        const container = document.getElementById('adminMenuContainer');
+        if (currentUser && currentUser.email.toLowerCase() === OWNER_EMAIL) {
+            container.innerHTML = `<div class="menu-heading">Admin</div>
+                <button class="menu-item sub" onclick="showAdminPanel()">Admin Panel</button>`;
+        } else {
+            container.innerHTML = '';
+        }
+    }
+
+    // ============ INIT ============
+    document.getElementById('wishlistCount').textContent = wishlist.length;
+    initVehicleDropdowns();
+    renderProducts();
+    updateAdminMenu();
+
+    // Kategorie-Seite laden, falls gesetzt
+    if (localStorage.getItem('selectedCategory')) {
+        loadCategoryProducts();
+    }
+
+    // Klick außerhalb schließt Dropdowns (global)
+    document.addEventListener('click', function(e) {
+        if (!e.target.closest('.custom-select')) {
+            document.querySelectorAll('.custom-select').forEach(d => d.classList.remove('active'));
+        }
+    });
+</script>
+</body>
+</html>
