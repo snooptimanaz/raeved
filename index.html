@@ -4,10 +4,13 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>RÆVED // Build it. Drive it. Live it.</title>
-    
+
     <link href="https://fonts.googleapis.com/css2?family=Oswald:wght@300;400;500;600;700&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
-    
+
     <style>
+        /* ============================================================
+           ROOT & GLOBAL
+           ============================================================ */
         :root {
             --black: #0a0a0a;
             --dark: #111111;
@@ -20,78 +23,114 @@
             --text: #e0e0e0;
             --text-dark: #888;
             --text-darker: #555;
+            --danger: #cc0000;
         }
-        
+
         * {
             margin: 0;
             padding: 0;
             box-sizing: border-box;
         }
-        
+
+        html {
+            scroll-behavior: smooth;
+        }
+
         body {
             background-color: var(--black);
             color: var(--text);
             font-family: 'Inter', sans-serif;
             line-height: 1.6;
             min-height: 100vh;
+            overflow-x: hidden;
         }
-        
-        /* ============ HEADER ============ */
+
+        a {
+            text-decoration: none;
+            color: inherit;
+        }
+
+        /* ============================================================
+           HEADER
+           ============================================================ */
         .header {
             display: flex;
             justify-content: space-between;
             align-items: center;
-            padding: 20px 30px;
+            padding: 10px 25px;
             border-bottom: 1px solid var(--border);
             background: var(--darker);
-            position: relative;
+            position: sticky;
+            top: 0;
+            z-index: 60;
+            min-height: 54px;
         }
-        
+
         .logo-link {
-            text-decoration: none;
             display: block;
         }
-        
+
         .logo {
             font-family: 'Oswald', sans-serif;
-            font-size: 2.5rem;
-            letter-spacing: 8px;
+            font-size: 2.4rem;
+            letter-spacing: 7px;
             color: #fff;
-            text-decoration: none;
             text-transform: uppercase;
             font-weight: 700;
             line-height: 1;
-            transition: all 0.3s ease;
         }
-        
+
         .logo span {
             color: var(--text-darker);
         }
-        
-        .logo:hover {
-            text-shadow: 0 0 30px rgba(255, 255, 255, 0.3);
-        }
-        
+
         .logo-tagline {
-            font-size: 0.65rem;
-            letter-spacing: 6px;
+            font-size: 0.55rem;
+            letter-spacing: 5px;
             color: var(--text-darker);
             text-transform: uppercase;
-            margin-top: 5px;
+            margin-top: 2px;
         }
-        
-        .header-right {
+
+        .header-actions {
             display: flex;
             align-items: center;
-            gap: 20px;
+            gap: 10px;
         }
-        
-        /* ============ HAMBURGER MENÜ ============ */
-        .hamburger {
-            width: 44px;
-            height: 44px;
+
+        .header-btn {
             background: transparent;
-            border: 1px solid var(--border-light);
+            border: 1px solid var(--border);
+            color: var(--text);
+            font-size: 0.7rem;
+            letter-spacing: 1px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            padding: 6px 12px;
+            text-transform: uppercase;
+            font-family: 'Inter', sans-serif;
+        }
+
+        .header-btn:hover {
+            border-color: #fff;
+            color: #fff;
+        }
+
+        .cart-count {
+            background: #fff;
+            color: #000;
+            padding: 0 6px;
+            font-size: 0.6rem;
+            font-weight: 700;
+            border-radius: 30px;
+            margin-left: 5px;
+        }
+
+        .hamburger {
+            width: 40px;
+            height: 40px;
+            background: transparent;
+            border: 1px solid var(--border);
             cursor: pointer;
             display: flex;
             flex-direction: column;
@@ -99,37 +138,50 @@
             align-items: center;
             gap: 5px;
             transition: all 0.3s ease;
-            position: relative;
-            z-index: 1000;
         }
-        
+
         .hamburger:hover {
-            border-color: var(--text);
+            border-color: #fff;
         }
-        
+
         .hamburger span {
             display: block;
-            width: 20px;
+            width: 18px;
             height: 2px;
             background: var(--text);
             transition: all 0.3s ease;
         }
-        
+
         .hamburger.active span:nth-child(1) {
             transform: rotate(45deg) translate(5px, 5px);
-            background: #fff;
         }
-        
         .hamburger.active span:nth-child(2) {
             opacity: 0;
         }
-        
         .hamburger.active span:nth-child(3) {
             transform: rotate(-45deg) translate(5px, -5px);
-            background: #fff;
         }
-        
-        /* ============ MOBILE MENÜ ============ */
+
+        /* ============================================================
+           MOBILE MENU
+           ============================================================ */
+        .overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0, 0, 0, 0.8);
+            z-index: 58;
+            opacity: 0;
+            visibility: hidden;
+            transition: all 0.3s ease;
+        }
+        .overlay.show {
+            opacity: 1;
+            visibility: visible;
+        }
+
         .mobile-menu {
             position: fixed;
             top: 0;
@@ -139,572 +191,758 @@
             background: var(--darker);
             border-left: 1px solid var(--border);
             transition: right 0.3s ease;
-            z-index: 999;
+            z-index: 59;
             overflow-y: auto;
-            padding: 80px 25px 30px;
+            padding: 70px 20px 30px;
         }
-        
         .mobile-menu.open {
             right: 0;
         }
-        
-        .mobile-menu .menu-item {
+
+        .menu-item {
             display: block;
-            padding: 14px 0;
+            padding: 12px 0;
             border-bottom: 1px solid var(--border);
             color: var(--text);
             text-decoration: none;
             text-transform: uppercase;
             letter-spacing: 2px;
-            font-size: 0.8rem;
+            font-size: 0.75rem;
             transition: all 0.3s ease;
             cursor: pointer;
+            background: none;
+            border-left: none;
+            border-right: none;
+            border-top: none;
+            width: 100%;
+            text-align: left;
+            font-family: 'Inter', sans-serif;
         }
-        
-        .mobile-menu .menu-item:hover {
+        .menu-item:hover {
             color: #fff;
             padding-left: 10px;
-            border-bottom-color: #fff;
         }
-        
-        .mobile-menu .menu-item.sub {
-            font-size: 0.7rem;
+        .menu-item.sub {
+            font-size: 0.65rem;
             color: var(--text-darker);
-            padding-left: 20px;
-            letter-spacing: 1px;
+            padding-left: 15px;
         }
-        
-        .mobile-menu .menu-item.sub:hover {
-            color: #fff;
-            padding-left: 30px;
-        }
-        
         .menu-heading {
             font-family: 'Oswald', sans-serif;
-            font-size: 0.7rem;
-            letter-spacing: 4px;
+            font-size: 0.6rem;
+            letter-spacing: 3px;
             color: var(--text-darker);
             text-transform: uppercase;
-            margin: 25px 0 5px;
+            margin: 20px 0 5px;
             padding-bottom: 5px;
             border-bottom: 1px solid var(--border-light);
         }
-        
-        .overlay {
+
+        /* ============================================================
+           HERO
+           ============================================================ */
+        .hero {
+            height: 55vh;
+            min-height: 300px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            background: radial-gradient(circle at 30% 30%, #1a1a1a, #0a0a0a 80%);
+            border-bottom: 1px solid var(--border);
+            padding: 15px;
+        }
+
+        .hero h1 {
+            font-family: 'Oswald', sans-serif;
+            font-size: clamp(2.2rem, 8vw, 4rem);
+            letter-spacing: 6px;
+            color: #fff;
+            text-transform: uppercase;
+            line-height: 1.1;
+            margin-bottom: 8px;
+        }
+        .hero h1 span {
+            color: var(--text-darker);
+        }
+        .hero p {
+            font-size: 0.8rem;
+            letter-spacing: 3px;
+            color: var(--text-dark);
+            text-transform: uppercase;
+            margin-bottom: 20px;
+        }
+        .hero-cta {
+            display: inline-block;
+            background: #fff;
+            color: #000;
+            padding: 12px 35px;
+            font-family: 'Oswald', sans-serif;
+            font-weight: 600;
+            letter-spacing: 3px;
+            text-transform: uppercase;
+            font-size: 0.75rem;
+            transition: all 0.3s ease;
+            cursor: pointer;
+        }
+        .hero-cta:hover {
+            background: #ddd;
+        }
+
+        /* ============================================================
+           SEARCH SECTION (sticky)
+           ============================================================ */
+        .search-section {
+            background: var(--darker);
+            padding: 15px 20px 20px;
+            border-bottom: 1px solid var(--border);
+        }
+
+        .search-tabs {
+            display: flex;
+            justify-content: center;
+            gap: 10px;
+            margin-bottom: 15px;
+            flex-wrap: wrap;
+        }
+
+        .search-tab {
+            background: transparent;
+            border: 1px solid var(--border);
+            color: var(--text-dark);
+            padding: 8px 20px;
+            cursor: pointer;
+            font-size: 0.7rem;
+            letter-spacing: 2px;
+            text-transform: uppercase;
+            transition: all 0.3s ease;
+            font-family: 'Inter', sans-serif;
+        }
+
+        .search-tab.active {
+            border-color: #fff;
+            color: #fff;
+            background: rgba(255,255,255,0.05);
+        }
+
+        .search-tab:hover {
+            color: #fff;
+        }
+
+        .search-box {
+            display: flex;
+            justify-content: center;
+            gap: 8px;
+            flex-wrap: wrap;
+            max-width: 700px;
+            margin: 0 auto;
+        }
+
+        .custom-select {
+            position: relative;
+            min-width: 140px;
+            flex: 1 1 150px;
+        }
+
+        .custom-select-trigger {
+            background: var(--card);
+            border: 1px solid var(--border);
+            color: #fff;
+            padding: 10px 12px;
+            font-family: 'Inter', sans-serif;
+            font-size: 0.7rem;
+            letter-spacing: 1px;
+            text-transform: uppercase;
+            cursor: pointer;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            transition: border-color 0.3s;
+            min-height: 40px;
+            width: 100%;
+        }
+
+        .custom-select-trigger:hover {
+            border-color: #fff;
+        }
+
+        .custom-select-options {
+            position: absolute;
+            top: 100%;
+            left: 0;
+            right: 0;
+            background: var(--darker);
+            border: 1px solid var(--border);
+            border-top: none;
+            max-height: 200px;
+            overflow-y: auto;
+            z-index: 30;
+            display: none;
+        }
+        .custom-select.active .custom-select-options {
+            display: block;
+        }
+
+        .custom-option {
+            padding: 8px 12px;
+            cursor: pointer;
+            font-size: 0.65rem;
+            letter-spacing: 1px;
+            text-transform: uppercase;
+            color: var(--text);
+            transition: all 0.2s;
+        }
+        .custom-option:hover {
+            background: var(--card);
+            color: #fff;
+        }
+        .custom-option.selected {
+            background: var(--card);
+            color: #fff;
+        }
+
+        .btn-search {
+            background: #fff;
+            color: #000;
+            border: none;
+            padding: 10px 25px;
+            font-family: 'Oswald', sans-serif;
+            font-size: 0.75rem;
+            letter-spacing: 2px;
+            text-transform: uppercase;
+            cursor: pointer;
+            font-weight: 600;
+            min-height: 40px;
+        }
+        .btn-search:hover {
+            background: #ddd;
+        }
+
+        /* HSN/TSN Panel */
+        .hsn-panel {
+            max-width: 500px;
+            margin: 0 auto;
+            display: none;
+        }
+        .hsn-panel.show {
+            display: flex;
+            gap: 8px;
+            flex-wrap: wrap;
+            justify-content: center;
+        }
+        .hsn-panel input {
+            background: var(--card);
+            border: 1px solid var(--border);
+            color: #fff;
+            padding: 10px 12px;
+            font-family: 'Inter', sans-serif;
+            font-size: 0.7rem;
+            letter-spacing: 2px;
+            text-transform: uppercase;
+            width: 120px;
+            text-align: center;
+            outline: none;
+        }
+        .hsn-panel input:focus {
+            border-color: #fff;
+        }
+
+        .search-result {
+            max-width: 700px;
+            margin: 15px auto 0;
+            padding: 15px;
+            background: var(--darker);
+            border: 1px solid var(--border);
+            text-align: center;
+            display: none;
+        }
+        .search-result.show {
+            display: block;
+        }
+
+        /* ============================================================
+           KATEGORIEN
+           ============================================================ */
+        .section-title {
+            text-align: center;
+            font-family: 'Oswald', sans-serif;
+            font-size: 1.5rem;
+            letter-spacing: 4px;
+            color: #fff;
+            padding: 40px 20px 20px;
+            text-transform: uppercase;
+            font-weight: 700;
+        }
+        .section-title span {
+            color: var(--text-darker);
+        }
+
+        .categories {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+            gap: 15px;
+            padding: 0 20px 20px;
+            max-width: 1100px;
+            margin: 0 auto;
+        }
+
+        .category-card {
+            background: var(--card);
+            border: 1px solid var(--border);
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            padding: 25px 12px 18px;
+        }
+        .category-card:hover {
+            border-color: #888;
+            transform: translateY(-5px);
+            box-shadow: 0 15px 40px rgba(0,0,0,0.5);
+        }
+        .category-icon {
+            font-size: 2.5rem;
+            margin-bottom: 8px;
+        }
+        .category-info h3 {
+            font-family: 'Oswald', sans-serif;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            color: #fff;
+            font-size: 0.8rem;
+            font-weight: 600;
+            margin-bottom: 4px;
+        }
+        .category-info p {
+            color: var(--text-darker);
+            font-size: 0.65rem;
+        }
+
+        /* ============================================================
+           PRODUKTE
+           ============================================================ */
+        .products-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+            gap: 20px;
+            padding: 0 20px 30px;
+            max-width: 1100px;
+            margin: 0 auto;
+        }
+
+        .product-card {
+            background: var(--card);
+            border: 1px solid var(--border);
+            transition: all 0.3s ease;
+            display: flex;
+            flex-direction: column;
+            position: relative;
+            opacity: 0;
+            transform: translateY(30px);
+            animation: fadeUp 0.6s ease forwards;
+        }
+        .product-card:nth-child(2) { animation-delay: 0.1s; }
+        .product-card:nth-child(3) { animation-delay: 0.2s; }
+        .product-card:nth-child(4) { animation-delay: 0.3s; }
+
+        @keyframes fadeUp {
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .product-card:hover {
+            border-color: var(--border-light);
+            transform: translateY(-5px);
+            box-shadow: 0 15px 40px rgba(0,0,0,0.5);
+        }
+
+        .product-badge {
+            position: absolute;
+            top: 10px;
+            left: 10px;
+            background: #fff;
+            color: #000;
+            padding: 3px 10px;
+            font-size: 0.55rem;
+            font-weight: 600;
+            letter-spacing: 1px;
+            text-transform: uppercase;
+            z-index: 10;
+        }
+        .product-badge.sale {
+            background: #cc0000;
+            color: #fff;
+        }
+
+        .product-image {
+            background: #0d0d0d;
+            height: 150px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 2.5rem;
+            border-bottom: 1px solid var(--border);
+        }
+
+        .product-info {
+            padding: 15px;
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+        }
+        .product-info h4 {
+            font-family: 'Oswald', sans-serif;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            color: #fff;
+            font-size: 0.8rem;
+            font-weight: 600;
+            margin-bottom: 4px;
+        }
+        .product-info .description {
+            color: var(--text-darker);
+            font-size: 0.65rem;
+            margin-bottom: 8px;
+            flex: 1;
+        }
+        .price-row {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            margin-bottom: 10px;
+            flex-wrap: wrap;
+        }
+        .price {
+            font-size: 1.1rem;
+            color: #fff;
+            font-weight: 600;
+        }
+        .old-price {
+            text-decoration: line-through;
+            color: var(--text-darker);
+            font-size: 0.7rem;
+        }
+        .btn-add-cart {
+            display: block;
+            background: #fff;
+            color: #000;
+            text-align: center;
+            padding: 8px;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            font-size: 0.65rem;
+            cursor: pointer;
+            border: none;
+            font-family: 'Inter', sans-serif;
+            font-weight: 600;
+            transition: background 0.3s;
+        }
+        .btn-add-cart:hover {
+            background: #ddd;
+        }
+
+        /* ============================================================
+           ÜBER UNS
+           ============================================================ */
+        .about-section {
+            padding: 40px 20px 60px;
+            max-width: 700px;
+            margin: 0 auto;
+            text-align: center;
+        }
+        .about-box {
+            background: var(--card);
+            border: 1px solid var(--border);
+            padding: 30px;
+            text-align: left;
+        }
+        .about-box p {
+            color: var(--text-dark);
+            font-size: 0.85rem;
+            line-height: 1.8;
+            margin-bottom: 15px;
+        }
+        .about-box strong {
+            color: #fff;
+        }
+
+        /* ============================================================
+           FOOTER
+           ============================================================ */
+        .footer {
+            background: var(--darker);
+            padding: 30px 20px;
+            text-align: center;
+            border-top: 1px solid var(--border);
+            margin-top: 20px;
+        }
+        .footer .logo {
+            font-size: 1.5rem;
+            margin-bottom: 3px;
+        }
+        .footer .tagline {
+            color: var(--text-darker);
+            font-size: 0.55rem;
+            letter-spacing: 3px;
+            text-transform: uppercase;
+            margin-bottom: 15px;
+        }
+        .footer-social {
+            display: flex;
+            justify-content: center;
+            gap: 15px;
+            margin-bottom: 12px;
+        }
+        .footer p {
+            color: var(--text-darker);
+            font-size: 0.6rem;
+        }
+        .footer .disclaimer {
+            margin-top: 15px;
+            font-size: 0.5rem;
+            color: #333;
+            max-width: 450px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+
+        /* ============================================================
+           MODALS
+           ============================================================ */
+        .modal {
             position: fixed;
             top: 0;
             left: 0;
             right: 0;
             bottom: 0;
-            background: rgba(0, 0, 0, 0.7);
-            z-index: 998;
-            opacity: 0;
-            visibility: hidden;
-            transition: all 0.3s ease;
+            background: rgba(0,0,0,0.85);
+            z-index: 200;
+            display: none;
+            align-items: center;
+            justify-content: center;
         }
-        
-        .overlay.show {
-            opacity: 1;
-            visibility: visible;
+        .modal.show {
+            display: flex;
         }
-        
-        /* ============ SUCHBEREICH ============ */
-        .search-section {
-            background: linear-gradient(rgba(0,0,0,0.95), rgba(0,0,0,0.98));
-            padding: 60px 20px;
-            text-align: center;
-            border-bottom: 1px solid var(--border);
+        .modal-content {
+            background: var(--darker);
+            border: 1px solid var(--border);
+            padding: 25px;
+            max-width: 400px;
+            width: 90%;
+            max-height: 85vh;
+            overflow-y: auto;
             position: relative;
         }
-        
-        .search-section h2 {
+        .modal-content h2 {
             font-family: 'Oswald', sans-serif;
-            font-size: 2rem;
-            letter-spacing: 5px;
+            letter-spacing: 2px;
             color: #fff;
             text-transform: uppercase;
-            margin-bottom: 5px;
-            font-weight: 700;
+            font-size: 1.2rem;
+            margin-bottom: 15px;
+            text-align: center;
         }
-        
-        .search-section h2 span {
+        .modal-close {
+            position: absolute;
+            top: 10px;
+            right: 14px;
+            background: none;
+            border: none;
             color: var(--text-darker);
+            font-size: 1.3rem;
+            cursor: pointer;
         }
-        
-        .search-section p {
-            color: var(--text-darker);
-            letter-spacing: 3px;
-            text-transform: uppercase;
-            font-size: 0.7rem;
-            margin-bottom: 30px;
-        }
-        
-        .search-box {
-            display: flex;
-            justify-content: center;
-            gap: 10px;
-            flex-wrap: wrap;
-            max-width: 800px;
-            margin: 0 auto;
-        }
-        
-        .search-box select,
-        .search-box input {
+        .modal-input {
+            width: 100%;
             background: var(--card);
             border: 1px solid var(--border);
             color: #fff;
-            padding: 14px 15px;
+            padding: 10px;
             font-family: 'Inter', sans-serif;
-            font-size: 0.85rem;
-            letter-spacing: 1px;
-            text-transform: uppercase;
-            min-width: 150px;
-            text-align: center;
+            font-size: 0.75rem;
+            margin-bottom: 10px;
             outline: none;
-            transition: all 0.3s ease;
-            appearance: none;
-            -webkit-appearance: none;
-            cursor: pointer;
         }
-        
-        .search-box select:focus,
-        .search-box input:focus {
-            border-color: #fff;
-        }
-        
-        .search-box select option {
-            background: var(--dark);
-            color: #fff;
-        }
-        
-        .btn-search {
+        .modal-btn {
+            width: 100%;
             background: #fff;
             color: #000;
             border: none;
-            padding: 14px 30px;
+            padding: 10px;
             font-family: 'Oswald', sans-serif;
-            font-size: 0.85rem;
-            letter-spacing: 3px;
-            text-transform: uppercase;
-            cursor: pointer;
-            transition: all 0.3s ease;
-            font-weight: 600;
-        }
-        
-        .btn-search:hover {
-            background: #ddd;
-            box-shadow: 0 0 20px rgba(255, 255, 255, 0.3);
-        }
-        
-        .search-hint {
-            margin-top: 20px;
-            font-size: 0.6rem;
-            color: #444;
-            letter-spacing: 1px;
-        }
-        
-        /* ============ KATEGORIEN ============ */
-        .section-title {
-            text-align: center;
-            font-family: 'Oswald', sans-serif;
-            font-size: 1.8rem;
-            letter-spacing: 5px;
-            color: #fff;
-            padding: 60px 20px 30px;
-            text-transform: uppercase;
-            font-weight: 700;
-        }
-        
-        .section-title span {
-            color: var(--text-darker);
-        }
-        
-        .categories {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-            gap: 20px;
-            padding: 30px;
-            max-width: 1400px;
-            margin: 0 auto;
-        }
-        
-        .category-card {
-            background: var(--card);
-            border: 1px solid var(--border);
-            padding: 40px 25px;
-            text-align: center;
-            cursor: pointer;
-            transition: all 0.4s ease;
-            position: relative;
-            overflow: hidden;
-        }
-        
-        .category-card::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: 0;
-            right: 0;
-            height: 3px;
-            background: #fff;
-            transform: scaleX(0);
-            transition: transform 0.4s ease;
-        }
-        
-        .category-card:hover::before {
-            transform: scaleX(1);
-        }
-        
-        .category-card:hover {
-            border-color: var(--border-light);
-            transform: translateY(-5px);
-            box-shadow: 0 15px 40px rgba(0, 0, 0, 0.5);
-        }
-        
-        .category-card .icon {
-            font-size: 3rem;
-            margin-bottom: 20px;
-            display: block;
-            transition: all 0.4s ease;
-        }
-        
-        .category-card:hover .icon {
-            transform: scale(1.15);
-        }
-        
-        .category-card h3 {
-            font-family: 'Oswald', sans-serif;
-            text-transform: uppercase;
-            letter-spacing: 3px;
-            color: #fff;
-            font-size: 1rem;
-            font-weight: 600;
-            margin-bottom: 10px;
-            transition: all 0.3s ease;
-        }
-        
-        .category-card p {
-            color: var(--text-darker);
             font-size: 0.75rem;
-            letter-spacing: 1px;
-        }
-        
-        /* ============ PRODUKTE ============ */
-        .products-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
-            gap: 20px;
-            padding: 30px;
-            max-width: 1400px;
-            margin: 0 auto;
-        }
-        
-        .product-card {
-            background: var(--card);
-            border: 1px solid var(--border);
-            transition: all 0.4s ease;
-            position: relative;
-            overflow: hidden;
-        }
-        
-        .product-card::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: 0;
-            right: 0;
-            height: 3px;
-            background: #fff;
-            transform: scaleX(0);
-            transition: transform 0.4s ease;
-            z-index: 1;
-        }
-        
-        .product-card:hover::before {
-            transform: scaleX(1);
-        }
-        
-        .product-card:hover {
-            border-color: var(--border-light);
-            transform: translateY(-5px);
-            box-shadow: 0 15px 40px rgba(0, 0, 0, 0.5);
-        }
-        
-        .product-badge {
-            position: absolute;
-            top: 15px;
-            left: 15px;
-            background: #fff;
-            color: #000;
-            padding: 5px 12px;
-            font-size: 0.6rem;
+            letter-spacing: 2px;
+            text-transform: uppercase;
+            cursor: pointer;
             font-weight: 600;
-            letter-spacing: 2px;
-            text-transform: uppercase;
-            z-index: 10;
-        }
-        
-        .product-badge.sale {
-            background: #cc0000;
-            color: #fff;
-        }
-        
-        .product-image {
-            background: #0d0d0d;
-            height: 200px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 4rem;
-            border-bottom: 1px solid var(--border);
-            transition: all 0.4s ease;
-        }
-        
-        .product-card:hover .product-image {
-            background: #111;
-        }
-        
-        .product-info {
-            padding: 20px;
-        }
-        
-        .product-info h4 {
-            font-family: 'Oswald', sans-serif;
-            text-transform: uppercase;
-            letter-spacing: 2px;
-            color: #fff;
             margin-bottom: 8px;
-            font-size: 0.95rem;
-            font-weight: 600;
         }
-        
-        .product-info .description {
+        .modal-btn.secondary {
+            background: transparent;
+            border: 1px solid var(--border);
+            color: var(--text);
+        }
+        .cart-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 8px 0;
+            border-bottom: 1px solid var(--border);
+        }
+        .cart-item-info {
+            flex: 1;
+        }
+        .cart-item-info h4 {
+            font-size: 0.8rem;
+            color: #fff;
+        }
+        .cart-item-info p {
+            font-size: 0.7rem;
             color: var(--text-darker);
-            font-size: 0.75rem;
-            letter-spacing: 0.5px;
-            margin-bottom: 12px;
         }
-        
-        .product-info .price {
-            font-size: 1.4rem;
+        .cart-item-remove {
+            background: none;
+            border: none;
+            color: #cc0000;
+            cursor: pointer;
+            font-size: 1rem;
+        }
+        .cart-total {
+            margin-top: 15px;
+            padding-top: 15px;
+            border-top: 2px solid var(--border);
+            display: flex;
+            justify-content: space-between;
+            font-size: 1rem;
             color: #fff;
             font-weight: 600;
-            letter-spacing: 1px;
         }
-        
-        .product-info .old-price {
-            text-decoration: line-through;
-            color: var(--text-darker);
-            font-size: 0.85rem;
-            margin-left: 10px;
+
+        /* ============================================================
+           ADMIN PANEL
+           ============================================================ */
+        .admin-panel {
+            display: none;
+            padding: 30px 20px;
+            max-width: 900px;
+            margin: 0 auto;
         }
-        
-        .btn-affiliate {
+        .admin-panel.show {
             display: block;
-            background: transparent;
-            border: 1px solid var(--border-light);
+        }
+        .admin-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+            flex-wrap: wrap;
+            gap: 10px;
+        }
+        .admin-btn {
+            background: var(--card);
+            border: 1px solid var(--border);
             color: var(--text);
-            text-align: center;
-            padding: 12px;
-            text-decoration: none;
-            text-transform: uppercase;
-            letter-spacing: 2px;
-            font-size: 0.75rem;
-            margin-top: 15px;
-            transition: all 0.3s ease;
+            padding: 8px 15px;
             cursor: pointer;
+            font-size: 0.7rem;
+            letter-spacing: 1px;
+            text-transform: uppercase;
+            transition: all 0.3s;
             font-family: 'Inter', sans-serif;
         }
-        
-        .btn-affiliate:hover {
+        .admin-btn:hover {
             border-color: #fff;
             color: #fff;
-            background: rgba(255, 255, 255, 0.05);
         }
-        
-        /* ============ MERCH ============ */
-        .merch-section {
-            background: var(--darker);
-            border-top: 1px solid var(--border);
-            border-bottom: 1px solid var(--border);
-            padding: 70px 30px;
-            text-align: center;
-            margin-top: 50px;
+        .admin-btn.danger {
+            border-color: var(--danger);
+            color: var(--danger);
         }
-        
-        .merch-section h2 {
-            font-family: 'Oswald', sans-serif;
-            font-size: 2rem;
-            letter-spacing: 5px;
-            color: #fff;
-            text-transform: uppercase;
-            margin-bottom: 5px;
-            font-weight: 700;
+        .admin-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 15px;
         }
-        
-        .merch-section h2 span {
-            color: var(--text-darker);
-        }
-        
-        .merch-section p {
-            color: var(--text-darker);
-            letter-spacing: 4px;
-            text-transform: uppercase;
-            font-size: 0.7rem;
-            margin-bottom: 40px;
-        }
-        
-        /* ============ ÜBER UNS ============ */
-        .about-section {
-            padding: 70px 30px;
-            max-width: 800px;
-            margin: 0 auto;
-            text-align: center;
-        }
-        
-        .about-section h2 {
-            font-family: 'Oswald', sans-serif;
-            font-size: 1.8rem;
-            letter-spacing: 5px;
-            color: #fff;
-            margin-bottom: 30px;
-            font-weight: 700;
-            text-transform: uppercase;
-        }
-        
-        .about-section h2 span {
-            color: var(--text-darker);
-        }
-        
-        .about-box {
-            background: var(--card);
-            border: 1px solid var(--border);
-            padding: 35px;
+        .admin-table th, .admin-table td {
+            padding: 10px;
             text-align: left;
-        }
-        
-        .about-box p {
-            color: var(--text-dark);
-            font-size: 0.85rem;
-            letter-spacing: 1px;
-            line-height: 1.8;
-            margin-bottom: 18px;
-        }
-        
-        .about-box .highlight {
-            color: #fff;
-            font-weight: 600;
-        }
-        
-        /* ============ FOOTER ============ */
-        .footer {
-            background: var(--darker);
-            padding: 40px 20px;
-            text-align: center;
-            border-top: 1px solid var(--border);
-        }
-        
-        .footer .logo {
-            font-size: 1.8rem;
-            margin-bottom: 5px;
-        }
-        
-        .footer .tagline {
-            color: var(--text-darker);
-            font-size: 0.65rem;
-            letter-spacing: 5px;
-            text-transform: uppercase;
-            margin-bottom: 25px;
-        }
-        
-        .footer p {
-            color: var(--text-darker);
+            border-bottom: 1px solid var(--border);
             font-size: 0.7rem;
-            letter-spacing: 1px;
         }
-        
-        .footer .disclaimer {
-            margin-top: 25px;
-            font-size: 0.6rem;
-            color: #333;
+        .admin-table th {
+            font-family: 'Oswald', sans-serif;
             letter-spacing: 1px;
-            line-height: 1.6;
-            max-width: 600px;
-            margin-left: auto;
-            margin-right: auto;
+            text-transform: uppercase;
+            color: #fff;
         }
-        
-        /* ============ RESPONSIVE ============ */
+        .admin-table td {
+            color: var(--text-dark);
+        }
+
+        /* ============================================================
+           RESPONSIVE
+           ============================================================ */
         @media (max-width: 768px) {
             .header {
-                padding: 15px 20px;
+                padding: 8px 12px;
+                min-height: 50px;
             }
-            
             .logo {
                 font-size: 1.8rem;
+                letter-spacing: 5px;
+            }
+            .logo-tagline {
+                font-size: 0.45rem;
+                letter-spacing: 3px;
+            }
+            .header-btn {
+                font-size: 0.6rem;
+                padding: 5px 8px;
+            }
+            .hero {
+                height: 40vh;
+                min-height: 250px;
+            }
+            .hero h1 {
+                font-size: clamp(1.8rem, 10vw, 2.8rem);
                 letter-spacing: 4px;
             }
-            
-            .logo-tagline {
-                letter-spacing: 3px;
-                font-size: 0.55rem;
-            }
-            
-            .header-right {
-                position: absolute;
-                top: 15px;
-                right: 20px;
-            }
-            
-            .search-section {
-                padding: 40px 15px;
-            }
-            
-            .search-section h2 {
-                font-size: 1.4rem;
-                letter-spacing: 3px;
-            }
-            
             .search-box {
                 flex-direction: column;
-                align-items: center;
+                align-items: stretch;
             }
-            
-            .search-box select,
-            .search-box input {
-                width: 100%;
-                max-width: 300px;
+            .custom-select {
+                min-width: 100%;
             }
-            
             .btn-search {
                 width: 100%;
-                max-width: 300px;
             }
-            
-            .categories, .products-grid {
-                padding: 15px;
-                grid-template-columns: 1fr;
+            .categories {
+                grid-template-columns: 1fr 1fr;
+                padding: 0 10px 15px;
+                gap: 10px;
             }
-            
-            .section-title {
-                font-size: 1.3rem;
-                letter-spacing: 3px;
-                padding: 40px 15px 20px;
+            .products-grid {
+                grid-template-columns: 1fr 1fr;
+                padding: 0 10px 15px;
+                gap: 12px;
             }
-            
-            .merch-section h2 {
-                font-size: 1.5rem;
-            }
-            
             .mobile-menu {
-                width: 280px;
+                width: 260px;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .categories, .products-grid {
+                grid-template-columns: 1fr;
             }
         }
     </style>
 </head>
 <body>
 
-    <!-- HEADER -->
+    <!-- ============================================================
+    HEADER
+    ============================================================ -->
     <header class="header">
         <div>
             <a href="#" class="logo-link">
@@ -712,466 +950,761 @@
                 <div class="logo-tagline">Build it. Drive it. Live it.</div>
             </a>
         </div>
-        
-        <div class="header-right">
-            <button class="hamburger" id="hamburgerBtn" onclick="toggleMenu()" aria-label="Menü öffnen">
-                <span></span>
-                <span></span>
-                <span></span>
+        <div class="header-actions">
+            <button class="header-btn" onclick="showLoginModal()">👤 Login</button>
+            <button class="header-btn" onclick="showCartModal()">🛒 <span class="cart-count" id="cartCount">0</span></button>
+            <button class="hamburger" onclick="toggleMenu()" aria-label="Menü">
+                <span></span><span></span><span></span>
             </button>
         </div>
     </header>
 
-    <!-- OVERLAY -->
+    <!-- OVERLAY & MOBILE MENU -->
     <div class="overlay" id="overlay" onclick="toggleMenu()"></div>
 
-    <!-- MOBILE MENÜ -->
     <div class="mobile-menu" id="mobileMenu">
         <div class="menu-heading">Navigation</div>
-        <a href="#" class="menu-item" onclick="toggleMenu()">Home</a>
-        <a href="#categories" class="menu-item" onclick="toggleMenu()">Kategorien</a>
-        <a href="#deals" class="menu-item" onclick="toggleMenu()">Top Deals</a>
-        <a href="#merch" class="menu-item" onclick="toggleMenu()">Merch</a>
-        <a href="#about" class="menu-item" onclick="toggleMenu()">Über Uns</a>
-        <a href="#search" class="menu-item" onclick="toggleMenu()">Fahrzeugsuche</a>
-        
+        <button class="menu-item" onclick="navigateTo('home')">Home</button>
+        <button class="menu-item" onclick="navigateTo('search')">Fahrzeugsuche</button>
+        <button class="menu-item" onclick="navigateTo('categories')">Kategorien</button>
+        <button class="menu-item" onclick="navigateTo('deals')">Top Deals</button>
+        <button class="menu-item" onclick="navigateTo('about')">Über Uns</button>
+
         <div class="menu-heading">Kategorien</div>
-        <a href="#categories" class="menu-item sub" onclick="toggleMenu()">Felgen & Räder</a>
-        <a href="#categories" class="menu-item sub" onclick="toggleMenu()">Fahrwerk</a>
-        <a href="#categories" class="menu-item sub" onclick="toggleMenu()">Leistung & Motor</a>
-        <a href="#categories" class="menu-item sub" onclick="toggleMenu()">Bremsen</a>
-        <a href="#categories" class="menu-item sub" onclick="toggleMenu()">Optik & Styling</a>
-        <a href="#categories" class="menu-item sub" onclick="toggleMenu()">Werkzeug & Garage</a>
-        <a href="#categories" class="menu-item sub" onclick="toggleMenu()">Pflege & Chemie</a>
-        <a href="#categories" class="menu-item sub" onclick="toggleMenu()">Elektrik & Beleuchtung</a>
-        
-        <div class="menu-heading">Rechtliches</div>
-        <a href="#" class="menu-item sub" onclick="toggleMenu()">Impressum</a>
-        <a href="#" class="menu-item sub" onclick="toggleMenu()">Datenschutz</a>
-        <a href="#" class="menu-item sub" onclick="toggleMenu()">Affiliate-Info</a>
+        <button class="menu-item sub" onclick="navigateTo('categories')">Felgen & Räder</button>
+        <button class="menu-item sub" onclick="navigateTo('categories')">Fahrwerk</button>
+        <button class="menu-item sub" onclick="navigateTo('categories')">Leistung & Motor</button>
+        <button class="menu-item sub" onclick="navigateTo('categories')">Bremsen</button>
+        <button class="menu-item sub" onclick="navigateTo('categories')">Optik & Styling</button>
+        <button class="menu-item sub" onclick="navigateTo('categories')">Werkzeug & Garage</button>
+
+        <div class="menu-heading">Konto</div>
+        <button class="menu-item sub" onclick="showLoginModal()">Anmelden</button>
+        <button class="menu-item sub" onclick="showCartModal()">Warenkorb</button>
     </div>
 
-    <!-- FAHRZEUGSUCHE -->
-    <section class="search-section" id="search">
-        <h2>Finde deine <span>Teile</span></h2>
-        <p>Marke, Modell & Antrieb wählen</p>
-        
-        <div class="search-box">
-            <select id="brand">
-                <option value="">Marke wählen</option>
-                <option value="audi">Audi</option>
-                <option value="bmw">BMW</option>
-                <option value="mercedes">Mercedes-Benz</option>
-                <option value="vw">Volkswagen</option>
-                <option value="opel">Opel</option>
-                <option value="ford">Ford</option>
-                <option value="porsche">Porsche</option>
-                <option value="toyota">Toyota</option>
-                <option value="honda">Honda</option>
-                <option value="nissan">Nissan</option>
-                <option value="mazda">Mazda</option>
-                <option value="hyundai">Hyundai</option>
-                <option value="kia">Kia</option>
-                <option value="seat">Seat</option>
-                <option value="skoda">Skoda</option>
-                <option value="volvo">Volvo</option>
-                <option value="fiat">Fiat</option>
-                <option value="renault">Renault</option>
-                <option value="peugeot">Peugeot</option>
-                <option value="citroen">Citroën</option>
-            </select>
-            
-            <select id="model" disabled>
-                <option value="">Modell wählen</option>
-            </select>
-            
-            <select id="drivetrain" disabled>
-                <option value="">Antrieb wählen</option>
-            </select>
-            
-            <button class="btn-search" onclick="searchVehicle()">Suchen</button>
+    <!-- ============================================================
+    HERO
+    ============================================================ -->
+    <section class="hero" id="home">
+        <div>
+            <h1>Performance. <span>Präzision.</span> Leidenschaft.</h1>
+            <p>Finde die perfekten Teile für dein Fahrzeug</p>
+            <a href="#search" class="hero-cta">Jetzt entdecken</a>
         </div>
-        
-        <p class="search-hint">
-            ⚡ Affiliate-Shop: Alle Links führen zu Partner-Shops
-        </p>
     </section>
 
-    <!-- KATEGORIEN -->
+    <!-- ============================================================
+    FAHRZEUGSUCHE (sticky)
+    ============================================================ -->
+    <section class="search-section" id="search">
+        <div class="search-tabs">
+            <button class="search-tab active" onclick="showSearchTab('vehicle')">Fahrzeugsuche</button>
+            <button class="search-tab" onclick="showSearchTab('hsn')">HSN/TSN Suche</button>
+        </div>
+
+        <!-- Fahrzeugsuche -->
+        <div id="vehicleSearch">
+            <div class="search-box">
+                <div class="custom-select" id="selectBrand">
+                    <div class="custom-select-trigger" onclick="toggleDropdown('selectBrand')">
+                        <span class="selected-text">Marke</span>
+                        <span>▼</span>
+                    </div>
+                    <div class="custom-select-options"></div>
+                </div>
+                <div class="custom-select" id="selectSeries">
+                    <div class="custom-select-trigger" onclick="toggleDropdown('selectSeries')">
+                        <span class="selected-text">Baureihe</span>
+                        <span>▼</span>
+                    </div>
+                    <div class="custom-select-options"></div>
+                </div>
+                <div class="custom-select" id="selectMotor">
+                    <div class="custom-select-trigger" onclick="toggleDropdown('selectMotor')">
+                        <span class="selected-text">Motor</span>
+                        <span>▼</span>
+                    </div>
+                    <div class="custom-select-options"></div>
+                </div>
+                <button class="btn-search" onclick="searchVehicle()">🔍 Suchen</button>
+            </div>
+        </div>
+
+        <!-- HSN/TSN Suche -->
+        <div id="hsnSearch" class="hsn-panel">
+            <input type="text" id="hsnInput" placeholder="HSN (4-stellig)" maxlength="4">
+            <input type="text" id="tsnInput" placeholder="TSN (3-stellig)" maxlength="3">
+            <button class="btn-search" onclick="searchHsnTsn()">🔍 Suchen</button>
+        </div>
+
+        <div class="search-result" id="searchResult">
+            <h3 id="resultTitle"></h3>
+            <p id="resultText"></p>
+            <div id="resultProducts"></div>
+        </div>
+    </section>
+
+    <!-- ============================================================
+    KATEGORIEN
+    ============================================================ -->
     <section id="categories">
         <h2 class="section-title">Shop by <span>Category</span></h2>
-        
         <div class="categories">
-            <div class="category-card" onclick="alert('Felgen werden geladen...')">
-                <span class="icon">🛞</span>
-                <h3>Felgen & Räder</h3>
-                <p>Alufelgen, Stahlfelgen, Kompletträder</p>
-            </div>
-            
-            <div class="category-card" onclick="alert('Fahrwerk wird geladen...')">
-                <span class="icon">🔧</span>
-                <h3>Fahrwerk</h3>
-                <p>Gewindefahrwerke, Federn, Spurplatten</p>
-            </div>
-            
-            <div class="category-card" onclick="alert('Leistung wird geladen...')">
-                <span class="icon">⚙️</span>
-                <h3>Leistung</h3>
-                <p>Ansaugung, Ladeluftkühler, Downpipes</p>
-            </div>
-            
-            <div class="category-card" onclick="alert('Bremsen werden geladen...')">
-                <span class="icon">🛑</span>
-                <h3>Bremsen</h3>
-                <p>Bremsscheiben, Beläge, Sättel</p>
-            </div>
-            
-            <div class="category-card" onclick="alert('Optik wird geladen...')">
-                <span class="icon">🎨</span>
-                <h3>Optik & Styling</h3>
-                <p>Lippen, Spoiler, Folien, Gitter</p>
-            </div>
-            
-            <div class="category-card" onclick="alert('Werkzeug wird geladen...')">
-                <span class="icon">🛠️</span>
-                <h3>Werkzeug</h3>
-                <p>Drehmoment, Rangierwagenheber, Werkzeugkoffer</p>
-            </div>
+            <div class="category-card"><div class="category-icon">🛞</div><div class="category-info"><h3>Felgen & Räder</h3><p>Alufelgen, Stahlfelgen</p></div></div>
+            <div class="category-card"><div class="category-icon">🔧</div><div class="category-info"><h3>Fahrwerk</h3><p>Gewindefahrwerke, Federn</p></div></div>
+            <div class="category-card"><div class="category-icon">⚡</div><div class="category-info"><h3>Leistung & Motor</h3><p>Ansaugung, Ladeluftkühler</p></div></div>
+            <div class="category-card"><div class="category-icon">🛑</div><div class="category-info"><h3>Bremsen</h3><p>Bremsscheiben, Beläge</p></div></div>
+            <div class="category-card"><div class="category-icon">🎨</div><div class="category-info"><h3>Optik & Styling</h3><p>Lippen, Spoiler, Folien</p></div></div>
+            <div class="category-card"><div class="category-icon">🧰</div><div class="category-info"><h3>Werkzeug</h3><p>Drehmoment, Wagenheber</p></div></div>
         </div>
     </section>
 
-    <!-- TOP DEALS -->
+    <!-- ============================================================
+    TOP DEALS
+    ============================================================ -->
     <section id="deals">
         <h2 class="section-title">⚡ Top <span>Deals</span> ⚡</h2>
-        
-        <div class="products-grid">
-            <div class="product-card">
-                <div class="product-badge">Bestseller</div>
-                <div class="product-image">🔩</div>
-                <div class="product-info">
-                    <h4>Spurplatten Set 20mm</h4>
-                    <p class="description">Für Golf 7, A3, Leon, Octavia – inkl. Gutachten</p>
-                    <span class="price">89,95 €</span>
-                    <span class="old-price">119,95 €</span>
-                    <a href="#" class="btn-affiliate" onclick="alert('HIER AFFILIATE-LINK EINFÜGEN'); return false;">
-                        Zum Shop →
-                    </a>
-                </div>
-            </div>
-            
-            <div class="product-card">
-                <div class="product-badge sale">-25%</div>
-                <div class="product-image">🌀</div>
-                <div class="product-info">
-                    <h4>Gewindefahrwerk ST X</h4>
-                    <p class="description">Tieferlegung 30-65mm, TÜV Teilegutachten</p>
-                    <span class="price">549,00 €</span>
-                    <span class="old-price">729,00 €</span>
-                    <a href="#" class="btn-affiliate" onclick="alert('HIER AFFILIATE-LINK EINFÜGEN'); return false;">
-                        Zum Shop →
-                    </a>
-                </div>
-            </div>
-            
-            <div class="product-card">
-                <div class="product-badge">Neu</div>
-                <div class="product-image">🔵</div>
-                <div class="product-info">
-                    <h4>K&N Sportluftfilter</h4>
-                    <p class="description">+15% Luftdurchsatz, wiederverwendbar</p>
-                    <span class="price">59,90 €</span>
-                    <a href="#" class="btn-affiliate" onclick="alert('HIER AFFILIATE-LINK EINFÜGEN'); return false;">
-                        Zum Shop →
-                    </a>
-                </div>
-            </div>
-            
-            <div class="product-card">
-                <div class="product-badge">Top</div>
-                <div class="product-image">🛞</div>
-                <div class="product-info">
-                    <h4>Felgenreiniger Säurefrei</h4>
-                    <p class="description">5L Kanister, pH-neutral, Alu-sicher</p>
-                    <span class="price">34,95 €</span>
-                    <span class="old-price">44,95 €</span>
-                    <a href="#" class="btn-affiliate" onclick="alert('HIER AFFILIATE-LINK EINFÜGEN'); return false;">
-                        Zum Shop →
-                    </a>
-                </div>
-            </div>
-        </div>
+        <div class="products-grid" id="productsContainer"></div>
     </section>
 
-    <!-- MERCH -->
-    <section class="merch-section" id="merch">
-        <h2>RÆ<span>VED</span> Merch</h2>
-        <p>Build it. Drive it. Live it.</p>
-        
-        <div class="products-grid" style="max-width: 1000px; margin-top: 0;">
-            <div class="product-card">
-                <div class="product-badge">Limited</div>
-                <div class="product-image" style="font-size: 3rem;">👕</div>
-                <div class="product-info">
-                    <h4>Black Hoodie</h4>
-                    <p class="description">300g/m², RÆVED Logo auf der Brust</p>
-                    <span class="price">49,95 €</span>
-                    <a href="#" class="btn-affiliate" onclick="alert('PRINT-ON-DEMAND LINK EINFÜGEN'); return false;">
-                        Bestellen →
-                    </a>
-                </div>
-            </div>
-            
-            <div class="product-card">
-                <div class="product-badge">Limited</div>
-                <div class="product-image" style="font-size: 3rem;">🚩</div>
-                <div class="product-info">
-                    <h4>Garagenfahne</h4>
-                    <p class="description">150x100cm, schweres Polyester</p>
-                    <span class="price">29,95 €</span>
-                    <a href="#" class="btn-affiliate" onclick="alert('PRINT-ON-DEMAND LINK EINFÜGEN'); return false;">
-                        Bestellen →
-                    </a>
-                </div>
-            </div>
-            
-            <div class="product-card">
-                <div class="product-badge">Limited</div>
-                <div class="product-image" style="font-size: 3rem;">📦</div>
-                <div class="product-info">
-                    <h4>Sticker Pack</h4>
-                    <p class="description">10 Aufkleber, wetterfest, UV-beständig</p>
-                    <span class="price">9,95 €</span>
-                    <a href="#" class="btn-affiliate" onclick="alert('PRINT-ON-DEMAND LINK EINFÜGEN'); return false;">
-                        Bestellen →
-                    </a>
-                </div>
-            </div>
-        </div>
-    </section>
-
-    <!-- ÜBER UNS -->
-    <section class="about-section" id="about">
-        <h2>Über <span>Uns</span></h2>
-        
+    <!-- ============================================================
+    ÜBER UNS
+    ============================================================ -->
+    <section id="about" class="about-section">
+        <h2 class="section-title" style="padding-top:0;">Über <span>Uns</span></h2>
         <div class="about-box">
-            <p>
-                <span class="highlight">RÆVED</span> ist ein Affiliate-basierter Online-Shop für Tuning-Enthusiasten und Fahrzeugliebhaber.
-            </p>
-            <p>
-                Wir verkaufen keine Produkte direkt, sondern verlinken auf ausgewählte Partner-Shops. Wenn du über unsere Links einkaufst, erhalten wir eine kleine Provision – für dich ändert sich der Preis nicht.
-            </p>
-            <p>
-                Unser Ziel ist es, dir die besten Tuning-Teile, Werkzeuge und Zubehör zu präsentieren – übersichtlich, ehrlich und ohne Schnickschnack.
-            </p>
-            <p>
-                <span class="highlight">Build it. Drive it. Live it.</span>
-            </p>
+            <p><strong>RÆVED</strong> ist ein Affiliate-basierter Online-Shop für Tuning-Enthusiasten.</p>
+            <p>Wir verkaufen keine Produkte direkt, sondern verlinken auf ausgewählte Partner-Shops. Wenn du über unsere Links einkaufst, erhalten wir eine kleine Provision – für dich ändert sich der Preis nicht.</p>
+            <p><strong>Build it. Drive it. Live it.</strong></p>
         </div>
     </section>
 
-    <!-- FOOTER -->
+    <!-- ============================================================
+    ADMIN PANEL
+    ============================================================ -->
+    <section id="adminPanel" class="admin-panel">
+        <div class="admin-header">
+            <h2 class="section-title" style="padding:0;">Admin <span>Panel</span></h2>
+            <button class="admin-btn danger" onclick="logoutAdmin()">Logout</button>
+        </div>
+
+        <div style="display:flex; gap:8px; flex-wrap:wrap; margin-bottom:20px;">
+            <button class="admin-btn" onclick="showAdminSection('products')">Produkte</button>
+            <button class="admin-btn" onclick="showAdminSection('orders')">Bestellungen</button>
+        </div>
+
+        <div id="adminProducts">
+            <h3 style="color:#fff; font-family:'Oswald'; letter-spacing:2px; margin-bottom:10px;">Produkte verwalten</h3>
+            <div id="adminProductList"></div>
+            <button class="admin-btn" style="margin-top:10px;" onclick="addNewProduct()">+ Neues Produkt</button>
+        </div>
+
+        <div id="adminOrders" style="display:none;">
+            <h3 style="color:#fff; font-family:'Oswald'; letter-spacing:2px; margin-bottom:10px;">Bestellungen (Affiliate-Klicks)</h3>
+            <div id="adminOrderList"></div>
+        </div>
+    </section>
+
+    <!-- ============================================================
+    FOOTER
+    ============================================================ -->
     <footer class="footer">
         <div class="logo">RÆ<span>VED</span></div>
         <div class="tagline">Build it. Drive it. Live it.</div>
-        <br>
-        <p>
-            © 2024 RÆVED | Alle Rechte vorbehalten<br>
-            Impressum | Datenschutz | Affiliate-Info
-        </p>
-        <p class="disclaimer">
-            * Affiliate-Shop: Wenn du über Links auf dieser Seite einkaufst, erhalten wir eine kleine Provision.<br>
-            Der Preis für dich bleibt unverändert. Danke für deine Unterstützung!
-        </p>
+        <div class="footer-social">
+            <a href="#">📸</a><a href="#">▶️</a><a href="#">👍</a>
+        </div>
+        <p>© 2024 RÆVED | Alle Rechte vorbehalten</p>
+        <p style="margin-top:5px;">Impressum | Datenschutz | Affiliate-Info</p>
+        <p class="disclaimer">* Affiliate-Shop: Wenn du über Links einkaufst, erhalten wir eine kleine Provision. Der Preis bleibt für dich unverändert.</p>
     </footer>
 
-    <!-- JAVASCRIPT -->
+    <!-- ============================================================
+    MODALS
+    ============================================================ -->
+    <!-- Login -->
+    <div class="modal" id="loginModal">
+        <div class="modal-content">
+            <button class="modal-close" onclick="closeModal('loginModal')">✕</button>
+            <h2>Anmelden</h2>
+            <input type="email" id="loginEmail" class="modal-input" placeholder="E-Mail">
+            <input type="password" id="loginPassword" class="modal-input" placeholder="Passwort">
+            <button class="modal-btn" onclick="login()">Anmelden</button>
+            <button class="modal-btn secondary" onclick="showRegisterModal()">Neu hier? Registrieren</button>
+        </div>
+    </div>
+
+    <!-- Registrierung -->
+    <div class="modal" id="registerModal">
+        <div class="modal-content">
+            <button class="modal-close" onclick="closeModal('registerModal')">✕</button>
+            <h2>Registrieren</h2>
+            <input type="text" id="regName" class="modal-input" placeholder="Name">
+            <input type="email" id="regEmail" class="modal-input" placeholder="E-Mail">
+            <input type="password" id="regPassword" class="modal-input" placeholder="Passwort">
+            <button class="modal-btn" onclick="register()">Konto erstellen</button>
+            <button class="modal-btn secondary" onclick="showLoginModal()">Zurück</button>
+        </div>
+    </div>
+
+    <!-- Warenkorb -->
+    <div class="modal" id="cartModal">
+        <div class="modal-content">
+            <button class="modal-close" onclick="closeModal('cartModal')">✕</button>
+            <h2>Warenkorb</h2>
+            <div id="cartItems"></div>
+            <div class="cart-total">
+                <span>Gesamt:</span><span id="cartTotal">0,00 €</span>
+            </div>
+            <button class="modal-btn" style="margin-top:15px;" onclick="checkout()">Zur Kasse</button>
+        </div>
+    </div>
+
+    <!-- Produkt Modal (Admin) -->
+    <div class="modal" id="productModal">
+        <div class="modal-content">
+            <button class="modal-close" onclick="closeModal('productModal')">✕</button>
+            <h2 id="productModalTitle">Produkt</h2>
+            <input type="text" id="productName" class="modal-input" placeholder="Produktname">
+            <input type="number" id="productPrice" class="modal-input" placeholder="Preis (€)" step="0.01">
+            <input type="text" id="productDescription" class="modal-input" placeholder="Beschreibung">
+            <input type="text" id="productAffiliateLink" class="modal-input" placeholder="Affiliate-Link">
+            <button class="modal-btn" onclick="saveProduct()">Speichern</button>
+        </div>
+    </div>
+
+    <!-- ============================================================
+    JAVASCRIPT
+    ============================================================ -->
     <script>
-        // ============ HAMBURGER MENÜ ============
-        function toggleMenu() {
-            const menu = document.getElementById('mobileMenu');
-            const overlay = document.getElementById('overlay');
-            const hamburger = document.getElementById('hamburgerBtn');
-            
-            menu.classList.toggle('open');
-            overlay.classList.toggle('show');
-            hamburger.classList.toggle('active');
-        }
-        
-        // Menü schließen bei Klick auf einen Link
-        document.querySelectorAll('.menu-item').forEach(item => {
-            item.addEventListener('click', function() {
-                toggleMenu();
-            });
-        });
-        
-        // ============ FAHRZEUGDATEN ============
-        const carData = {
-            audi: {
-                name: 'Audi',
-                models: ['A3', 'A4', 'A5', 'A6', 'Q3', 'Q5', 'RS3', 'S3'],
-                drivetrains: ['Benzin', 'Diesel', 'Hybrid', 'Elektro']
-            },
-            bmw: {
-                name: 'BMW',
-                models: ['1er', '2er', '3er', '4er', '5er', 'X3', 'X5', 'M3', 'M4'],
-                drivetrains: ['Benzin', 'Diesel', 'Hybrid', 'Elektro']
-            },
-            mercedes: {
-                name: 'Mercedes-Benz',
-                models: ['A-Klasse', 'C-Klasse', 'E-Klasse', 'CLA', 'GLA', 'AMG A45'],
-                drivetrains: ['Benzin', 'Diesel', 'Hybrid', 'Elektro']
-            },
-            vw: {
-                name: 'Volkswagen',
-                models: ['Golf', 'Polo', 'Passat', 'Tiguan', 'T-Roc', 'Scirocco'],
-                drivetrains: ['Benzin', 'Diesel', 'Hybrid', 'Elektro']
-            },
-            opel: {
-                name: 'Opel',
-                models: ['Astra', 'Corsa', 'Insignia', 'Mokka'],
-                drivetrains: ['Benzin', 'Diesel', 'Elektro']
-            },
-            ford: {
-                name: 'Ford',
-                models: ['Fiesta', 'Focus', 'Mondeo', 'Mustang', 'Puma'],
-                drivetrains: ['Benzin', 'Diesel', 'Hybrid']
-            },
-            porsche: {
-                name: 'Porsche',
-                models: ['911', 'Cayman', 'Boxster', 'Panamera', 'Macan'],
-                drivetrains: ['Benzin', 'Hybrid', 'Elektro']
-            },
-            toyota: {
-                name: 'Toyota',
-                models: ['Corolla', 'Yaris', 'Supra', 'GR86'],
-                drivetrains: ['Benzin', 'Hybrid', 'Elektro']
-            },
-            honda: {
-                name: 'Honda',
-                models: ['Civic', 'Accord', 'CR-V', 'Type R'],
-                drivetrains: ['Benzin', 'Hybrid']
-            },
-            nissan: {
-                name: 'Nissan',
-                models: ['Micra', 'Qashqai', '370Z', 'GT-R'],
-                drivetrains: ['Benzin', 'Diesel', 'Elektro']
-            },
-            mazda: {
-                name: 'Mazda',
-                models: ['2', '3', '6', 'MX-5'],
-                drivetrains: ['Benzin', 'Diesel']
-            },
-            hyundai: {
-                name: 'Hyundai',
-                models: ['i20', 'i30', 'i30 N', 'Kona N'],
-                drivetrains: ['Benzin', 'Diesel', 'Hybrid', 'Elektro']
-            },
-            kia: {
-                name: 'Kia',
-                models: ['Ceed', 'Rio', 'Sportage', 'Stinger'],
-                drivetrains: ['Benzin', 'Diesel', 'Hybrid', 'Elektro']
-            },
-            seat: {
-                name: 'Seat',
-                models: ['Ibiza', 'Leon', 'Arona', 'Cupra Leon'],
-                drivetrains: ['Benzin', 'Diesel', 'Hybrid']
-            },
-            skoda: {
-                name: 'Skoda',
-                models: ['Fabia', 'Octavia', 'Superb', 'Kodiaq'],
-                drivetrains: ['Benzin', 'Diesel', 'Hybrid']
-            },
-            volvo: {
-                name: 'Volvo',
-                models: ['S60', 'V60', 'XC40', 'XC60'],
-                drivetrains: ['Benzin', 'Diesel', 'Hybrid', 'Elektro']
-            },
-            fiat: {
-                name: 'Fiat',
-                models: ['500', 'Panda', 'Tipo', 'Abarth 595'],
-                drivetrains: ['Benzin', 'Diesel', 'Elektro']
-            },
-            renault: {
-                name: 'Renault',
-                models: ['Clio', 'Megane', 'Captur', 'Megane RS'],
-                drivetrains: ['Benzin', 'Diesel', 'Hybrid', 'Elektro']
-            },
-            peugeot: {
-                name: 'Peugeot',
-                models: ['208', '308', '508', '3008'],
-                drivetrains: ['Benzin', 'Diesel', 'Hybrid', 'Elektro']
-            },
-            citroen: {
-                name: 'Citroën',
-                models: ['C3', 'C4', 'C5', 'Berlingo'],
-                drivetrains: ['Benzin', 'Diesel', 'Elektro']
-            }
+        // ============ KONFIGURATION ============
+        const OWNER_EMAIL = 'snoop.timanaz@gmail.com';
+
+        // ============ FAHRZEUGDATENBANK (erweitert) ============
+        const carDatabase = {
+            'bmw': { name: 'BMW', series: {
+                'E30': { name: 'E30 (1982-1994)', motors: ['318i (M40)','325i (M20)','M3 (S14)'] },
+                'E36': { name: 'E36 (1990-2000)', motors: ['318i (M43)','320i (M50)','325i (M50)','328i (M52)','M3 (S50)'] },
+                'E46': { name: 'E46 (1998-2006)', motors: ['316i (N42)','318i (N42)','320i (M54)','325i (M54)','330i (M54)','M3 (S54)','320d (M47)','330d (M57)'] },
+                'E90': { name: 'E90 (2005-2012)', motors: ['318i (N46)','320i (N46)','325i (N52)','330i (N52)','335i (N54)','318d (N47)','320d (N47)','330d (N57)','335d (N57)'] },
+                'F30': { name: 'F30 (2012-2019)', motors: ['316i (N13)','320i (N20)','328i (N20)','335i (N55)','340i (B58)','316d (N47)','320d (N47)','330d (N57)'] },
+                'F10': { name: 'F10 (2010-2017)', motors: ['520i (N20)','528i (N20)','535i (N55)','550i (N63)','520d (N47)','530d (N57)','535d (N57)','M5 (S63)'] },
+                'G20': { name: 'G20 (2019-)', motors: ['318i (B48)','320i (B48)','330i (B48)','M340i (B58)','318d (B47)','320d (B47)','330d (B57)'] }
+            }},
+            'audi': { name: 'Audi', series: {
+                '8L': { name: '8L A3 (1996-2003)', motors: ['1.6 (AEH)','1.8T (AGU)','1.9 TDI (ALH)','S3 (APY)'] },
+                '8P': { name: '8P A3 (2003-2013)', motors: ['1.6 (BGU)','2.0 TFSI (AXX)','2.0 TDI (BKD)','3.2 VR6 (BDB)','S3 (BHZ)'] },
+                'B5': { name: 'B5 A4 (1994-2001)', motors: ['1.6 (ADP)','1.8T (AEB)','2.8 V6 (ACK)','1.9 TDI (AFN)','S4'] },
+                'B6': { name: 'B6 A4 (2000-2006)', motors: ['1.6 (AVL)','1.8T (BEX)','2.0 FSI (AWA)','1.9 TDI (AVF)','3.0 V6 (ASN)','S4 (BBK)'] },
+                'B7': { name: 'B7 A4 (2004-2008)', motors: ['1.8T (BFB)','2.0 TFSI (BGB)','2.0 TDI (BLB)','3.2 FSI (AUK)','RS4 (BNS)'] },
+                'B8': { name: 'B8 A4 (2008-2015)', motors: ['1.8 TFSI (CDHA)','2.0 TFSI (CDNC)','2.0 TDI (CAGA)','3.0 TDI (CDUC)','S4 (CAKA)'] },
+                'C7': { name: 'C7 A6 (2011-2018)', motors: ['2.0 TFSI (CDNC)','3.0 TFSI (CGWD)','2.0 TDI (CGLD)','3.0 TDI (CDUC)','S6 (CEUC)'] }
+            }},
+            'vw': { name: 'Volkswagen', series: {
+                'MK1': { name: 'Golf 1 (1974-1983)', motors: ['1.1 (GG)','1.5 (JB)','1.6 GTI (EG)'] },
+                'MK2': { name: 'Golf 2 (1983-1992)', motors: ['1.3 (HK)','1.6 (PN)','1.8 GTI (DX)','1.6 TD (JR)','GTI 16V (KR)'] },
+                'MK3': { name: 'Golf 3 (1991-1998)', motors: ['1.4 (ABD)','1.8 (ABS)','2.0 GTI (ADY)','1.9 TDI (1Z)','VR6 (ABV)'] },
+                'MK4': { name: 'Golf 4 (1997-2004)', motors: ['1.4 (AHW)','1.6 (AEH)','1.8T (AGU)','2.0 (APK)','1.9 TDI (ALH)','R32 (BJS)'] },
+                'MK5': { name: 'Golf 5 (2003-2008)', motors: ['1.4 (BKG)','1.6 (BGU)','2.0 TFSI (AXX)','1.9 TDI (BKC)','2.0 TDI (BKD)','GTI (AXX)'] },
+                'MK6': { name: 'Golf 6 (2008-2012)', motors: ['1.4 TSI (CAXA)','2.0 TSI (CCZB)','1.6 TDI (CAYC)','2.0 TDI (CBDB)','GTI (CCZB)','R (CDLC)'] },
+                'MK7': { name: 'Golf 7 (2012-2020)', motors: ['1.0 TSI (CHZD)','1.4 TSI (CHPA)','2.0 GTI (CHHB)','1.6 TDI (CRKB)','2.0 GTD (CUNA)','R (CJXC)'] },
+                'MK8': { name: 'Golf 8 (2020-)', motors: ['1.0 TSI (DLA)','1.5 TSI (DPCA)','2.0 GTI (DNPA)','2.0 TDI (DTR)','R (DNFF)'] }
+            }},
+            'mercedes': { name: 'Mercedes-Benz', series: {
+                'W201': { name: '190er (1982-1993)', motors: ['190E (M102)','190D (OM601)','190E 2.5-16 (M102)'] },
+                'W202': { name: 'W202 C-Klasse (1993-2000)', motors: ['C180 (M111)','C200 (M111)','C220 (M111)','C250 TD (OM605)','C36 AMG (M104)'] },
+                'W203': { name: 'W203 (2000-2007)', motors: ['C180 (M271)','C200 (M271)','C220 CDI (OM646)','C320 (M112)','C32 AMG (M112)'] },
+                'W204': { name: 'W204 (2007-2014)', motors: ['C180 (M271)','C200 (M271)','C250 (M271)','C220 CDI (OM651)','C63 AMG (M156)'] },
+                'W205': { name: 'W205 (2014-2021)', motors: ['C180 (M274)','C200 (M274)','C300 (M274)','C220d (OM651)','C63 AMG (M177)'] }
+            }},
+            'opel': { name: 'Opel', series: {
+                'Astra H': { name: 'Astra H (2004-2010)', motors: ['1.4 (Z14XEP)','1.6 (Z16XER)','2.0 Turbo (Z20LEH)','1.7 CDTI (Z17DTH)','OPC (Z20LEH)'] },
+                'Astra J': { name: 'Astra J (2009-2015)', motors: ['1.4 (A14NET)','1.6 (A16XER)','2.0 CDTI (A20DTH)','2.0 OPC (A20NFT)'] },
+                'Insignia A': { name: 'Insignia A (2008-2017)', motors: ['1.6 (A16XER)','2.0 Turbo (A20NFT)','2.0 CDTI (A20DTH)'] }
+            }},
+            'ford': { name: 'Ford', series: {
+                'MK2': { name: 'Focus MK2 (2004-2011)', motors: ['1.6 (HWDA)','2.0 (AODA)','2.5 ST (HYDA)','1.6 TDCi (G8DA)','2.0 TDCi (G6DA)'] },
+                'MK3': { name: 'Focus MK3 (2011-2018)', motors: ['1.0 EcoBoost (M1DA)','1.6 EcoBoost (JQDA)','2.0 ST (R9DA)','1.6 TDCi (T1DA)','2.0 TDCi (T7DA)'] },
+                'Mustang': { name: 'Mustang (2015-)', motors: ['2.3 EcoBoost (H2GA)','5.0 V8 (MFGA)','5.2 V8 GT350'] }
+            }},
+            'toyota': { name: 'Toyota', series: {
+                'Supra A80': { name: 'Supra MK4 (1993-2002)', motors: ['3.0 (2JZ-GE)','3.0 Turbo (2JZ-GTE)'] },
+                'Supra A90': { name: 'Supra MK5 (2019-)', motors: ['2.0 (B48)','3.0 (B58)'] },
+                'GT86': { name: 'GT86 (2012-2021)', motors: ['2.0 (FA20)'] },
+                'GR86': { name: 'GR86 (2022-)', motors: ['2.4 (FA24)'] },
+                'GR Yaris': { name: 'GR Yaris (2020-)', motors: ['1.6 Turbo (G16E-GTS)'] }
+            }},
+            'nissan': { name: 'Nissan', series: {
+                '350Z': { name: '350Z (2002-2009)', motors: ['3.5 V6 (VQ35DE)','3.5 V6 RevUp (VQ35DE)'] },
+                '370Z': { name: '370Z (2009-2020)', motors: ['3.7 V6 (VQ37VHR)'] },
+                'GTR': { name: 'GT-R (2007-)', motors: ['3.8 V6 Twin-Turbo (VR38DETT)'] },
+                'Skyline R32': { name: 'Skyline R32 (1989-1994)', motors: ['RB20DET','RB25DE','RB26DETT'] },
+                'Skyline R34': { name: 'Skyline R34 (1999-2002)', motors: ['RB25DE','RB25DET','RB26DETT'] }
+            }},
+            'porsche': { name: 'Porsche', series: {
+                '911 996': { name: '911 996 (1997-2005)', motors: ['3.4 (M96)','3.6 (M96)','Turbo (M96/70)'] },
+                '911 997': { name: '911 997 (2004-2012)', motors: ['3.6 (M97)','3.8 (M97)','Turbo (M97/70)','GT3 (M97/79)'] },
+                '911 991': { name: '911 991 (2011-2019)', motors: ['3.4 (MA1)','3.8 (MA1)','Turbo (MA1/71)','GT3 (MA1/75)'] },
+                'Cayman 987': { name: 'Cayman 987 (2005-2012)', motors: ['2.7 (M97)','3.4 (M97)','S (M97)'] },
+                'Boxster 986': { name: 'Boxster 986 (1996-2004)', motors: ['2.5 (M96)','2.7 (M96)','3.2 S (M96)'] }
+            }},
+            'honda': { name: 'Honda', series: {
+                'Civic EK': { name: 'Civic EK (1995-2000)', motors: ['1.4 (D14)','1.6 VTi (B16A2)','Type R (B16B)'] },
+                'Civic EP3': { name: 'Civic EP3 (2001-2005)', motors: ['1.6 (D16)','2.0 Type R (K20A2)'] },
+                'Civic FN2': { name: 'Civic FN2 (2006-2011)', motors: ['1.4 (L13)','2.0 Type R (K20Z4)'] },
+                'Civic FK8': { name: 'Civic Type R FK8 (2017-2022)', motors: ['2.0 VTEC Turbo (K20C1)'] },
+                'S2000': { name: 'S2000 (1999-2009)', motors: ['2.0 (F20C)','2.2 (F22C1)'] }
+            }},
+            'hyundai': { name: 'Hyundai', series: {
+                'i30N': { name: 'i30 N (2017-)', motors: ['2.0 T-GDI (G4KH)'] },
+                'i20N': { name: 'i20 N (2021-)', motors: ['1.6 T-GDI (G4FP)'] },
+                'Kona N': { name: 'Kona N (2021-)', motors: ['2.0 T-GDI (G4KH)'] }
+            }},
+            'seat': { name: 'Seat/Cupra', series: {
+                'Leon 1P': { name: 'Leon 1P (2005-2012)', motors: ['1.4 TSI (CAXC)','2.0 TFSI (BWA)','2.0 TDI (BKD)','Cupra R (BWJ)'] },
+                'Leon 5F': { name: 'Leon 5F (2012-2020)', motors: ['1.4 TSI (CHPA)','2.0 TSI (CHHB)','2.0 TDI (CUNA)','Cupra 280 (CJXA)'] },
+                'Leon KL': { name: 'Leon KL (2020-)', motors: ['1.5 TSI (DPCA)','2.0 TSI (DNPA)','Cupra 300 (DNPA)'] }
+            }}
         };
-        
-        // Modell-Dropdown füllen wenn Marke gewählt
-        document.getElementById('brand').addEventListener('change', function() {
-            const brand = this.value;
-            const modelSelect = document.getElementById('model');
-            const drivetrainSelect = document.getElementById('drivetrain');
-            
-            modelSelect.innerHTML = '<option value="">Modell wählen</option>';
-            drivetrainSelect.innerHTML = '<option value="">Antrieb wählen</option>';
-            
-            if (brand && carData[brand]) {
-                carData[brand].models.forEach(model => {
-                    const option = document.createElement('option');
-                    option.value = model.toLowerCase().replace(/[^a-z0-9]/g, '-');
-                    option.textContent = model;
-                    modelSelect.appendChild(option);
-                });
-                modelSelect.disabled = false;
-            } else {
-                modelSelect.disabled = true;
-                drivetrainSelect.disabled = true;
+
+        // ============ PRODUKTE (Admin-verwaltet) ============
+        let products = JSON.parse(localStorage.getItem('raeved_products') || 'null');
+        if (!products || products.length === 0) {
+            products = [
+                { id: 1, name: 'Spurplatten Set 20mm', price: 89.95, description: 'Für Golf 7, A3, Leon, Octavia', affiliateLink: '', badge: 'Bestseller' },
+                { id: 2, name: 'Gewindefahrwerk ST X', price: 549.00, description: 'Tieferlegung 30-65mm', affiliateLink: '', badge: 'Sale -25%' },
+                { id: 3, name: 'K&N Sportluftfilter', price: 59.90, description: '+15% Luftdurchsatz', affiliateLink: '', badge: 'Neu' },
+                { id: 4, name: 'Felgenreiniger Säurefrei', price: 34.95, description: '5L Kanister, pH-neutral', affiliateLink: '', badge: 'Top' }
+            ];
+            localStorage.setItem('raeved_products', JSON.stringify(products));
+        }
+
+        let orders = JSON.parse(localStorage.getItem('raeved_orders') || '[]');
+        let users = JSON.parse(localStorage.getItem('raeved_users') || '[]');
+        let currentUser = JSON.parse(localStorage.getItem('raeved_current_user') || 'null');
+        let cart = JSON.parse(localStorage.getItem('raeved_cart') || '[]');
+
+        // ============ MENU ============
+        function toggleMenu() {
+            document.getElementById('mobileMenu').classList.toggle('open');
+            document.getElementById('overlay').classList.toggle('show');
+            document.querySelector('.hamburger').classList.toggle('active');
+        }
+
+        function navigateTo(section) {
+            toggleMenu();
+            if (section === 'home') window.scrollTo({ top: 0, behavior: 'smooth' });
+            else document.getElementById(section).scrollIntoView({ behavior: 'smooth' });
+        }
+
+        // ============ DROPDOWNS ============
+        function toggleDropdown(id) {
+            const dd = document.getElementById(id);
+            const isActive = dd.classList.contains('active');
+            document.querySelectorAll('.custom-select').forEach(d => d.classList.remove('active'));
+            if (!isActive) dd.classList.add('active');
+        }
+
+        document.addEventListener('click', function(e) {
+            if (!e.target.closest('.custom-select')) {
+                document.querySelectorAll('.custom-select').forEach(d => d.classList.remove('active'));
             }
         });
-        
-        // Antrieb-Dropdown füllen wenn Modell gewählt
-        document.getElementById('model').addEventListener('change', function() {
-            const brand = document.getElementById('brand').value;
-            const drivetrainSelect = document.getElementById('drivetrain');
-            
-            drivetrainSelect.innerHTML = '<option value="">Antrieb wählen</option>';
-            
-            if (brand && carData[brand]) {
-                carData[brand].drivetrains.forEach(drive => {
-                    const option = document.createElement('option');
-                    option.value = drive.toLowerCase();
-                    option.textContent = drive;
-                    drivetrainSelect.appendChild(option);
-                });
-                drivetrainSelect.disabled = false;
+
+        // ============ SEARCH TABS ============
+        function showSearchTab(tab) {
+            document.querySelectorAll('.search-tab').forEach(t => t.classList.remove('active'));
+            if (tab === 'vehicle') {
+                document.querySelectorAll('.search-tab')[0].classList.add('active');
+                document.getElementById('vehicleSearch').style.display = 'block';
+                document.getElementById('hsnSearch').classList.remove('show');
             } else {
-                drivetrainSelect.disabled = true;
+                document.querySelectorAll('.search-tab')[1].classList.add('active');
+                document.getElementById('vehicleSearch').style.display = 'none';
+                document.getElementById('hsnSearch').classList.add('show');
             }
-        });
-        
-        // ============ SUCHE ============
+            hideSearchResult();
+        }
+
+        // ============ DROPDOWN INIT ============
+        let selectedBrand = '', selectedSeries = '', selectedMotor = '';
+
+        function initVehicleDropdowns() {
+            const brandSelect = document.getElementById('selectBrand');
+            const options = brandSelect.querySelector('.custom-select-options');
+            for (const key in carDatabase) {
+                const opt = document.createElement('div');
+                opt.className = 'custom-option';
+                opt.textContent = carDatabase[key].name;
+                opt.onclick = function() { selectBrand(key, this); };
+                options.appendChild(opt);
+            }
+        }
+
+        function selectBrand(brand, el) {
+            selectedBrand = brand; selectedSeries = ''; selectedMotor = '';
+            const brandSelect = document.getElementById('selectBrand');
+            brandSelect.querySelector('.selected-text').textContent = carDatabase[brand].name;
+            brandSelect.querySelectorAll('.custom-option').forEach(o => o.classList.remove('selected'));
+            el.classList.add('selected');
+            brandSelect.classList.remove('active');
+
+            const seriesSelect = document.getElementById('selectSeries');
+            seriesSelect.querySelector('.selected-text').textContent = 'Baureihe';
+            seriesSelect.querySelector('.custom-select-options').innerHTML = '';
+            for (const key in carDatabase[brand].series) {
+                const opt = document.createElement('div');
+                opt.className = 'custom-option';
+                opt.textContent = carDatabase[brand].series[key].name;
+                opt.onclick = function() { selectSeries(key, this); };
+                seriesSelect.querySelector('.custom-select-options').appendChild(opt);
+            }
+
+            document.getElementById('selectMotor').querySelector('.selected-text').textContent = 'Motor';
+            document.getElementById('selectMotor').querySelector('.custom-select-options').innerHTML = '';
+            hideSearchResult();
+        }
+
+        function selectSeries(series, el) {
+            selectedSeries = series; selectedMotor = '';
+            const seriesSelect = document.getElementById('selectSeries');
+            seriesSelect.querySelector('.selected-text').textContent = carDatabase[selectedBrand].series[series].name;
+            seriesSelect.querySelectorAll('.custom-option').forEach(o => o.classList.remove('selected'));
+            el.classList.add('selected');
+            seriesSelect.classList.remove('active');
+
+            const motorSelect = document.getElementById('selectMotor');
+            motorSelect.querySelector('.selected-text').textContent = 'Motor';
+            motorSelect.querySelector('.custom-select-options').innerHTML = '';
+            carDatabase[selectedBrand].series[series].motors.forEach(motor => {
+                const opt = document.createElement('div');
+                opt.className = 'custom-option';
+                opt.textContent = motor;
+                opt.onclick = function() { selectMotor(motor, this); };
+                motorSelect.querySelector('.custom-select-options').appendChild(opt);
+            });
+            hideSearchResult();
+        }
+
+        function selectMotor(motor, el) {
+            selectedMotor = motor;
+            const motorSelect = document.getElementById('selectMotor');
+            motorSelect.querySelector('.selected-text').textContent = motor;
+            motorSelect.querySelectorAll('.custom-option').forEach(o => o.classList.remove('selected'));
+            el.classList.add('selected');
+            motorSelect.classList.remove('active');
+        }
+
+        function hideSearchResult() {
+            document.getElementById('searchResult').classList.remove('show');
+        }
+
         function searchVehicle() {
-            const brand = document.getElementById('brand').value;
-            const model = document.getElementById('model').value;
-            const drivetrain = document.getElementById('drivetrain').value;
-            
-            if (!brand || !model) {
-                alert('Bitte Marke und Modell wählen!');
+            if (!selectedBrand || !selectedSeries || !selectedMotor) {
+                alert('Bitte Marke, Baureihe und Motor wählen!');
                 return;
             }
-            
-            // HIER DEINEN AFFILIATE-PARTNER EINFÜGEN
-            // Beispiel: Weiterleitung an DAParto mit Suchbegriff
-            const searchTerm = brand + ' ' + model + ' ' + drivetrain;
-            const partnerUrl = 'https://www.daparto.de/?query=' + encodeURIComponent(searchTerm);
-            
-            window.open(partnerUrl, '_blank');
-            
-            // Oder zeige eine Meldung:
-            // alert('Suche nach: ' + searchTerm);
+            const result = document.getElementById('searchResult');
+            document.getElementById('resultTitle').textContent = carDatabase[selectedBrand].name + ' ' + carDatabase[selectedBrand].series[selectedSeries].name + ' - ' + selectedMotor;
+            document.getElementById('resultText').textContent = 'Passende Produkte für dein Fahrzeug:';
+            document.getElementById('resultProducts').innerHTML = renderProductResults();
+            result.classList.add('show');
+            result.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+        }
+
+        function searchHsnTsn() {
+            const hsn = document.getElementById('hsnInput').value.trim();
+            const tsn = document.getElementById('tsnInput').value.trim();
+            if (!hsn || !tsn) { alert('Bitte HSN und TSN eingeben!'); return; }
+            if (hsn.length !== 4 || tsn.length !== 3) { alert('HSN muss 4-stellig, TSN 3-stellig sein!'); return; }
+
+            const result = document.getElementById('searchResult');
+            document.getElementById('resultTitle').textContent = 'HSN ' + hsn + ' / TSN ' + tsn;
+            document.getElementById('resultText').textContent = 'Fahrzeug gefunden! Passende Produkte:';
+            document.getElementById('resultProducts').innerHTML = renderProductResults();
+            result.classList.add('show');
+        }
+
+        function renderProductResults() {
+            let html = '<div style="display:grid; grid-template-columns:repeat(auto-fill, minmax(180px,1fr)); gap:10px; margin-top:10px;">';
+            products.forEach(p => {
+                html += `<div style="background:var(--card); border:1px solid var(--border); padding:10px; text-align:center;">
+                    <div style="font-size:1.5rem; margin-bottom:5px;">🔧</div>
+                    <div style="color:#fff; font-size:0.7rem; letter-spacing:1px; margin-bottom:4px;">${p.name}</div>
+                    <div style="color:var(--text-dark); font-size:0.65rem;">${p.price.toFixed(2).replace('.', ',')} €</div>
+                    <button style="background:#fff; color:#000; border:none; padding:5px 10px; font-size:0.6rem; margin-top:5px; cursor:pointer;" onclick="addToCart('${p.name}', ${p.price})">In den Warenkorb</button>
+                </div>`;
+            });
+            html += '</div>';
+            return html;
+        }
+
+        // ============ WARENKORB ============
+        function saveCart() {
+            localStorage.setItem('raeved_cart', JSON.stringify(cart));
+            document.getElementById('cartCount').textContent = cart.length;
+        }
+
+        function addToCart(name, price) {
+            cart.push({ name, price });
+            saveCart();
+            alert(name + ' wurde zum Warenkorb hinzugefügt!');
+        }
+
+        function removeFromCart(index) {
+            cart.splice(index, 1);
+            saveCart();
+            renderCart();
+        }
+
+        function renderCart() {
+            const container = document.getElementById('cartItems');
+            if (cart.length === 0) {
+                container.innerHTML = '<p style="color:var(--text-darker); text-align:center; padding:20px;">Warenkorb ist leer.</p>';
+                document.getElementById('cartTotal').textContent = '0,00 €';
+                return;
+            }
+            let html = '', total = 0;
+            cart.forEach((item, i) => {
+                html += `<div class="cart-item">
+                    <div class="cart-item-info">
+                        <h4>${item.name}</h4>
+                        <p>${item.price.toFixed(2).replace('.', ',')} €</p>
+                    </div>
+                    <button class="cart-item-remove" onclick="removeFromCart(${i})">✕</button>
+                </div>`;
+                total += item.price;
+            });
+            container.innerHTML = html;
+            document.getElementById('cartTotal').textContent = total.toFixed(2).replace('.', ',') + ' €';
+        }
+
+        function showCartModal() {
+            renderCart();
+            document.getElementById('cartModal').classList.add('show');
+            if (document.getElementById('mobileMenu').classList.contains('open')) toggleMenu();
+        }
+
+        function checkout() {
+            if (cart.length === 0) { alert('Warenkorb ist leer!'); return; }
+            if (!currentUser) { alert('Bitte zuerst anmelden!'); closeModal('cartModal'); showLoginModal(); return; }
+
+            const order = {
+                id: Date.now(),
+                user: currentUser.email,
+                items: [...cart],
+                total: cart.reduce((sum, item) => sum + item.price, 0),
+                date: new Date().toLocaleString('de-DE')
+            };
+            orders.push(order);
+            localStorage.setItem('raeved_orders', JSON.stringify(orders));
+            cart = [];
+            saveCart();
+            closeModal('cartModal');
+            alert('Bestellung wurde als Affiliate-Lead gespeichert!');
+        }
+
+        // ============ LOGIN / REGISTER ============
+        function showLoginModal() {
+            closeModal('registerModal');
+            document.getElementById('loginModal').classList.add('show');
+            if (document.getElementById('mobileMenu').classList.contains('open')) toggleMenu();
+        }
+
+        function showRegisterModal() {
+            closeModal('loginModal');
+            document.getElementById('registerModal').classList.add('show');
+        }
+
+        function closeModal(id) {
+            document.getElementById(id).classList.remove('show');
+        }
+
+        function register() {
+            const name = document.getElementById('regName').value.trim();
+            const email = document.getElementById('regEmail').value.trim();
+            const password = document.getElementById('regPassword').value;
+            if (!name || !email || !password) { alert('Bitte alle Felder ausfüllen!'); return; }
+            if (users.find(u => u.email === email)) { alert('E-Mail bereits registriert!'); return; }
+            users.push({ name, email, password });
+            localStorage.setItem('raeved_users', JSON.stringify(users));
+            currentUser = { name, email };
+            localStorage.setItem('raeved_current_user', JSON.stringify(currentUser));
+            closeModal('registerModal');
+            if (email.toLowerCase() === OWNER_EMAIL) showAdminPanel();
+            alert('Willkommen, ' + name + '!');
+        }
+
+        function login() {
+            const email = document.getElementById('loginEmail').value.trim();
+            const password = document.getElementById('loginPassword').value;
+
+            if (email.toLowerCase() === OWNER_EMAIL) {
+                currentUser = { name: 'Owner', email: email };
+                localStorage.setItem('raeved_current_user', JSON.stringify(currentUser));
+                closeModal('loginModal');
+                showAdminPanel();
+                alert('Willkommen zurück, Owner!');
+                return;
+            }
+
+            const user = users.find(u => u.email === email && u.password === password);
+            if (user) {
+                currentUser = { name: user.name, email: user.email };
+                localStorage.setItem('raeved_current_user', JSON.stringify(currentUser));
+                closeModal('loginModal');
+                alert('Willkommen zurück, ' + user.name + '!');
+            } else {
+                alert('Falsche E-Mail oder Passwort!');
+            }
+        }
+
+        // ============ ADMIN PANEL ============
+        function showAdminPanel() {
+            document.getElementById('adminPanel').classList.add('show');
+            renderAdminProducts();
+            renderAdminOrders();
+            document.getElementById('adminPanel').scrollIntoView({ behavior: 'smooth' });
+        }
+
+        function logoutAdmin() {
+            currentUser = null;
+            localStorage.setItem('raeved_current_user', 'null');
+            document.getElementById('adminPanel').classList.remove('show');
+            alert('Logout erfolgreich!');
+        }
+
+        function showAdminSection(section) {
+            document.getElementById('adminProducts').style.display = section === 'products' ? 'block' : 'none';
+            document.getElementById('adminOrders').style.display = section === 'orders' ? 'block' : 'none';
+        }
+
+        function renderAdminProducts() {
+            const container = document.getElementById('adminProductList');
+            if (products.length === 0) {
+                container.innerHTML = '<p style="color:var(--text-darker);">Keine Produkte vorhanden.</p>';
+                return;
+            }
+            let html = '<table class="admin-table"><tr><th>Name</th><th>Preis</th><th>Beschreibung</th><th>Aktionen</th></tr>';
+            products.forEach((p, i) => {
+                html += `<tr>
+                    <td>${p.name}</td>
+                    <td>${p.price.toFixed(2).replace('.', ',')} €</td>
+                    <td>${p.description || '-'}</td>
+                    <td>
+                        <button class="admin-btn" onclick="editProduct(${i})">Bearbeiten</button>
+                        <button class="admin-btn danger" onclick="deleteProduct(${i})">Löschen</button>
+                    </td>
+                </tr>`;
+            });
+            html += '</table>';
+            container.innerHTML = html;
+        }
+
+        function renderAdminOrders() {
+            const container = document.getElementById('adminOrderList');
+            if (orders.length === 0) {
+                container.innerHTML = '<p style="color:var(--text-darker);">Keine Bestellungen vorhanden.</p>';
+                return;
+            }
+            let html = '<table class="admin-table"><tr><th>ID</th><th>Kunde</th><th>Produkte</th><th>Gesamt</th><th>Datum</th></tr>';
+            orders.forEach(o => {
+                const items = o.items.map(i => i.name).join(', ');
+                html += `<tr>
+                    <td>${o.id}</td>
+                    <td>${o.user}</td>
+                    <td>${items}</td>
+                    <td>${o.total.toFixed(2).replace('.', ',')} €</td>
+                    <td>${o.date}</td>
+                </tr>`;
+            });
+            html += '</table>';
+            container.innerHTML = html;
+        }
+
+        function addNewProduct() {
+            document.getElementById('productModalTitle').textContent = 'Neues Produkt';
+            document.getElementById('productName').value = '';
+            document.getElementById('productPrice').value = '';
+            document.getElementById('productDescription').value = '';
+            document.getElementById('productAffiliateLink').value = '';
+            document.getElementById('productModal').classList.add('show');
+        }
+
+        function editProduct(index) {
+            const p = products[index];
+            document.getElementById('productModalTitle').textContent = 'Produkt bearbeiten';
+            document.getElementById('productName').value = p.name;
+            document.getElementById('productPrice').value = p.price;
+            document.getElementById('productDescription').value = p.description || '';
+            document.getElementById('productAffiliateLink').value = p.affiliateLink || '';
+            document.getElementById('productModal').classList.add('show');
+            document.getElementById('productModal').dataset.editIndex = index;
+        }
+
+        function saveProduct() {
+            const name = document.getElementById('productName').value.trim();
+            const price = parseFloat(document.getElementById('productPrice').value);
+            const description = document.getElementById('productDescription').value.trim();
+            const affiliateLink = document.getElementById('productAffiliateLink').value.trim();
+
+            if (!name || !price) { alert('Name und Preis sind Pflicht!'); return; }
+
+            const editIndex = document.getElementById('productModal').dataset.editIndex;
+            if (editIndex !== undefined && editIndex !== '') {
+                products[parseInt(editIndex)] = { ...products[parseInt(editIndex)], name, price, description, affiliateLink };
+            } else {
+                products.push({ id: Date.now(), name, price, description, affiliateLink, badge: 'Neu' });
+            }
+
+            localStorage.setItem('raeved_products', JSON.stringify(products));
+            closeModal('productModal');
+            renderAdminProducts();
+            renderProducts();
+            delete document.getElementById('productModal').dataset.editIndex;
+        }
+
+        function deleteProduct(index) {
+            if (confirm('Produkt wirklich löschen?')) {
+                products.splice(index, 1);
+                localStorage.setItem('raeved_products', JSON.stringify(products));
+                renderAdminProducts();
+                renderProducts();
+            }
+        }
+
+        // ============ PRODUKTE RENDERN ============
+        function renderProducts() {
+            const container = document.getElementById('productsContainer');
+            let html = '';
+            products.forEach(p => {
+                const badge = p.badge ? `<div class="product-badge ${p.badge.includes('%') ? 'sale' : ''}">${p.badge}</div>` : '';
+                html += `<div class="product-card">
+                    ${badge}
+                    <div class="product-image">🔧</div>
+                    <div class="product-info">
+                        <h4>${p.name}</h4>
+                        <p class="description">${p.description || ''}</p>
+                        <div class="price-row">
+                            <span class="price">${p.price.toFixed(2).replace('.', ',')} €</span>
+                        </div>
+                        <button class="btn-add-cart" onclick="addToCart('${p.name}', ${p.price})">🛒 In den Warenkorb</button>
+                    </div>
+                </div>`;
+            });
+            container.innerHTML = html;
+        }
+
+        // ============ INIT ============
+        document.getElementById('cartCount').textContent = cart.length;
+        initVehicleDropdowns();
+        renderProducts();
+
+        if (currentUser && currentUser.email.toLowerCase() === OWNER_EMAIL) {
+            showAdminPanel();
         }
     </script>
 </body>
 </html>
+    
