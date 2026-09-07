@@ -18,13 +18,13 @@
 
         /* ===== HEADER ===== */
         .header { display:flex; justify-content:space-between; align-items:center; padding:10px 25px; border-bottom:1px solid var(--border); background:var(--darker); position:sticky; top:0; z-index:60; min-height:54px; }
-        .logo { font-family:'Oswald',sans-serif; font-size:2.4rem; letter-spacing:7px; color:#fff; text-transform:uppercase; font-weight:700; line-height:1; }
+        .logo { font-family:'Oswald',sans-serif; font-size:3.2rem; letter-spacing:7px; color:#fff; text-transform:uppercase; font-weight:700; line-height:1; }
         .logo span { color:var(--text-darker); }
-        .logo-tagline { font-size:0.55rem; letter-spacing:5px; color:var(--text-darker); text-transform:uppercase; margin-top:2px; }
+        .logo-tagline { font-size:0.75rem; letter-spacing:5px; color:var(--text-darker); text-transform:uppercase; margin-top:2px; }
         .header-actions { display:flex; align-items:center; gap:10px; }
         .header-btn { background:transparent; border:1px solid var(--border); color:var(--text); font-size:0.7rem; letter-spacing:1px; cursor:pointer; transition:0.3s; padding:6px 12px; text-transform:uppercase; font-family:'Inter',sans-serif; }
         .header-btn:hover { border-color:#fff; color:#fff; }
-        .cart-count { background:#fff; color:#000; padding:0 6px; font-size:0.6rem; font-weight:700; border-radius:30px; margin-left:5px; }
+        .wishlist-count { background:#fff; color:#000; padding:0 6px; font-size:0.6rem; font-weight:700; border-radius:30px; margin-left:5px; }
         .hamburger { width:40px; height:40px; background:transparent; border:1px solid var(--border); cursor:pointer; display:flex; flex-direction:column; justify-content:center; align-items:center; gap:5px; transition:0.3s; }
         .hamburger:hover { border-color:#fff; }
         .hamburger span { display:block; width:18px; height:2px; background:var(--text); transition:0.3s; }
@@ -56,7 +56,7 @@
         .search-tab { background:transparent; border:1px solid var(--border); color:var(--text-dark); padding:8px 20px; cursor:pointer; font-size:0.7rem; letter-spacing:2px; text-transform:uppercase; transition:0.3s; font-family:'Inter',sans-serif; }
         .search-tab.active { border-color:#fff; color:#fff; background:rgba(255,255,255,0.05); }
         .search-tab:hover { color:#fff; }
-        .search-box { display:flex; justify-content:center; gap:8px; flex-wrap:wrap; max-width:700px; margin:0 auto; }
+        .search-box { display:flex; justify-content:center; gap:6px; flex-wrap:wrap; max-width:700px; margin:0 auto; }
         .custom-select { position:relative; min-width:140px; flex:1 1 150px; }
         .custom-select-trigger { background:var(--card); border:1px solid var(--border); color:#fff; padding:10px 12px; font-family:'Inter',sans-serif; font-size:0.7rem; letter-spacing:1px; text-transform:uppercase; cursor:pointer; display:flex; justify-content:space-between; align-items:center; transition:border-color 0.3s; min-height:40px; width:100%; }
         .custom-select-trigger:hover { border-color:#fff; }
@@ -73,6 +73,7 @@
         .hsn-panel input:focus { border-color:#fff; }
         .search-result { max-width:700px; margin:15px auto 0; padding:15px; background:var(--darker); border:1px solid var(--border); text-align:center; display:none; }
         .search-result.show { display:block; }
+        .search-result .vehicle-image { max-width:200px; margin:10px auto; display:block; }
 
         /* ===== CATEGORIES ===== */
         .section-title { text-align:center; font-family:'Oswald',sans-serif; font-size:1.5rem; letter-spacing:4px; color:#fff; padding:40px 20px 20px; text-transform:uppercase; font-weight:700; }
@@ -101,8 +102,8 @@
         .price-row { display:flex; align-items:center; gap:8px; margin-bottom:10px; flex-wrap:wrap; }
         .price { font-size:1.1rem; color:#fff; font-weight:600; }
         .old-price { text-decoration:line-through; color:var(--text-darker); font-size:0.7rem; }
-        .btn-add-cart { display:block; background:#fff; color:#000; text-align:center; padding:8px; text-transform:uppercase; letter-spacing:1px; font-size:0.65rem; cursor:pointer; border:none; font-family:'Inter',sans-serif; font-weight:600; transition:background 0.3s; }
-        .btn-add-cart:hover { background:#ddd; }
+        .btn-add-wishlist { display:block; background:#fff; color:#000; text-align:center; padding:8px; text-transform:uppercase; letter-spacing:1px; font-size:0.65rem; cursor:pointer; border:none; font-family:'Inter',sans-serif; font-weight:600; transition:background 0.3s; }
+        .btn-add-wishlist:hover { background:#ddd; }
 
         /* ===== ABOUT ===== */
         .about-section { padding:40px 20px 60px; max-width:700px; margin:0 auto; text-align:center; }
@@ -127,12 +128,12 @@
         .modal-input { width:100%; background:var(--card); border:1px solid var(--border); color:#fff; padding:10px; font-family:'Inter',sans-serif; font-size:0.75rem; margin-bottom:10px; outline:none; }
         .modal-btn { width:100%; background:#fff; color:#000; border:none; padding:10px; font-family:'Oswald',sans-serif; font-size:0.75rem; letter-spacing:2px; text-transform:uppercase; cursor:pointer; font-weight:600; margin-bottom:8px; }
         .modal-btn.secondary { background:transparent; border:1px solid var(--border); color:var(--text); }
-        .cart-item { display:flex; justify-content:space-between; align-items:center; padding:8px 0; border-bottom:1px solid var(--border); }
-        .cart-item-info { flex:1; }
-        .cart-item-info h4 { font-size:0.8rem; color:#fff; }
-        .cart-item-info p { font-size:0.7rem; color:var(--text-darker); }
-        .cart-item-remove { background:none; border:none; color:#cc0000; cursor:pointer; font-size:1rem; }
-        .cart-total { margin-top:15px; padding-top:15px; border-top:2px solid var(--border); display:flex; justify-content:space-between; font-size:1rem; color:#fff; font-weight:600; }
+        .wishlist-item { display:flex; justify-content:space-between; align-items:center; padding:8px 0; border-bottom:1px solid var(--border); }
+        .wishlist-item-info { flex:1; }
+        .wishlist-item-info h4 { font-size:0.8rem; color:#fff; }
+        .wishlist-item-info p { font-size:0.7rem; color:var(--text-darker); }
+        .wishlist-item-remove { background:none; border:none; color:#cc0000; cursor:pointer; font-size:1rem; }
+        .wishlist-total { margin-top:15px; padding-top:15px; border-top:2px solid var(--border); display:flex; justify-content:space-between; font-size:1rem; color:#fff; font-weight:600; }
 
         /* ===== ADMIN ===== */
         .admin-panel { display:none; padding:30px 20px; max-width:900px; margin:0 auto; }
@@ -149,12 +150,12 @@
         /* ===== RESPONSIVE ===== */
         @media (max-width:768px) {
             .header { padding:8px 12px; min-height:50px; }
-            .logo { font-size:1.8rem; letter-spacing:5px; }
-            .logo-tagline { font-size:0.45rem; letter-spacing:3px; }
+            .logo { font-size:2.2rem; letter-spacing:5px; }
+            .logo-tagline { font-size:0.6rem; letter-spacing:3px; }
             .header-btn { font-size:0.6rem; padding:5px 8px; }
             .hero { height:40vh; min-height:250px; }
             .hero h1 { font-size:clamp(1.8rem,10vw,2.8rem); letter-spacing:4px; }
-            .search-box { flex-direction:column; align-items:stretch; }
+            .search-box { flex-direction:column; align-items:stretch; gap:6px; }
             .custom-select { min-width:100%; }
             .btn-search { width:100%; }
             .categories { grid-template-columns:1fr 1fr; padding:0 10px 15px; gap:10px; }
@@ -176,7 +177,7 @@
     </div>
     <div class="header-actions">
         <button class="header-btn" onclick="showLoginModal()">👤 Login</button>
-        <button class="header-btn" onclick="showCartModal()">🛒 <span class="cart-count" id="cartCount">0</span></button>
+        <button class="header-btn" onclick="showWishlistModal()">❤️ <span class="wishlist-count" id="wishlistCount">0</span></button>
         <button class="hamburger" onclick="toggleMenu()" aria-label="Menü"><span></span><span></span><span></span></button>
     </div>
 </header>
@@ -199,7 +200,7 @@
     <button class="menu-item sub" onclick="navigateTo('categories')">Werkzeug & Garage</button>
     <div class="menu-heading">Konto</div>
     <button class="menu-item sub" onclick="showLoginModal()">Anmelden</button>
-    <button class="menu-item sub" onclick="showCartModal()">Warenkorb</button>
+    <button class="menu-item sub" onclick="showWishlistModal()">Merkliste</button>
 </div>
 
 <!-- ===== HERO ===== -->
@@ -240,6 +241,7 @@
         <button class="btn-search" onclick="searchHsnTsn()">🔍 Suchen</button>
     </div>
     <div class="search-result" id="searchResult">
+        <img class="vehicle-image" id="vehicleImage" src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 60'%3E%3Crect width='100' height='60' fill='%231a1a1a'/%3E%3Cpath d='M15 30 L25 20 L75 20 L85 30 L90 30 L90 40 L85 40 L80 45 L20 45 L15 40 L10 40 L10 30 L15 30Z' fill='%23555'/%3E%3Ccircle cx='30' cy='45' r='8' fill='%23333'/%3E%3Ccircle cx='70' cy='45' r='8' fill='%23333'/%3E%3Ccircle cx='30' cy='45' r='5' fill='%23666'/%3E%3Ccircle cx='70' cy='45' r='5' fill='%23666'/%3E%3Crect x='45' y='25' width='10' height='8' fill='%23444'/%3E%3Crect x='47' y='27' width='6' height='4' fill='%23888'/%3E%3C/svg%3E" alt="Fahrzeug" style="display:none;" />
         <h3 id="resultTitle"></h3>
         <p id="resultText"></p>
         <div id="resultProducts"></div>
@@ -324,11 +326,11 @@
         <button class="modal-btn secondary" onclick="showLoginModal()">Zurück</button>
     </div>
 </div>
-<div class="modal" id="cartModal">
-    <div class="modal-content"><button class="modal-close" onclick="closeModal('cartModal')">✕</button><h2>Warenkorb</h2>
-        <div id="cartItems"></div>
-        <div class="cart-total"><span>Gesamt:</span><span id="cartTotal">0,00 €</span></div>
-        <button class="modal-btn" style="margin-top:15px;" onclick="checkout()">Zur Kasse</button>
+<div class="modal" id="wishlistModal">
+    <div class="modal-content"><button class="modal-close" onclick="closeModal('wishlistModal')">✕</button><h2>❤️ Merkliste</h2>
+        <div id="wishlistItems"></div>
+        <div class="wishlist-total"><span>Gesamt (nur Anzeige):</span><span id="wishlistTotal">0,00 €</span></div>
+        <p style="font-size:0.7rem; color:var(--text-darker); margin-top:10px; text-align:center;">Dies ist eine Merkliste – keine Bestellung möglich.</p>
     </div>
 </div>
 <div class="modal" id="productModal">
@@ -348,7 +350,6 @@
 
     // ================================================================
     //  ERWEITERTE FAHRZEUGDATENBANK (250+ Baureihen, 1000+ Motoren)
-    //  Basierend auf Wikipedia & gängigen Tuning-Shops
     // ================================================================
     const carDatabase = {
         'bmw': { name: 'BMW', series: {
@@ -576,7 +577,7 @@
     let orders = JSON.parse(localStorage.getItem('raeved_orders') || '[]');
     let users = JSON.parse(localStorage.getItem('raeved_users') || '[]');
     let currentUser = JSON.parse(localStorage.getItem('raeved_current_user') || 'null');
-    let cart = JSON.parse(localStorage.getItem('raeved_cart') || '[]');
+    let wishlist = JSON.parse(localStorage.getItem('raeved_wishlist') || '[]');
 
     // ============ MENU ============
     function toggleMenu() {
@@ -691,6 +692,12 @@
 
     function hideSearchResult() {
         document.getElementById('searchResult').classList.remove('show');
+        document.getElementById('vehicleImage').style.display = 'none';
+    }
+
+    function showVehicleImage() {
+        const img = document.getElementById('vehicleImage');
+        img.style.display = 'block';
     }
 
     function searchVehicle() {
@@ -702,6 +709,7 @@
         document.getElementById('resultTitle').textContent = carDatabase[selectedBrand].name + ' ' + carDatabase[selectedBrand].series[selectedSeries].name + ' - ' + selectedMotor;
         document.getElementById('resultText').textContent = 'Passende Produkte für dein Fahrzeug:';
         document.getElementById('resultProducts').innerHTML = renderProductResults();
+        showVehicleImage();
         result.classList.add('show');
         result.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
     }
@@ -716,6 +724,7 @@
         document.getElementById('resultTitle').textContent = 'HSN ' + hsn + ' / TSN ' + tsn;
         document.getElementById('resultText').textContent = 'Fahrzeug gefunden! Passende Produkte:';
         document.getElementById('resultProducts').innerHTML = renderProductResults();
+        showVehicleImage();
         result.classList.add('show');
     }
 
@@ -726,76 +735,57 @@
                 <div style="font-size:1.5rem; margin-bottom:5px;">🔧</div>
                 <div style="color:#fff; font-size:0.7rem; letter-spacing:1px; margin-bottom:4px;">${p.name}</div>
                 <div style="color:var(--text-dark); font-size:0.65rem;">${p.price.toFixed(2).replace('.', ',')} €</div>
-                <button style="background:#fff; color:#000; border:none; padding:5px 10px; font-size:0.6rem; margin-top:5px; cursor:pointer;" onclick="addToCart('${p.name}', ${p.price})">In den Warenkorb</button>
+                <button style="background:#fff; color:#000; border:none; padding:5px 10px; font-size:0.6rem; margin-top:5px; cursor:pointer;" onclick="addToWishlist('${p.name}', ${p.price})">❤️ Merken</button>
             </div>`;
         });
         html += '</div>';
         return html;
     }
 
-    // ============ WARENKORB ============
-    function saveCart() {
-        localStorage.setItem('raeved_cart', JSON.stringify(cart));
-        document.getElementById('cartCount').textContent = cart.length;
+    // ============ MERKLISTE ============
+    function saveWishlist() {
+        localStorage.setItem('raeved_wishlist', JSON.stringify(wishlist));
+        document.getElementById('wishlistCount').textContent = wishlist.length;
     }
 
-    function addToCart(name, price) {
-        cart.push({ name, price });
-        saveCart();
-        alert(name + ' wurde zum Warenkorb hinzugefügt!');
+    function addToWishlist(name, price) {
+        wishlist.push({ name, price });
+        saveWishlist();
+        alert(name + ' wurde zur Merkliste hinzugefügt!');
     }
 
-    function removeFromCart(index) {
-        cart.splice(index, 1);
-        saveCart();
-        renderCart();
+    function removeFromWishlist(index) {
+        wishlist.splice(index, 1);
+        saveWishlist();
+        renderWishlist();
     }
 
-    function renderCart() {
-        const container = document.getElementById('cartItems');
-        if (cart.length === 0) {
-            container.innerHTML = '<p style="color:var(--text-darker); text-align:center; padding:20px;">Warenkorb ist leer.</p>';
-            document.getElementById('cartTotal').textContent = '0,00 €';
+    function renderWishlist() {
+        const container = document.getElementById('wishlistItems');
+        if (wishlist.length === 0) {
+            container.innerHTML = '<p style="color:var(--text-darker); text-align:center; padding:20px;">Merkliste ist leer.</p>';
+            document.getElementById('wishlistTotal').textContent = '0,00 €';
             return;
         }
         let html = '', total = 0;
-        cart.forEach((item, i) => {
-            html += `<div class="cart-item">
-                <div class="cart-item-info">
+        wishlist.forEach((item, i) => {
+            html += `<div class="wishlist-item">
+                <div class="wishlist-item-info">
                     <h4>${item.name}</h4>
                     <p>${item.price.toFixed(2).replace('.', ',')} €</p>
                 </div>
-                <button class="cart-item-remove" onclick="removeFromCart(${i})">✕</button>
+                <button class="wishlist-item-remove" onclick="removeFromWishlist(${i})">✕</button>
             </div>`;
             total += item.price;
         });
         container.innerHTML = html;
-        document.getElementById('cartTotal').textContent = total.toFixed(2).replace('.', ',') + ' €';
+        document.getElementById('wishlistTotal').textContent = total.toFixed(2).replace('.', ',') + ' €';
     }
 
-    function showCartModal() {
-        renderCart();
-        document.getElementById('cartModal').classList.add('show');
+    function showWishlistModal() {
+        renderWishlist();
+        document.getElementById('wishlistModal').classList.add('show');
         if (document.getElementById('mobileMenu').classList.contains('open')) toggleMenu();
-    }
-
-    function checkout() {
-        if (cart.length === 0) { alert('Warenkorb ist leer!'); return; }
-        if (!currentUser) { alert('Bitte zuerst anmelden!'); closeModal('cartModal'); showLoginModal(); return; }
-
-        const order = {
-            id: Date.now(),
-            user: currentUser.email,
-            items: [...cart],
-            total: cart.reduce((sum, item) => sum + item.price, 0),
-            date: new Date().toLocaleString('de-DE')
-        };
-        orders.push(order);
-        localStorage.setItem('raeved_orders', JSON.stringify(orders));
-        cart = [];
-        saveCart();
-        closeModal('cartModal');
-        alert('Bestellung wurde als Affiliate-Lead gespeichert!');
     }
 
     // ============ LOGIN / REGISTER ============
@@ -982,7 +972,7 @@
                     <div class="price-row">
                         <span class="price">${p.price.toFixed(2).replace('.', ',')} €</span>
                     </div>
-                    <button class="btn-add-cart" onclick="addToCart('${p.name}', ${p.price})">🛒 In den Warenkorb</button>
+                    <button class="btn-add-wishlist" onclick="addToWishlist('${p.name}', ${p.price})">❤️ Merken</button>
                 </div>
             </div>`;
         });
@@ -990,7 +980,7 @@
     }
 
     // ============ INIT ============
-    document.getElementById('cartCount').textContent = cart.length;
+    document.getElementById('wishlistCount').textContent = wishlist.length;
     initVehicleDropdowns();
     renderProducts();
 
