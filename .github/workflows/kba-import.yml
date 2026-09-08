@@ -1,0 +1,15 @@
+name: KBA-Import
+on:
+  schedule:
+    - cron: '0 3 * * 0'
+  workflow_dispatch:
+jobs:
+  import:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - name: KBA-Import ausführen
+        env:
+          SUPABASE_URL: ${{ secrets.SUPABASE_URL }}
+          SUPABASE_KEY: ${{ secrets.SUPABASE_KEY }}
+        run: echo "KBA-Import gestartet"
