@@ -14,4 +14,5 @@ RUN mvn clean install
 
 EXPOSE 8080
 
-CMD ["java", "-jar", "target/*.jar"]
+# Genauen JAR-Namen angeben!
+CMD ["java", "-jar", "target/raever-backend-1.0.0.jar"]
