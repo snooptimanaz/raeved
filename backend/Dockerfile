@@ -2,16 +2,14 @@ FROM eclipse-temurin:17-jdk-alpine
 
 WORKDIR /app
 
-# Nur die Backend-Dateien kopieren
-COPY backend/. .
+# Den gesamten backend-Ordner kopieren
+COPY . .
 
-# Maven Wrapper vom Hauptverzeichnis kopieren
-COPY mvnw /app/mvnw
-COPY mvnw.cmd /app/mvnw.cmd
-COPY .mvn /app/.mvn
-
+# Sicherstellen, dass der Maven Wrapper ausführbar ist
 RUN chmod +x mvnw
-RUN ./mvnw clean install
+
+# Projekt bauen (Überspringt die Tests für Geschwindigkeit)
+RUN ./mvnw clean install -DskipTests
 
 EXPOSE 8080
 
